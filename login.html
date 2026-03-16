@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vistago — تسجيل الدخول</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);
+  min-height:100vh;
+  font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+}
+.lang-bar{
+  padding:12px 20px;
+  position:absolute;
+  top:0;left:0;right:0;
+  z-index:10;
+  display:flex;
+  justify-content:flex-end;
+}
+.lang-btn{
+  border:1px solid rgba(255,255,255,0.5);
+  background:rgba(255,255,255,0.15);
+  color:#fff;
+  border-radius:20px;
+  padding:4px 16px;
+  font-size:0.85rem;
+  margin:0 4px;
+  cursor:pointer;
+  transition:all 0.2s;
+}
+.lang-btn.active{
+  background:rgba(255,255,255,0.35);
+  font-weight:600;
+}
+.auth-wrapper{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+  padding:80px 16px 30px;
+}
+.auth-card{
+  background:#fff;
+  border-radius:20px;
+  padding:40px;
+  width:100%;
+  max-width:420px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.2);
+}
+.auth-logo{
+  font-size:2rem;
+  font-weight:800;
+  text-align:center;
+  background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  margin-bottom:4px;
+  letter-spacing:-1px;
+}
+.auth-title{
+  font-size:1.4rem;
+  font-weight:700;
+  color:#1a1a2e;
+  text-align:center;
+  margin-bottom:4px;
+}
+.auth-sub{
+  font-size:0.9rem;
+  color:#6c757d;
+  text-align:center;
+  margin-bottom:28px;
+}
+.btn-google{
+  background:#fff;
+  border:1.5px solid #dee2e6;
+  color:#343a40;
+  border-radius:12px;
+  padding:13px;
+  width:100%;
+  font-size:1rem;
+  font-weight:500;
+  cursor:pointer;
+  transition:all 0.2s;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  margin-bottom:8px;
+}
+.btn-google:hover{
+  background:#f8f9fa;
+  border-color:#adb5bd;
+}
+.divider{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:20px 0;
+  color:#adb5bd;
+  font-size:0.85rem;
+}
+.divider::before,.divider::after{
+  content:'';
+  flex:1;
+  height:1px;
+  background:#dee2e6;
+}
+.form-control{
+  border-radius:12px;
+  padding:13px 16px;
+  border:1.5px solid #dee2e6;
+  font-size:0.95rem;
+  transition:all 0.2s;
+}
+.form-control:focus{
+  border-color:#833ab4;
+  box-shadow:0 0 0 3px rgba(131,58,180,0.1);
+}
+.btn-submit{
+  background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);
+  border:none;
+  border-radius:12px;
+  padding:13px;
+  font-size:1rem;
+  font-weight:600;
+  width:100%;
+  color:#fff;
+  cursor:pointer;
+  transition:opacity 0.2s;
+  margin-bottom:16px;
+}
+.btn-submit:hover{
+  opacity:0.9;
+}
+.toggle-link{
+  color:#833ab4;
+  cursor:pointer;
+  text-decoration:underline;
+  font-weight:500;
+}
+.alert-msg{
+  border-radius:12px;
+  padding:10px 16px;
+  font-size:0.9rem;
+  margin-bottom:16px;
+  display:none;
+  text-align:center;
+}
+.alert-error{
+  background:#fff0f0;
+  color:#dc3545;
+  border:1px solid #f5c6cb;
+}
+.alert-success{
+  background:#f0fff4;
+  color:#198754;
+  border:1px solid #b7dfc5;
+}
+.switch-text{
+  text-align:center;
+  font-size:0.9rem;
+  color:#6c757d;
+}
+</style>
+</head>
+<body>
+
+<!-- Language Bar -->
+<div class="lang-bar">
+  <button id="btn-ar" class="lang-btn active" onclick="setLang('ar')">🇸🇦 العربية</button>
+  <button id="btn-en" class="lang-btn" onclick="setLang('en')">🇬🇧 English</button>
+</div>
+
+<!-- Auth Card -->
+<div class="auth-wrapper">
+  <div class="auth-card">
+
+    <!-- Logo -->
+    <div class="auth-logo">Vistago</div>
+    <div class="auth-title" id="auth-title">مرحباً بك</div>
+    <div class="auth-sub" id="auth-sub">شارك لحظاتك مع العالم</div>
+
+    <!-- Alert -->
+    <div id="alert-msg" class="alert-msg"></div>
+
+    <!-- Google Button -->
+    <button class="btn-google" onclick="signInWithGoogle()">
+      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="22">
+      <span id="google-btn-text">تسجيل الدخول بواسطة Google</span>
+    </button>
+
+    <!-- Divider -->
+    <div class="divider"><span id="divider-text">أو</span></div>
+
+    <!-- Login Form -->
+    <div id="login-form">
+      <div class="mb-3">
+        <input id="login-email" type="email" class="form-control" placeholder="البريد الإلكتروني">
+      </div>
+      <div class="mb-3">
+        <input id="login-password" type="password" class="form-control" placeholder="كلمة المرور">
+      </div>
+      <button class="btn-submit" onclick="loginWithEmail()" id="login-btn">تسجيل الدخول</button>
+      <div class="switch-text">
+        <span id="no-account-text">ليس لديك حساب؟</span>
+        <span class="toggle-link" onclick="showRegister()" id="go-register"> إنشاء حساب</span>
+      </div>
+    </div>
+
+    <!-- Register Form -->
+    <div id="register-form" style="display:none;">
+      <div class="mb-3">
+        <input id="reg-name" type="text" class="form-control" placeholder="الاسم الكامل">
+      </div>
+      <div class="mb-3">
+        <input id="reg-email" type="email" class="form-control" placeholder="البريد الإلكتروني">
+      </div>
+      <div class="mb-3">
+        <input id="reg-password" type="password" class="form-control" placeholder="كلمة المرور">
+      </div>
+      <div class="mb-3">
+        <input id="reg-confirm" type="password" class="form-control" placeholder="تأكيد كلمة المرور">
+      </div>
+      <button class="btn-submit" onclick="registerWithEmail()" id="register-btn">إنشاء حساب</button>
+      <div class="switch-text">
+        <span id="have-account-text">لديك حساب بالفعل؟</span>
+        <span class="toggle-link" onclick="showLogin()" id="go-login"> تسجيل الدخول</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Language Script -->
+<script>
+const t = {
+  ar:{
+    dir:"rtl",
+    authTitle:"مرحباً بك",
+    authSub:"شارك لحظاتك مع العالم",
+    googleBtn:"تسجيل الدخول بواسطة Google",
+    divider:"أو",
+    loginEmail:"البريد الإلكتروني",
+    loginPassword:"كلمة المرور",
+    loginBtn:"تسجيل الدخول",
+    noAccount:"ليس لديك حساب؟",
+    goRegister:"إنشاء حساب",
+    regName:"الاسم الكامل",
+    regEmail:"البريد الإلكتروني",
+    regPassword:"كلمة المرور",
+    regConfirm:"تأكيد كلمة المرور",
+    registerBtn:"إنشاء حساب",
+    haveAccount:"لديك حساب بالفعل؟",
+    goLogin:"تسجيل الدخول",
+    errFill:"يرجى ملء جميع الحقول",
+    errPassword:"كلمة المرور يجب أن تكون 6 أحرف على الأقل",
+    errMatch:"كلمة المرور غير متطابقة",
+    errGoogle:"فشل تسجيل الدخول بواسطة Google",
+    successRegister:"تم إنشاء الحساب بنجاح! 🎉",
+    successLogin:"تم تسجيل الدخول بنجاح! 👋"
+  },
+  en:{
+    dir:"ltr",
+    authTitle:"Welcome Back",
+    authSub:"Share your moments with the world",
+    googleBtn:"Sign in with Google",
+    divider:"or",
+    loginEmail:"Email address",
+    loginPassword:"Password",
+    loginBtn:"Sign In",
+    noAccount:"Don't have an account?",
+    goRegister:"Create account",
+    regName:"Full name",
+    regEmail:"Email address",
+    regPassword:"Password",
+    regConfirm:"Confirm password",
+    registerBtn:"Create Account",
+    haveAccount:"Already have an account?",
+    goLogin:"Sign In",
+    errFill:"Please fill in all fields",
+    errPassword:"Password must be at least 6 characters",
+    errMatch:"Passwords do not match",
+    errGoogle:"Google sign in failed",
+    successRegister:"Account created successfully! 🎉",
+    successLogin:"Signed in successfully! 👋"
+  }
+};
+
+let lang = "ar";
+
+function setLang(l) {
+  lang = l;
+  document.documentElement.setAttribute("dir", t[l].dir);
+  document.documentElement.setAttribute("lang", l);
+  document.getElementById("auth-title").textContent = t[l].authTitle;
+  document.getElementById("auth-sub").textContent = t[l].authSub;
+  document.getElementById("google-btn-text").textContent = t[l].googleBtn;
+  document.getElementById("divider-text").textContent = t[l].divider;
+  document.getElementById("login-email").placeholder = t[l].loginEmail;
+  document.getElementById("login-password").placeholder = t[l].loginPassword;
+  document.getElementById("login-btn").textContent = t[l].loginBtn;
+  document.getElementById("no-account-text").textContent = t[l].noAccount;
+  document.getElementById("go-register").textContent = t[l].goRegister;
+  document.getElementById("reg-name").placeholder = t[l].regName;
+  document.getElementById("reg-email").placeholder = t[l].regEmail;
+  document.getElementById("reg-password").placeholder = t[l].regPassword;
+  document.getElementById("reg-confirm").placeholder = t[l].regConfirm;
+  document.getElementById("register-btn").textContent = t[l].registerBtn;
+  document.getElementById("have-account-text").textContent = t[l].haveAccount;
+  document.getElementById("go-login").textContent = t[l].goLogin;
+  document.getElementById("btn-ar").classList.toggle("active", l === "ar");
+  document.getElementById("btn-en").classList.toggle("active", l === "en");
+}
+
+function showAlert(msg, type) {
+  const el = document.getElementById("alert-msg");
+  el.textContent = msg;
+  el.className = "alert-msg " + (type === "error" ? "alert-error" : "alert-success");
+  el.style.display = "block";
+  setTimeout(() => el.style.display = "none", 4000);
+}
+
+function showRegister() {
+  document.getElementById("login-form").style.display = "none";
+  document.getElementById("register-form").style.display = "block";
+  document.getElementById("auth-title").textContent = t[lang].goRegister;
+  document.getElementById("auth-sub").textContent = t[lang].authSub;
+}
+
+function showLogin() {
+  document.getElementById("register-form").style.display = "none";
+  document.getElementById("login-form").style.display = "block";
+  document.getElementById("auth-title").textContent = t[lang].authTitle;
+  document.getElementById("auth-sub").textContent = t[lang].authSub;
+}
+</script>
+
+<!-- Firebase -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyA4vNgF3NBWxjQfx_feHpsoIMdswlzUegA",
+    authDomain: "social-media-app-da2cd.firebaseapp.com",
+    projectId: "social-media-app-da2cd",
+    storageBucket: "social-media-app-da2cd.firebasestorage.app",
+    messagingSenderId: "41413182238",
+    appId: "1:41413182238:web:bbf664b131279ec4bd3f0f",
+    measurementId: "G-K5T9NGVCC3"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const googleProvider = new GoogleAuthProvider();
+
+  // Save user to Firestore
+  async function saveUser(user, name) {
+    await setDoc(doc(db, "users", user.uid), {
+      uid: user.uid,
+      name: name || user.displayName,
+      email: user.email,
+      photo: user.photoURL || "",
+      bio: "",
+      followers: 0,
+      following: 0,
+      posts: 0,
+      createdAt: new Date()
+    }, { merge: true });
+  }
+
+  // Google Sign In
+  window.signInWithGoogle = async function() {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      await saveUser(result.user, result.user.displayName);
+      showAlert(t[lang].successLogin, "success");
+      setTimeout(() => window.location.href = "home.html", 1500);
+    } catch(err) {
+      showAlert(t[lang].errGoogle, "error");
+    }
+  }
+
+  // Email Login
+  window.loginWithEmail = async function() {
+    const email    = document.getElementById("login-email").value.trim();
+    const password = document.getElementById("login-password").value.trim();
+    if (!email || !password) { showAlert(t[lang].errFill, "error"); return; }
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      showAlert(t[lang].successLogin, "success");
+      setTimeout(() => window.location.href = "home.html", 1500);
+    } catch(err) {
+      showAlert(err.message, "error");
+    }
+  }
+
+  // Email Register
+  window.registerWithEmail = async function() {
+    const name     = document.getElementById("reg-name").value.trim();
+    const email    = document.getElementById("reg-email").value.trim();
+    const password = document.getElementById("reg-password").value.trim();
+    const confirm  = document.getElementById("reg-confirm").value.trim();
+    if (!name || !email || !password || !confirm) { showAlert(t[lang].errFill, "error"); return; }
+    if (password.length < 6) { showAlert(t[lang].errPassword, "error"); return; }
+    if (password !== confirm) { showAlert(t[lang].errMatch, "error"); return; }
+    try {
+      const result = await createUserWithEmailAndPassword(auth, email, password);
+      await updateProfile(result.user, { displayName: name });
+      await saveUser(result.user, name);
+      showAlert(t[lang].successRegister, "success");
+      setTimeout(() => window.location.href = "home.html", 1500);
+    } catch(err) {
+      showAlert(err.message, "error");
+    }
+  }
+</script>
+
+</body>
+</html>
+```
+
+**Upload to GitHub:**
+1. Save as `login.html`
+2. Go to your `vistago` repository
+3. Click **Add file → Upload files**
+4. Upload `login.html`
+5. Click **Commit changes**
+
+**Enable GitHub Pages:**
+1. Click **Settings → Pages**
+2. Select `main` branch
+3. Click **Save**
+
+Your login page will be live at:
+```
+https://omanxp45-sudo.github.io/vistago/login.html
