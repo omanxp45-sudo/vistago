@@ -1,0 +1,41 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#c13584"/>
+      <stop offset="40%" stop-color="#e1306c"/>
+      <stop offset="70%" stop-color="#fd1d1d"/>
+      <stop offset="100%" stop-color="#fcb045"/>
+    </linearGradient>
+    <linearGradient id="inner" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#c13584"/>
+      <stop offset="50%" stop-color="#fd1d1d"/>
+      <stop offset="100%" stop-color="#fcb045"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Icon rounded square -->
+  <rect x="0" y="0" width="512" height="512" rx="115" fill="url(#bg)"/>
+
+  <!-- Top bump (camera hump) -->
+  <rect x="172" y="62" width="112" height="46" rx="23" fill="rgba(0,0,0,0.2)"/>
+
+  <!-- Small viewfinder dot top right -->
+  <circle cx="420" cy="110" r="28" fill="rgba(255,255,255,0.35)"/>
+  <circle cx="420" cy="110" r="18" fill="rgba(255,255,255,0.5)"/>
+
+  <!-- Outer white ring -->
+  <circle cx="256" cy="290" r="158" fill="none" stroke="white" stroke-width="16"/>
+
+  <!-- Middle ring -->
+  <circle cx="256" cy="290" r="126" fill="none" stroke="white" stroke-width="7" opacity="0.4"/>
+
+  <!-- Inner white filled circle -->
+  <circle cx="256" cy="290" r="100" fill="white" opacity="0.95"/>
+
+  <!-- Lens center gradient -->
+  <circle cx="256" cy="290" r="66" fill="url(#inner)"/>
+
+  <!-- Lens shine -->
+  <circle cx="226" cy="260" r="20" fill="white" opacity="0.45"/>
+  <circle cx="278" cy="314" r="9" fill="white" opacity="0.15"/>
+</svg>
