@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vistago — الشروط والأحكام</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#f0f2f5;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;}
+.navbar{
+  background:#1DA1F2;padding:12px 20px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;
+}
+.navbar-logo{font-size:1.4rem;font-weight:800;color:#fff;letter-spacing:-1px;cursor:pointer;}
+.lang-btn{
+  border:1px solid rgba(255,255,255,0.5);
+  background:transparent;color:#fff;
+  border-radius:20px;padding:4px 14px;
+  font-size:0.8rem;cursor:pointer;margin:0 3px;
+}
+.lang-btn.active{background:rgba(255,255,255,0.25);font-weight:600;}
+.container{max-width:760px;margin:0 auto;padding:40px 20px;}
+.terms-card{
+  background:#fff;border-radius:16px;
+  padding:40px;box-shadow:0 1px 4px rgba(0,0,0,0.08);
+}
+.terms-title{
+  font-size:1.8rem;font-weight:800;
+  color:#1DA1F2;margin-bottom:8px;
+}
+.terms-date{font-size:0.85rem;color:#aaa;margin-bottom:30px;}
+.terms-section{margin-bottom:28px;}
+.terms-section h2{
+  font-size:1.1rem;font-weight:700;
+  color:#1a1a2e;margin-bottom:10px;
+  padding-bottom:6px;border-bottom:2px solid #e8f5fe;
+}
+.terms-section p{
+  font-size:0.92rem;color:#444;
+  line-height:1.8;margin-bottom:10px;
+}
+.terms-section ul{
+  padding-right:20px;margin-bottom:10px;
+}
+.terms-section ul li{
+  font-size:0.92rem;color:#444;
+  line-height:1.8;margin-bottom:6px;
+}
+.back-btn{
+  background:#1DA1F2;color:#fff;
+  border:none;border-radius:12px;
+  padding:12px 30px;font-size:1rem;
+  font-weight:600;cursor:pointer;
+  margin-top:20px;display:block;
+  text-align:center;text-decoration:none;
+}
+.back-btn:hover{opacity:0.9;color:#fff;}
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="navbar-logo" onclick="window.location.href='index.html'">Vistago</div>
+  <div>
+    <button id="btn-ar" class="lang-btn active" onclick="setLang('ar')">🇸🇦 ع</button>
+    <button id="btn-en" class="lang-btn" onclick="setLang('en')">🇬🇧 EN</button>
+  </div>
+</nav>
+
+<!-- Content -->
+<div class="container">
+  <div class="terms-card">
+
+    <div class="terms-title" id="page-title">الشروط والأحكام وسياسة الخصوصية</div>
+    <div class="terms-date" id="page-date">آخر تحديث: مارس 2026</div>
+
+    <!-- Section 1 -->
+    <div class="terms-section">
+      <h2 id="s1-title">1. القبول بالشروط</h2>
+      <p id="s1-text">باستخدامك لمنصة Vistago فإنك توافق على الالتزام بهذه الشروط والأحكام. إذا كنت لا توافق على أي من هذه الشروط، يرجى عدم استخدام المنصة.</p>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="terms-section">
+      <h2 id="s2-title">2. استخدام الحساب</h2>
+      <p id="s2-text">عند إنشاء حساب على Vistago، أنت توافق على:</p>
+      <ul id="s2-list">
+        <li>تقديم معلومات صحيحة ودقيقة عند التسجيل</li>
+        <li>الحفاظ على سرية كلمة المرور الخاصة بك</li>
+        <li>عدم مشاركة حسابك مع أي شخص آخر</li>
+        <li>إخطارنا فوراً في حال الاشتباه بأي استخدام غير مصرح به لحسابك</li>
+      </ul>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="terms-section">
+      <h2 id="s3-title">3. المحتوى المنشور</h2>
+      <p id="s3-text">أنت المسؤول الكامل عن المحتوى الذي تنشره على Vistago. يُحظر نشر:</p>
+      <ul id="s3-list">
+        <li>المحتوى المسيء أو العنيف أو الإباحي</li>
+        <li>المحتوى الذي ينتهك حقوق الملكية الفكرية للآخرين</li>
+        <li>المحتوى الذي يروج للكراهية أو التمييز</li>
+        <li>المعلومات الكاذبة أو المضللة</li>
+        <li>أي محتوى غير قانوني وفق القوانين المعمول بها</li>
+      </ul>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="terms-section">
+      <h2 id="s4-title">4. الخصوصية وحماية البيانات</h2>
+      <p id="s4-text">نحن نحترم خصوصيتك ونلتزم بحماية بياناتك الشخصية. نقوم بجمع المعلومات الضرورية فقط لتشغيل المنصة وتحسين تجربتك. لن نبيع بياناتك الشخصية لأي طرف ثالث.</p>
+    </div>
+
+    <!-- Section 5 -->
+    <div class="terms-section">
+      <h2 id="s5-title">5. الملكية الفكرية</h2>
+      <p id="s5-text">تحتفظ بجميع حقوق الملكية الفكرية للمحتوى الذي تنشره. بنشر المحتوى على Vistago، تمنحنا ترخيصاً غير حصري لعرض المحتوى على المنصة.</p>
+    </div>
+
+    <!-- Section 6 -->
+    <div class="terms-section">
+      <h2 id="s6-title">6. إنهاء الحساب</h2>
+      <p id="s6-text">نحتفظ بالحق في تعليق أو إنهاء حسابك في حال انتهاك هذه الشروط. يمكنك أيضاً حذف حسابك في أي وقت من إعدادات الحساب.</p>
+    </div>
+
+    <!-- Section 7 -->
+    <div class="terms-section">
+      <h2 id="s7-title">7. التعديلات على الشروط</h2>
+      <p id="s7-text">نحتفظ بالحق في تعديل هذه الشروط في أي وقت. سيتم إخطارك بأي تغييرات جوهرية عبر البريد الإلكتروني أو من خلال إشعار على المنصة.</p>
+    </div>
+
+    <!-- Section 8 -->
+    <div class="terms-section">
+      <h2 id="s8-title">8. التواصل معنا</h2>
+      <p id="s8-text">إذا كان لديك أي أسئلة حول هذه الشروط، يمكنك التواصل معنا عبر المنصة.</p>
+    </div>
+
+    <a href="login.html" class="back-btn" id="back-btn">← العودة إلى التسجيل</a>
+
+  </div>
+</div>
+
+<script>
+const tr={
+  ar:{dir:"rtl",
+    pageTitle:"الشروط والأحكام وسياسة الخصوصية",
+    pageDate:"آخر تحديث: مارس 2026",
+    s1Title:"1. القبول بالشروط",
+    s1Text:"باستخدامك لمنصة Vistago فإنك توافق على الالتزام بهذه الشروط والأحكام. إذا كنت لا توافق على أي من هذه الشروط، يرجى عدم استخدام المنصة.",
+    s2Title:"2. استخدام الحساب",
+    s2Text:"عند إنشاء حساب على Vistago، أنت توافق على:",
+    s2List:["تقديم معلومات صحيحة ودقيقة عند التسجيل","الحفاظ على سرية كلمة المرور الخاصة بك","عدم مشاركة حسابك مع أي شخص آخر","إخطارنا فوراً في حال الاشتباه بأي استخدام غير مصرح به لحسابك"],
+    s3Title:"3. المحتوى المنشور",
+    s3Text:"أنت المسؤول الكامل عن المحتوى الذي تنشره على Vistago. يُحظر نشر:",
+    s3List:["المحتوى المسيء أو العنيف أو الإباحي","المحتوى الذي ينتهك حقوق الملكية الفكرية للآخرين","المحتوى الذي يروج للكراهية أو التمييز","المعلومات الكاذبة أو المضللة","أي محتوى غير قانوني وفق القوانين المعمول بها"],
+    s4Title:"4. الخصوصية وحماية البيانات",
+    s4Text:"نحن نحترم خصوصيتك ونلتزم بحماية بياناتك الشخصية. نقوم بجمع المعلومات الضرورية فقط لتشغيل المنصة وتحسين تجربتك. لن نبيع بياناتك الشخصية لأي طرف ثالث.",
+    s5Title:"5. الملكية الفكرية",
+    s5Text:"تحتفظ بجميع حقوق الملكية الفكرية للمحتوى الذي تنشره. بنشر المحتوى على Vistago، تمنحنا ترخيصاً غير حصري لعرض المحتوى على المنصة.",
+    s6Title:"6. إنهاء الحساب",
+    s6Text:"نحتفظ بالحق في تعليق أو إنهاء حسابك في حال انتهاك هذه الشروط. يمكنك أيضاً حذف حسابك في أي وقت من إعدادات الحساب.",
+    s7Title:"7. التعديلات على الشروط",
+    s7Text:"نحتفظ بالحق في تعديل هذه الشروط في أي وقت. سيتم إخطارك بأي تغييرات جوهرية عبر البريد الإلكتروني أو من خلال إشعار على المنصة.",
+    s8Title:"8. التواصل معنا",
+    s8Text:"إذا كان لديك أي أسئلة حول هذه الشروط، يمكنك التواصل معنا عبر المنصة.",
+    backBtn:"← العودة إلى التسجيل"},
+  en:{dir:"ltr",
+    pageTitle:"Terms & Conditions and Privacy Policy",
+    pageDate:"Last updated: March 2026",
+    s1Title:"1. Acceptance of Terms",
+    s1Text:"By using Vistago, you agree to be bound by these terms and conditions. If you do not agree to any of these terms, please do not use the platform.",
+    s2Title:"2. Account Usage",
+    s2Text:"When creating an account on Vistago, you agree to:",
+    s2List:["Provide accurate and truthful information during registration","Keep your password confidential","Not share your account with anyone else","Notify us immediately of any suspected unauthorized use of your account"],
+    s3Title:"3. Posted Content",
+    s3Text:"You are fully responsible for the content you post on Vistago. It is prohibited to post:",
+    s3List:["Offensive, violent, or explicit content","Content that infringes on the intellectual property rights of others","Content that promotes hatred or discrimination","False or misleading information","Any illegal content under applicable laws"],
+    s4Title:"4. Privacy and Data Protection",
+    s4Text:"We respect your privacy and are committed to protecting your personal data. We collect only the necessary information to operate the platform and improve your experience. We will not sell your personal data to any third party.",
+    s5Title:"5. Intellectual Property",
+    s5Text:"You retain all intellectual property rights to the content you post. By posting content on Vistago, you grant us a non-exclusive license to display the content on the platform.",
+    s6Title:"6. Account Termination",
+    s6Text:"We reserve the right to suspend or terminate your account in case of violation of these terms. You can also delete your account at any time from account settings.",
+    s7Title:"7. Amendments to Terms",
+    s7Text:"We reserve the right to modify these terms at any time. You will be notified of any material changes via email or through a notice on the platform.",
+    s8Title:"8. Contact Us",
+    s8Text:"If you have any questions about these terms, you can contact us through the platform.",
+    backBtn:"← Back to Registration"}
+};
+
+function setLang(l){
+  const s=tr[l];
+  document.documentElement.setAttribute("dir",s.dir);
+  document.documentElement.setAttribute("lang",l);
+  document.getElementById("page-title").textContent=s.pageTitle;
+  document.getElementById("page-date").textContent=s.pageDate;
+  document.getElementById("s1-title").textContent=s.s1Title;
+  document.getElementById("s1-text").textContent=s.s1Text;
+  document.getElementById("s2-title").textContent=s.s2Title;
+  document.getElementById("s2-text").textContent=s.s2Text;
+  const s2l=document.getElementById("s2-list");
+  s2l.innerHTML=s.s2List.map(i=>`<li>${i}</li>`).join("");
+  document.getElementById("s3-title").textContent=s.s3Title;
+  document.getElementById("s3-text").textContent=s.s3Text;
+  const s3l=document.getElementById("s3-list");
+  s3l.innerHTML=s.s3List.map(i=>`<li>${i}</li>`).join("");
+  document.getElementById("s4-title").textContent=s.s4Title;
+  document.getElementById("s4-text").textContent=s.s4Text;
+  document.getElementById("s5-title").textContent=s.s5Title;
+  document.getElementById("s5-text").textContent=s.s5Text;
+  document.getElementById("s6-title").textContent=s.s6Title;
+  document.getElementById("s6-text").textContent=s.s6Text;
+  document.getElementById("s7-title").textContent=s.s7Title;
+  document.getElementById("s7-text").textContent=s.s7Text;
+  document.getElementById("s8-title").textContent=s.s8Title;
+  document.getElementById("s8-text").textContent=s.s8Text;
+  document.getElementById("back-btn").textContent=s.backBtn;
+  document.getElementById("btn-ar").classList.toggle("active",l==="ar");
+  document.getElementById("btn-en").classList.toggle("active",l==="en");
+}
+
+// Load saved language
+const savedLang=localStorage.getItem("vistagoLang");
+if(savedLang) setLang(savedLang);
+</script>
+
+</body>
+</html>
