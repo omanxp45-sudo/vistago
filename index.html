@@ -45,7 +45,7 @@ body{background:#f0f2f5;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
 .comments-section{padding:0 16px 14px;display:none;}
 .comments-section.open{display:block;}
 .comment-item{display:flex;gap:10px;margin-bottom:12px;align-items:flex-start;}
-.comment-avatar{width:32px;height:32px;border-radius:50%;background:#1DA1F2;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:0.8rem;flex-shrink:0;cursor:pointer;}
+.comment-avatar{width:32px;height:32px;border-radius:50%;background:#1DA1F2;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:0.8rem;flex-shrink:0;}
 .comment-bubble{background:#f0f2f5;border-radius:12px;padding:8px 12px;flex:1;}
 .comment-user{font-weight:700;font-size:0.82rem;color:#1a1a2e;cursor:pointer;}
 .comment-user:hover{color:#1DA1F2;}
@@ -53,8 +53,8 @@ body{background:#f0f2f5;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
 .comment-meta{display:flex;align-items:center;gap:12px;margin-top:6px;flex-wrap:wrap;}
 .comment-time{font-size:0.72rem;color:#aaa;}
 .comment-actions{display:flex;gap:12px;}
-.cmt-btn{background:transparent;border:none;font-size:0.75rem;color:#888;cursor:pointer;padding:0;display:flex;align-items:center;gap:3px;}
-.cmt-btn:hover{color:#1DA1F2;}
+.cmt-btn{background:transparent;border:none;font-size:0.75rem;color:#888;cursor:pointer;padding:2px 6px;border-radius:8px;display:flex;align-items:center;gap:3px;}
+.cmt-btn:hover{background:#e8f5fe;color:#1DA1F2;}
 .cmt-btn.liked{color:#e1306c;}
 .comment-input-row{display:flex;gap:8px;align-items:center;margin-top:8px;border-top:1px solid #f0f0f0;padding-top:10px;}
 .comment-input{flex:1;border:1.5px solid #e0e0e0;border-radius:20px;padding:8px 14px;font-size:0.88rem;outline:none;}
@@ -125,15 +125,15 @@ body{background:#f0f2f5;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
     <div class="post-image-placeholder">🌅</div>
     <div class="post-caption"><b>ahmed_shamsi</b> لحظة جميلة من غروب الشمس 🌅✨</div>
     <div class="post-actions">
-      <button class="action-btn" id="lb-post1"><i class="bi bi-heart" id="li-post1"></i><span id="lc-post1">0</span></button>
-      <button class="action-btn" onclick="toggleComments('post1')"><i class="bi bi-chat"></i><span id="cc-post1">0</span></button>
-      <button class="action-btn" onclick="sharePost('post1')"><i class="bi bi-share"></i><span id="sc-post1">0</span></button>
+      <button class="action-btn" id="lb-post1" data-action="like" data-post="post1"><i class="bi bi-heart" id="li-post1"></i><span id="lc-post1">0</span></button>
+      <button class="action-btn" data-action="toggle-comments" data-post="post1"><i class="bi bi-chat"></i><span id="cc-post1">0</span></button>
+      <button class="action-btn" data-action="share" data-post="post1"><i class="bi bi-share"></i><span id="sc-post1">0</span></button>
     </div>
     <div class="comments-section" id="cs-post1">
       <div id="cl-post1"></div>
       <div id="ci-post1" style="display:none;" class="comment-input-row">
         <input class="comment-input" id="cin-post1" placeholder="اكتب تعليقاً...">
-        <button class="comment-send" id="csend-post1"><i class="bi bi-send"></i></button>
+        <button class="comment-send" data-action="add-comment" data-post="post1"><i class="bi bi-send"></i></button>
       </div>
     </div>
   </div>
@@ -147,15 +147,15 @@ body{background:#f0f2f5;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
     <div class="post-image-placeholder">🌺</div>
     <div class="post-caption"><b>sara_mutairi</b> طبيعة خلابة من رحلتي الأخيرة 🌺🌿</div>
     <div class="post-actions">
-      <button class="action-btn" id="lb-post2"><i class="bi bi-heart" id="li-post2"></i><span id="lc-post2">0</span></button>
-      <button class="action-btn" onclick="toggleComments('post2')"><i class="bi bi-chat"></i><span id="cc-post2">0</span></button>
-      <button class="action-btn" onclick="sharePost('post2')"><i class="bi bi-share"></i><span id="sc-post2">0</span></button>
+      <button class="action-btn" id="lb-post2" data-action="like" data-post="post2"><i class="bi bi-heart" id="li-post2"></i><span id="lc-post2">0</span></button>
+      <button class="action-btn" data-action="toggle-comments" data-post="post2"><i class="bi bi-chat"></i><span id="cc-post2">0</span></button>
+      <button class="action-btn" data-action="share" data-post="post2"><i class="bi bi-share"></i><span id="sc-post2">0</span></button>
     </div>
     <div class="comments-section" id="cs-post2">
       <div id="cl-post2"></div>
       <div id="ci-post2" style="display:none;" class="comment-input-row">
         <input class="comment-input" id="cin-post2" placeholder="اكتب تعليقاً...">
-        <button class="comment-send" id="csend-post2"><i class="bi bi-send"></i></button>
+        <button class="comment-send" data-action="add-comment" data-post="post2"><i class="bi bi-send"></i></button>
       </div>
     </div>
   </div>
@@ -169,15 +169,15 @@ body{background:#f0f2f5;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
     <div class="post-image-placeholder">🏙️</div>
     <div class="post-caption"><b>mohammed_abri</b> مدينة مسقط في الليل 🏙️🌙</div>
     <div class="post-actions">
-      <button class="action-btn" id="lb-post3"><i class="bi bi-heart" id="li-post3"></i><span id="lc-post3">0</span></button>
-      <button class="action-btn" onclick="toggleComments('post3')"><i class="bi bi-chat"></i><span id="cc-post3">0</span></button>
-      <button class="action-btn" onclick="sharePost('post3')"><i class="bi bi-share"></i><span id="sc-post3">0</span></button>
+      <button class="action-btn" id="lb-post3" data-action="like" data-post="post3"><i class="bi bi-heart" id="li-post3"></i><span id="lc-post3">0</span></button>
+      <button class="action-btn" data-action="toggle-comments" data-post="post3"><i class="bi bi-chat"></i><span id="cc-post3">0</span></button>
+      <button class="action-btn" data-action="share" data-post="post3"><i class="bi bi-share"></i><span id="sc-post3">0</span></button>
     </div>
     <div class="comments-section" id="cs-post3">
       <div id="cl-post3"></div>
       <div id="ci-post3" style="display:none;" class="comment-input-row">
         <input class="comment-input" id="cin-post3" placeholder="اكتب تعليقاً...">
-        <button class="comment-send" id="csend-post3"><i class="bi bi-send"></i></button>
+        <button class="comment-send" data-action="add-comment" data-post="post3"><i class="bi bi-send"></i></button>
       </div>
     </div>
   </div>
@@ -309,19 +309,34 @@ const auth=getAuth(app);
 const db=getFirestore(app);
 const POSTS=["post1","post2","post3"];
 
-// ── attach button events after DOM ready ──
-function attachPostEvents(postId){
-  // like post button
-  document.getElementById("lb-"+postId).addEventListener("click",()=>likePost(postId));
-  // comment send button
-  document.getElementById("csend-"+postId).addEventListener("click",()=>addComment(postId));
-  // comment input enter key
-  document.getElementById("cin-"+postId).addEventListener("keydown",e=>{if(e.key==="Enter")addComment(postId);});
-}
+// ── EVENT DELEGATION — single listener handles all dynamic buttons ──
+document.addEventListener("click", async function(e){
+  const btn = e.target.closest("[data-action]");
+  if(!btn) return;
+  const action = btn.dataset.action;
+  const post = btn.dataset.post;
+  const comment = btn.dataset.comment;
+  const reply = btn.dataset.reply;
+
+  if(action==="like" && post) await likePost(post);
+  if(action==="toggle-comments" && post) toggleComments(post);
+  if(action==="share" && post) sharePost(post);
+  if(action==="add-comment" && post) await addComment(post);
+  if(action==="like-comment" && post && comment) await likeComment(post,comment);
+  if(action==="toggle-reply" && comment) toggleReply(comment);
+  if(action==="add-reply" && post && comment) await addReply(post,comment);
+});
+
+// ── ENTER KEY for inputs ──
+document.addEventListener("keydown", async function(e){
+  if(e.key!=="Enter") return;
+  const el = e.target;
+  if(el.dataset.post && el.classList.contains("comment-input")) await addComment(el.dataset.post);
+  if(el.dataset.comment && el.classList.contains("reply-input")) await addReply(el.dataset.post, el.dataset.comment);
+});
 
 // ── load post ──
 function loadPost(postId){
-  // stats
   onSnapshot(doc(db,"posts",postId),snap=>{
     const d=snap.exists()?snap.data():{};
     document.getElementById("lc-"+postId).textContent=d.likes||0;
@@ -331,7 +346,6 @@ function loadPost(postId){
     document.getElementById("lb-"+postId).classList.toggle("liked",!!liked);
   });
 
-  // comments
   const q=query(collection(db,"posts",postId,"comments"),orderBy("createdAt","asc"));
   onSnapshot(q,snap=>{
     const list=document.getElementById("cl-"+postId);
@@ -346,34 +360,30 @@ function loadPost(postId){
         <div class="comment-avatar">${(c.name||"?").charAt(0)}</div>
         <div style="flex:1">
           <div class="comment-bubble">
-            <div class="comment-user">${c.name||"مجهول"}</div>
+            <div class="comment-user" onclick="goto('profile.html?u=${c.username||""}')">${c.name||"مجهول"}</div>
             <div class="comment-text">${c.text}</div>
             <div class="comment-meta">
               <span class="comment-time">${formatTime(c.createdAt)}</span>
               <div class="comment-actions">
-                <button class="cmt-btn${myLike?" liked":""}" id="cla-${cid}">
+                <button class="cmt-btn${myLike?" liked":""}" data-action="like-comment" data-post="${postId}" data-comment="${cid}">
                   <i class="bi bi-heart${myLike?"-fill":""}" id="cli-${cid}"></i>
                   <span id="clc-${cid}">${c.likes||0}</span>
                 </button>
-                <button class="cmt-btn" id="crb-${cid}">
+                <button class="cmt-btn" data-action="toggle-reply" data-comment="${cid}">
                   <i class="bi bi-reply"></i> ${tr[lang].replyBtn}
                 </button>
               </div>
             </div>
           </div>
           <div class="reply-form" id="rf-${cid}">
-            <input class="reply-input" id="ri-${cid}" placeholder="${tr[lang].rp}">
-            <button class="reply-send" id="rs-${cid}"><i class="bi bi-send" style="font-size:0.8rem"></i></button>
+            <input class="reply-input" id="ri-${cid}" data-post="${postId}" data-comment="${cid}" placeholder="${tr[lang].rp}">
+            <button class="reply-send" data-action="add-reply" data-post="${postId}" data-comment="${cid}">
+              <i class="bi bi-send" style="font-size:0.8rem"></i>
+            </button>
           </div>
           <div class="replies-list" id="rl-${cid}"></div>
         </div>`;
       list.appendChild(wrap);
-
-      // attach comment button events
-      document.getElementById("cla-"+cid).addEventListener("click",()=>likeComment(postId,cid));
-      document.getElementById("crb-"+cid).addEventListener("click",()=>toggleReply(cid));
-      document.getElementById("rs-"+cid).addEventListener("click",()=>addReply(postId,cid));
-      document.getElementById("ri-"+cid).addEventListener("keydown",e=>{if(e.key==="Enter")addReply(postId,cid);});
 
       // load replies
       const rq=query(collection(db,"posts",postId,"comments",cid,"replies"),orderBy("createdAt","asc"));
@@ -443,7 +453,7 @@ async function likeComment(postId,commentId){
   const likedBy={...(d.likedBy||{})};
   const uid=currentUser.uid;
   const icon=document.getElementById("cli-"+commentId);
-  const btn=document.getElementById("cla-"+commentId);
+  const btn=document.querySelector(`[data-action="like-comment"][data-comment="${commentId}"]`);
   const count=document.getElementById("clc-"+commentId);
   if(likedBy[uid]){
     delete likedBy[uid];
@@ -497,10 +507,7 @@ onAuthStateChanged(auth,user=>{
     document.getElementById("nav-login-btn").style.display="block";
     document.getElementById("user-menu").style.display="none";
   }
-  POSTS.forEach(postId=>{
-    attachPostEvents(postId);
-    loadPost(postId);
-  });
+  POSTS.forEach(loadPost);
 });
 
 window.signOutUser=async()=>{await signOut(auth);window.location.reload();};
