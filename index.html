@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vistago</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  background:#f0f2f5;
+  font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+}
+
+/* ── NAVBAR ── */
+.navbar{
+  background:#fff;
+  border-bottom:1px solid #e0e0e0;
+  padding:10px 20px;
+  position:sticky;
+  top:0;
+  z-index:100;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.navbar-logo{
+  font-size:1.6rem;
+  font-weight:800;
+  background:linear-gradient(135deg,#0088ee,#00ccff);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  letter-spacing:-1px;
+}
+.navbar-actions{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.lang-btn{
+  border:1px solid #0088ee;
+  background:transparent;
+  color:#0088ee;
+  border-radius:20px;
+  padding:4px 14px;
+  font-size:0.8rem;
+  cursor:pointer;
+  transition:all 0.2s;
+}
+.lang-btn.active{
+  background:#0088ee;
+  color:#fff;
+}
+.btn-login{
+  background:linear-gradient(135deg,#0088ee,#00ccff);
+  color:#fff;
+  border:none;
+  border-radius:20px;
+  padding:6px 20px;
+  font-size:0.9rem;
+  font-weight:600;
+  cursor:pointer;
+  transition:opacity 0.2s;
+}
+.btn-login:hover{opacity:0.85}
+
+/* ── LAYOUT ── */
+.main-layout{
+  max-width:680px;
+  margin:0 auto;
+  padding:20px 16px;
+}
+
+/* ── POST CARD ── */
+.post-card{
+  background:#fff;
+  border-radius:16px;
+  margin-bottom:20px;
+  overflow:hidden;
+  box-shadow:0 1px 4px rgba(0,0,0,0.08);
+}
+.post-header{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:14px 16px;
+}
+.post-avatar{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  object-fit:cover;
+  background:linear-gradient(135deg,#0088ee,#00ccff);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#fff;
+  font-weight:700;
+  font-size:1rem;
+  flex-shrink:0;
+}
+.post-user-info{flex:1}
+.post-username{
+  font-weight:700;
+  font-size:0.95rem;
+  color:#1a1a2e;
+}
+.post-time{
+  font-size:0.78rem;
+  color:#aaa;
+}
+.post-image{
+  width:100%;
+  aspect-ratio:1;
+  object-fit:cover;
+  display:block;
+  background:#e0e0e0;
+}
+.post-image-placeholder{
+  width:100%;
+  aspect-ratio:1;
+  background:linear-gradient(135deg,#e0e8f0,#c8d8e8);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:4rem;
+  color:#a0b0c0;
+}
+.post-actions{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  padding:12px 16px;
+  border-top:1px solid #f0f0f0;
+}
+.action-btn{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  background:transparent;
+  border:none;
+  color:#555;
+  font-size:0.9rem;
+  cursor:pointer;
+  padding:6px 12px;
+  border-radius:20px;
+  transition:all 0.2s;
+  flex:1;
+  justify-content:center;
+}
+.action-btn:hover{background:#f0f2f5}
+.action-btn.liked{color:#e1306c}
+.action-btn i{font-size:1.1rem}
+.post-caption{
+  padding:10px 16px 14px;
+  font-size:0.9rem;
+  color:#333;
+  line-height:1.5;
+}
+.post-caption span{
+  font-weight:700;
+  color:#1a1a2e;
+}
+
+/* ── LOGIN PROMPT MODAL ── */
+.modal-overlay{
+  display:none;
+  position:fixed;
+  top:0;left:0;right:0;bottom:0;
+  background:rgba(0,0,0,0.5);
+  z-index:1000;
+  align-items:center;
+  justify-content:center;
+}
+.modal-overlay.show{display:flex}
+.modal-box{
+  background:#fff;
+  border-radius:20px;
+  padding:36px 32px;
+  max-width:360px;
+  width:90%;
+  text-align:center;
+  box-shadow:0 20px 60px rgba(0,0,0,0.2);
+}
+.modal-icon{font-size:3rem;margin-bottom:12px}
+.modal-title{
+  font-size:1.3rem;
+  font-weight:700;
+  color:#1a1a2e;
+  margin-bottom:8px;
+}
+.modal-sub{
+  font-size:0.9rem;
+  color:#6c757d;
+  margin-bottom:24px;
+}
+.btn-modal-login{
+  background:linear-gradient(135deg,#0088ee,#00ccff);
+  color:#fff;
+  border:none;
+  border-radius:12px;
+  padding:12px;
+  width:100%;
+  font-size:1rem;
+  font-weight:600;
+  cursor:pointer;
+  margin-bottom:10px;
+}
+.btn-modal-close{
+  background:transparent;
+  border:1px solid #dee2e6;
+  border-radius:12px;
+  padding:10px;
+  width:100%;
+  font-size:0.9rem;
+  cursor:pointer;
+  color:#6c757d;
+}
+
+/* ── STORIES ── */
+.stories{
+  display:flex;
+  gap:12px;
+  overflow-x:auto;
+  padding:16px 0;
+  scrollbar-width:none;
+  margin-bottom:8px;
+}
+.stories::-webkit-scrollbar{display:none}
+.story{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+  cursor:pointer;
+  flex-shrink:0;
+}
+.story-ring{
+  width:62px;
+  height:62px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#0088ee,#00ccff);
+  padding:2.5px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.story-avatar{
+  width:100%;
+  height:100%;
+  border-radius:50%;
+  background:#e0e8f0;
+  border:2.5px solid #fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:700;
+  color:#0088ee;
+  font-size:1.1rem;
+}
+.story-name{
+  font-size:0.72rem;
+  color:#555;
+  max-width:62px;
+  text-align:center;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="navbar-logo">Vistago</div>
+  <div class="navbar-actions">
+    <button id="btn-ar" class="lang-btn active" onclick="setLang('ar')">🇸🇦 ع</button>
+    <button id="btn-en" class="lang-btn" onclick="setLang('en')">🇬🇧 EN</button>
+    <button class="btn-login" onclick="window.location.href='login.html'" id="nav-login-btn">تسجيل الدخول</button>
+  </div>
+</nav>
+
+<!-- Main Content -->
+<div class="main-layout">
+
+  <!-- Stories -->
+  <div class="stories" id="stories-container">
+    <div class="story" onclick="showLoginPrompt()">
+      <div class="story-ring"><div class="story-avatar">أ</div></div>
+      <span class="story-name">أحمد</span>
+    </div>
+    <div class="story" onclick="showLoginPrompt()">
+      <div class="story-ring"><div class="story-avatar">س</div></div>
+      <span class="story-name">سارة</span>
+    </div>
+    <div class="story" onclick="showLoginPrompt()">
+      <div class="story-ring"><div class="story-avatar">م</div></div>
+      <span class="story-name">محمد</span>
+    </div>
+    <div class="story" onclick="showLoginPrompt()">
+      <div class="story-ring"><div class="story-avatar">ف</div></div>
+      <span class="story-name">فاطمة</span>
+    </div>
+    <div class="story" onclick="showLoginPrompt()">
+      <div class="story-ring"><div class="story-avatar">ع</div></div>
+      <span class="story-name">عمر</span>
+    </div>
+  </div>
+
+  <!-- Post 1 -->
+  <div class="post-card">
+    <div class="post-header">
+      <div class="post-avatar">أ</div>
+      <div class="post-user-info">
+        <div class="post-username" id="p1-user">أحمد الشامسي</div>
+        <div class="post-time" id="p1-time">منذ ساعتين</div>
+      </div>
+    </div>
+    <div class="post-image-placeholder">🌅</div>
+    <div class="post-caption"><span id="p1-username">أحمد</span> <span id="p1-caption">لحظة جميلة من غروب الشمس 🌅✨</span></div>
+    <div class="post-actions">
+      <button class="action-btn" onclick="showLoginPrompt()" id="like-btn-1">
+        <i class="bi bi-heart"></i> <span id="like-count-1">128</span>
+      </button>
+      <button class="action-btn" onclick="showLoginPrompt()">
+        <i class="bi bi-chat"></i> <span id="comment-count-1">24</span>
+      </button>
+      <button class="action-btn" onclick="sharePost()">
+        <i class="bi bi-share"></i> <span id="share-text">مشاركة</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Post 2 -->
+  <div class="post-card">
+    <div class="post-header">
+      <div class="post-avatar">س</div>
+      <div class="post-user-info">
+        <div class="post-username" id="p2-user">سارة المطيري</div>
+        <div class="post-time" id="p2-time">منذ 4 ساعات</div>
+      </div>
+    </div>
+    <div class="post-image-placeholder">🌺</div>
+    <div class="post-caption"><span id="p2-username">سارة</span> <span id="p2-caption">طبيعة خلابة من رحلتي الأخيرة 🌺🌿</span></div>
+    <div class="post-actions">
+      <button class="action-btn" onclick="showLoginPrompt()">
+        <i class="bi bi-heart"></i> <span>256</span>
+      </button>
+      <button class="action-btn" onclick="showLoginPrompt()">
+        <i class="bi bi-chat"></i> <span>42</span>
+      </button>
+      <button class="action-btn" onclick="sharePost()">
+        <i class="bi bi-share"></i> <span id="share-text2">مشاركة</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Post 3 -->
+  <div class="post-card">
+    <div class="post-header">
+      <div class="post-avatar">م</div>
+      <div class="post-user-info">
+        <div class="post-username" id="p3-user">محمد العبري</div>
+        <div class="post-time" id="p3-time">منذ 6 ساعات</div>
+      </div>
+    </div>
+    <div class="post-image-placeholder">🏙️</div>
+    <div class="post-caption"><span id="p3-username">محمد</span> <span id="p3-caption">مدينة مسقط في الليل 🏙️🌙</span></div>
+    <div class="post-actions">
+      <button class="action-btn" onclick="showLoginPrompt()">
+        <i class="bi bi-heart"></i> <span>189</span>
+      </button>
+      <button class="action-btn" onclick="showLoginPrompt()">
+        <i class="bi bi-chat"></i> <span>31</span>
+      </button>
+      <button class="action-btn" onclick="sharePost()">
+        <i class="bi bi-share"></i> <span id="share-text3">مشاركة</span>
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<!-- Login Prompt Modal -->
+<div class="modal-overlay" id="loginModal">
+  <div class="modal-box">
+    <div class="modal-icon">📸</div>
+    <div class="modal-title" id="modal-title">سجّل دخولك للمتابعة</div>
+    <div class="modal-sub" id="modal-sub">انضم إلى Vistago لتتفاعل مع المنشورات وتشارك لحظاتك</div>
+    <button class="btn-modal-login" onclick="window.location.href='login.html'" id="modal-login-btn">تسجيل الدخول / إنشاء حساب</button>
+    <button class="btn-modal-close" onclick="closeModal()" id="modal-close-btn">ربما لاحقاً</button>
+  </div>
+</div>
+
+<!-- Language Script -->
+<script>
+const t = {
+  ar:{
+    dir:"rtl", lang:"ar",
+    loginBtn:"تسجيل الدخول",
+    shareText:"مشاركة",
+    modalTitle:"سجّل دخولك للمتابعة",
+    modalSub:"انضم إلى Vistago لتتفاعل مع المنشورات وتشارك لحظاتك",
+    modalLogin:"تسجيل الدخول / إنشاء حساب",
+    modalClose:"ربما لاحقاً",
+    p1user:"أحمد الشامسي", p1time:"منذ ساعتين", p1name:"أحمد", p1cap:"لحظة جميلة من غروب الشمس 🌅✨",
+    p2user:"سارة المطيري", p2time:"منذ 4 ساعات", p2name:"سارة", p2cap:"طبيعة خلابة من رحلتي الأخيرة 🌺🌿",
+    p3user:"محمد العبري", p3time:"منذ 6 ساعات", p3name:"محمد", p3cap:"مدينة مسقط في الليل 🏙️🌙"
+  },
+  en:{
+    dir:"ltr", lang:"en",
+    loginBtn:"Sign In",
+    shareText:"Share",
+    modalTitle:"Sign in to continue",
+    modalSub:"Join Vistago to interact with posts and share your moments",
+    modalLogin:"Sign In / Create Account",
+    modalClose:"Maybe later",
+    p1user:"Ahmed Al Shamsi", p1time:"2 hours ago", p1name:"Ahmed", p1cap:"Beautiful sunset moment 🌅✨",
+    p2user:"Sara Al Mutairi", p2time:"4 hours ago", p2name:"Sara", p2cap:"Amazing nature from my last trip 🌺🌿",
+    p3user:"Mohammed Al Abri", p3time:"6 hours ago", p3name:"Mohammed", p3cap:"Muscat city at night 🏙️🌙"
+  }
+};
+
+let lang = "ar";
+
+function setLang(l) {
+  lang = l;
+  const s = t[l];
+  document.documentElement.setAttribute("dir", s.dir);
+  document.documentElement.setAttribute("lang", s.lang);
+  document.getElementById("nav-login-btn").textContent = s.loginBtn;
+  document.getElementById("share-text").textContent = s.shareText;
+  document.getElementById("share-text2").textContent = s.shareText;
+  document.getElementById("share-text3").textContent = s.shareText;
+  document.getElementById("modal-title").textContent = s.modalTitle;
+  document.getElementById("modal-sub").textContent = s.modalSub;
+  document.getElementById("modal-login-btn").textContent = s.modalLogin;
+  document.getElementById("modal-close-btn").textContent = s.modalClose;
+  document.getElementById("p1-user").textContent = s.p1user;
+  document.getElementById("p1-time").textContent = s.p1time;
+  document.getElementById("p1-username").textContent = s.p1name;
+  document.getElementById("p1-caption").textContent = s.p1cap;
+  document.getElementById("p2-user").textContent = s.p2user;
+  document.getElementById("p2-time").textContent = s.p2time;
+  document.getElementById("p2-username").textContent = s.p2name;
+  document.getElementById("p2-caption").textContent = s.p2cap;
+  document.getElementById("p3-user").textContent = s.p3user;
+  document.getElementById("p3-time").textContent = s.p3time;
+  document.getElementById("p3-username").textContent = s.p3name;
+  document.getElementById("p3-caption").textContent = s.p3cap;
+  document.getElementById("btn-ar").classList.toggle("active", l === "ar");
+  document.getElementById("btn-en").classList.toggle("active", l === "en");
+}
+
+function showLoginPrompt() {
+  document.getElementById("loginModal").classList.add("show");
+}
+
+function closeModal() {
+  document.getElementById("loginModal").classList.remove("show");
+}
+
+function sharePost() {
+  if (navigator.share) {
+    navigator.share({
+      title: "Vistago",
+      url: window.location.href
+    });
+  } else {
+    navigator.clipboard.writeText(window.location.href);
+    alert(lang === "ar" ? "تم نسخ الرابط!" : "Link copied!");
+  }
+}
+
+// Close modal when clicking outside
+document.getElementById("loginModal").addEventListener("click", function(e) {
+  if (e.target === this) closeModal();
+});
+</script>
+
+<!-- Firebase — check if user already logged in -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyA4vNgF3NBWxjQfx_feHpsoIMdswlzUegA",
+    authDomain: "social-media-app-da2cd.firebaseapp.com",
+    projectId: "social-media-app-da2cd",
+    storageBucket: "social-media-app-da2cd.firebasestorage.app",
+    messagingSenderId: "41413182238",
+    appId: "1:41413182238:web:bbf664b131279ec4bd3f0f",
+    measurementId: "G-K5T9NGVCC3"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  onAuthStateChanged(auth, user => {
+    if (user) {
+      // User is logged in — change login button to profile
+      const btn = document.getElementById("nav-login-btn");
+      btn.textContent = user.displayName || "حسابي";
+      btn.onclick = () => window.location.href = "profile.html";
+    }
+  });
+</script>
+
+</body>
+</html>
