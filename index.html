@@ -90,7 +90,6 @@ body{
   width:42px;
   height:42px;
   border-radius:50%;
-  object-fit:cover;
   background:linear-gradient(135deg,#0088ee,#00ccff);
   display:flex;
   align-items:center;
@@ -109,13 +108,6 @@ body{
 .post-time{
   font-size:0.78rem;
   color:#aaa;
-}
-.post-image{
-  width:100%;
-  aspect-ratio:1;
-  object-fit:cover;
-  display:block;
-  background:#e0e0e0;
 }
 .post-image-placeholder{
   width:100%;
@@ -268,6 +260,40 @@ body{
   text-overflow:ellipsis;
   white-space:nowrap;
 }
+
+/* ── USER MENU ── */
+.user-menu{
+  position:relative;
+}
+.user-menu-dropdown{
+  display:none;
+  position:absolute;
+  top:45px;
+  left:0;
+  background:#fff;
+  border-radius:12px;
+  box-shadow:0 4px 20px rgba(0,0,0,0.15);
+  min-width:160px;
+  overflow:hidden;
+  z-index:200;
+}
+.user-menu-dropdown.show{display:block}
+.user-menu-item{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:12px 16px;
+  font-size:0.9rem;
+  color:#333;
+  cursor:pointer;
+  transition:background 0.2s;
+  border:none;
+  background:transparent;
+  width:100%;
+  text-align:right;
+}
+.user-menu-item:hover{background:#f0f2f5}
+.user-menu-item.danger{color:#dc3545}
 </style>
 </head>
 <body>
@@ -278,7 +304,26 @@ body{
   <div class="navbar-actions">
     <button id="btn-ar" class="lang-btn active" onclick="setLang('ar')">🇸🇦 ع</button>
     <button id="btn-en" class="lang-btn" onclick="setLang('en')">🇬🇧 EN</button>
-    <button class="btn-login" onclick="window.location.href='login.html'" id="nav-login-btn">تسجيل الدخول</button>
+    <!-- Login button (shown when logged out) -->
+    <button class="btn-login" id="nav-login-btn" onclick="window.location.href='login.html'">تسجيل الدخول</button>
+    <!-- User menu (shown when logged in) -->
+    <div class="user-menu" id="user-menu" style="display:none;">
+      <button class="btn-login" id="nav-user-btn" onclick="toggleUserMenu()">👤 ...</button>
+      <div class="user-menu-dropdown" id="user-dropdown">
+        <button class="user-menu-item" onclick="window.location.href='profile.html'">
+          <i class="bi bi-person"></i> <span id="menu-profile">حسابي</span>
+        </button>
+        <button class="user-menu-item" onclick="window.location.href='upload.html'">
+          <i class="bi bi-plus-square"></i> <span id="menu-upload">نشر صورة</span>
+        </button>
+        <button class="user-menu-item" onclick="window.location.href='notifications.html'">
+          <i class="bi bi-bell"></i> <span id="menu-notif">الإشعارات</span>
+        </button>
+        <button class="user-menu-item danger" onclick="signOutUser()">
+          <i class="bi bi-box-arrow-right"></i> <span id="menu-logout">تسجيل الخروج</span>
+        </button>
+      </div>
+    </div>
   </div>
 </nav>
 
@@ -286,24 +331,24 @@ body{
 <div class="main-layout">
 
   <!-- Stories -->
-  <div class="stories" id="stories-container">
-    <div class="story" onclick="showLoginPrompt()">
+  <div class="stories">
+    <div class="story" onclick="handleInteraction()">
       <div class="story-ring"><div class="story-avatar">أ</div></div>
       <span class="story-name">أحمد</span>
     </div>
-    <div class="story" onclick="showLoginPrompt()">
+    <div class="story" onclick="handleInteraction()">
       <div class="story-ring"><div class="story-avatar">س</div></div>
       <span class="story-name">سارة</span>
     </div>
-    <div class="story" onclick="showLoginPrompt()">
+    <div class="story" onclick="handleInteraction()">
       <div class="story-ring"><div class="story-avatar">م</div></div>
       <span class="story-name">محمد</span>
     </div>
-    <div class="story" onclick="showLoginPrompt()">
+    <div class="story" onclick="handleInteraction()">
       <div class="story-ring"><div class="story-avatar">ف</div></div>
       <span class="story-name">فاطمة</span>
     </div>
-    <div class="story" onclick="showLoginPrompt()">
+    <div class="story" onclick="handleInteraction()">
       <div class="story-ring"><div class="story-avatar">ع</div></div>
       <span class="story-name">عمر</span>
     </div>
@@ -321,10 +366,10 @@ body{
     <div class="post-image-placeholder">🌅</div>
     <div class="post-caption"><span id="p1-username">أحمد</span> <span id="p1-caption">لحظة جميلة من غروب الشمس 🌅✨</span></div>
     <div class="post-actions">
-      <button class="action-btn" onclick="showLoginPrompt()" id="like-btn-1">
-        <i class="bi bi-heart"></i> <span id="like-count-1">128</span>
+      <button class="action-btn" id="like-btn-1" onclick="handleLike(1)">
+        <i class="bi bi-heart" id="like-icon-1"></i> <span id="like-count-1">128</span>
       </button>
-      <button class="action-btn" onclick="showLoginPrompt()">
+      <button class="action-btn" onclick="handleInteraction()">
         <i class="bi bi-chat"></i> <span id="comment-count-1">24</span>
       </button>
       <button class="action-btn" onclick="sharePost()">
@@ -345,10 +390,10 @@ body{
     <div class="post-image-placeholder">🌺</div>
     <div class="post-caption"><span id="p2-username">سارة</span> <span id="p2-caption">طبيعة خلابة من رحلتي الأخيرة 🌺🌿</span></div>
     <div class="post-actions">
-      <button class="action-btn" onclick="showLoginPrompt()">
-        <i class="bi bi-heart"></i> <span>256</span>
+      <button class="action-btn" id="like-btn-2" onclick="handleLike(2)">
+        <i class="bi bi-heart" id="like-icon-2"></i> <span id="like-count-2">256</span>
       </button>
-      <button class="action-btn" onclick="showLoginPrompt()">
+      <button class="action-btn" onclick="handleInteraction()">
         <i class="bi bi-chat"></i> <span>42</span>
       </button>
       <button class="action-btn" onclick="sharePost()">
@@ -369,10 +414,10 @@ body{
     <div class="post-image-placeholder">🏙️</div>
     <div class="post-caption"><span id="p3-username">محمد</span> <span id="p3-caption">مدينة مسقط في الليل 🏙️🌙</span></div>
     <div class="post-actions">
-      <button class="action-btn" onclick="showLoginPrompt()">
-        <i class="bi bi-heart"></i> <span>189</span>
+      <button class="action-btn" id="like-btn-3" onclick="handleLike(3)">
+        <i class="bi bi-heart" id="like-icon-3"></i> <span id="like-count-3">189</span>
       </button>
-      <button class="action-btn" onclick="showLoginPrompt()">
+      <button class="action-btn" onclick="handleInteraction()">
         <i class="bi bi-chat"></i> <span>31</span>
       </button>
       <button class="action-btn" onclick="sharePost()">
@@ -394,7 +439,7 @@ body{
   </div>
 </div>
 
-<!-- Language Script -->
+<!-- Language & UI Script -->
 <script>
 const t = {
   ar:{
@@ -405,6 +450,10 @@ const t = {
     modalSub:"انضم إلى Vistago لتتفاعل مع المنشورات وتشارك لحظاتك",
     modalLogin:"تسجيل الدخول / إنشاء حساب",
     modalClose:"ربما لاحقاً",
+    menuProfile:"حسابي",
+    menuUpload:"نشر صورة",
+    menuNotif:"الإشعارات",
+    menuLogout:"تسجيل الخروج",
     p1user:"أحمد الشامسي", p1time:"منذ ساعتين", p1name:"أحمد", p1cap:"لحظة جميلة من غروب الشمس 🌅✨",
     p2user:"سارة المطيري", p2time:"منذ 4 ساعات", p2name:"سارة", p2cap:"طبيعة خلابة من رحلتي الأخيرة 🌺🌿",
     p3user:"محمد العبري", p3time:"منذ 6 ساعات", p3name:"محمد", p3cap:"مدينة مسقط في الليل 🏙️🌙"
@@ -417,6 +466,10 @@ const t = {
     modalSub:"Join Vistago to interact with posts and share your moments",
     modalLogin:"Sign In / Create Account",
     modalClose:"Maybe later",
+    menuProfile:"My Profile",
+    menuUpload:"Upload Photo",
+    menuNotif:"Notifications",
+    menuLogout:"Sign Out",
     p1user:"Ahmed Al Shamsi", p1time:"2 hours ago", p1name:"Ahmed", p1cap:"Beautiful sunset moment 🌅✨",
     p2user:"Sara Al Mutairi", p2time:"4 hours ago", p2name:"Sara", p2cap:"Amazing nature from my last trip 🌺🌿",
     p3user:"Mohammed Al Abri", p3time:"6 hours ago", p3name:"Mohammed", p3cap:"Muscat city at night 🏙️🌙"
@@ -424,6 +477,8 @@ const t = {
 };
 
 let lang = "ar";
+let currentUser = null;
+let likedPosts = {};
 
 function setLang(l) {
   lang = l;
@@ -438,6 +493,10 @@ function setLang(l) {
   document.getElementById("modal-sub").textContent = s.modalSub;
   document.getElementById("modal-login-btn").textContent = s.modalLogin;
   document.getElementById("modal-close-btn").textContent = s.modalClose;
+  document.getElementById("menu-profile").textContent = s.menuProfile;
+  document.getElementById("menu-upload").textContent = s.menuUpload;
+  document.getElementById("menu-notif").textContent = s.menuNotif;
+  document.getElementById("menu-logout").textContent = s.menuLogout;
   document.getElementById("p1-user").textContent = s.p1user;
   document.getElementById("p1-time").textContent = s.p1time;
   document.getElementById("p1-username").textContent = s.p1name;
@@ -454,6 +513,33 @@ function setLang(l) {
   document.getElementById("btn-en").classList.toggle("active", l === "en");
 }
 
+function handleInteraction() {
+  if (!currentUser) {
+    showLoginPrompt();
+  }
+}
+
+function handleLike(postId) {
+  if (!currentUser) {
+    showLoginPrompt();
+    return;
+  }
+  const icon = document.getElementById("like-icon-" + postId);
+  const count = document.getElementById("like-count-" + postId);
+  const btn = document.getElementById("like-btn-" + postId);
+  if (likedPosts[postId]) {
+    likedPosts[postId] = false;
+    icon.className = "bi bi-heart";
+    btn.classList.remove("liked");
+    count.textContent = parseInt(count.textContent) - 1;
+  } else {
+    likedPosts[postId] = true;
+    icon.className = "bi bi-heart-fill";
+    btn.classList.add("liked");
+    count.textContent = parseInt(count.textContent) + 1;
+  }
+}
+
 function showLoginPrompt() {
   document.getElementById("loginModal").classList.add("show");
 }
@@ -462,28 +548,35 @@ function closeModal() {
   document.getElementById("loginModal").classList.remove("show");
 }
 
+function toggleUserMenu() {
+  document.getElementById("user-dropdown").classList.toggle("show");
+}
+
 function sharePost() {
   if (navigator.share) {
-    navigator.share({
-      title: "Vistago",
-      url: window.location.href
-    });
+    navigator.share({ title:"Vistago", url:window.location.href });
   } else {
     navigator.clipboard.writeText(window.location.href);
     alert(lang === "ar" ? "تم نسخ الرابط!" : "Link copied!");
   }
 }
 
-// Close modal when clicking outside
 document.getElementById("loginModal").addEventListener("click", function(e) {
   if (e.target === this) closeModal();
 });
+
+document.addEventListener("click", function(e) {
+  const menu = document.getElementById("user-menu");
+  if (!menu.contains(e.target)) {
+    document.getElementById("user-dropdown").classList.remove("show");
+  }
+});
 </script>
 
-<!-- Firebase — check if user already logged in -->
+<!-- Firebase -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyA4vNgF3NBWxjQfx_feHpsoIMdswlzUegA",
@@ -498,13 +591,24 @@ document.getElementById("loginModal").addEventListener("click", function(e) {
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
 
- onAuthStateChanged(auth, user => {
+  onAuthStateChanged(auth, user => {
     if (user) {
-      const btn = document.getElementById("nav-login-btn");
-      btn.textContent = user.displayName || "حسابي";
-      btn.onclick = () => window.location.href = "profile.html";
+      currentUser = user;
+      // Hide login button show user menu
+      document.getElementById("nav-login-btn").style.display = "none";
+      document.getElementById("user-menu").style.display = "block";
+      document.getElementById("nav-user-btn").textContent = "👤 " + (user.displayName || "حسابي");
+    } else {
+      currentUser = null;
+      document.getElementById("nav-login-btn").style.display = "block";
+      document.getElementById("user-menu").style.display = "none";
     }
   });
+
+  window.signOutUser = async function() {
+    await signOut(auth);
+    window.location.reload();
+  }
 </script>
 
 </body>
