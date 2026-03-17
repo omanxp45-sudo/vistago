@@ -8,10 +8,37 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{
-  background:#f0f2f5;
-  font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+body{background:#f0f2f5;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;}
+
+/* ── LOADING SCREEN ── */
+#loading{
+  position:fixed;
+  top:0;left:0;right:0;bottom:0;
+  background:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+  flex-direction:column;
+  gap:16px;
 }
+#loading .logo{
+  font-size:2rem;
+  font-weight:800;
+  background:linear-gradient(135deg,#0088ee,#00ccff);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+#loading .spinner{
+  width:36px;height:36px;
+  border:3px solid #e0e0e0;
+  border-top-color:#0088ee;
+  border-radius:50%;
+  animation:spin 0.8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── NAVBAR ── */
 .navbar{
   background:#fff;
   border-bottom:1px solid #e0e0e0;
@@ -46,10 +73,7 @@ body{
   cursor:pointer;
   transition:all 0.2s;
 }
-.lang-btn.active{
-  background:#0088ee;
-  color:#fff;
-}
+.lang-btn.active{background:#0088ee;color:#fff;}
 .btn-login{
   background:linear-gradient(135deg,#0088ee,#00ccff);
   color:#fff;
@@ -60,199 +84,111 @@ body{
   font-weight:600;
   cursor:pointer;
 }
-.main-layout{
-  max-width:680px;
-  margin:0 auto;
-  padding:20px 16px;
-}
-.post-card{
-  background:#fff;
-  border-radius:16px;
-  margin-bottom:20px;
-  overflow:hidden;
-  box-shadow:0 1px 4px rgba(0,0,0,0.08);
-}
-.post-header{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  padding:14px 16px;
-}
-.post-avatar{
-  width:42px;
-  height:42px;
-  border-radius:50%;
-  background:linear-gradient(135deg,#0088ee,#00ccff);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:#fff;
-  font-weight:700;
-  font-size:1rem;
-  flex-shrink:0;
-}
-.post-user-info{flex:1}
-.post-username{font-weight:700;font-size:0.95rem;color:#1a1a2e;}
-.post-time{font-size:0.78rem;color:#aaa;}
-.post-image-placeholder{
-  width:100%;
-  aspect-ratio:1;
-  background:linear-gradient(135deg,#e0e8f0,#c8d8e8);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:4rem;
-}
-.post-actions{
-  display:flex;
-  align-items:center;
-  padding:12px 16px;
-  border-top:1px solid #f0f0f0;
-}
-.action-btn{
-  display:flex;
-  align-items:center;
-  gap:5px;
-  background:transparent;
-  border:none;
-  color:#555;
-  font-size:0.9rem;
-  cursor:pointer;
-  padding:6px 12px;
-  border-radius:20px;
-  transition:all 0.2s;
-  flex:1;
-  justify-content:center;
-}
-.action-btn:hover{background:#f0f2f5}
-.action-btn.liked{color:#e1306c}
-.post-caption{
-  padding:10px 16px 14px;
-  font-size:0.9rem;
-  color:#333;
-  line-height:1.5;
-}
+.main-layout{max-width:680px;margin:0 auto;padding:20px 16px;}
+
+/* ── STORIES ── */
 .stories{
-  display:flex;
-  gap:12px;
-  overflow-x:auto;
-  padding:16px 0;
-  scrollbar-width:none;
-  margin-bottom:8px;
+  display:flex;gap:12px;
+  overflow-x:auto;padding:16px 0;
+  scrollbar-width:none;margin-bottom:8px;
 }
 .stories::-webkit-scrollbar{display:none}
-.story{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:6px;
-  cursor:pointer;
-  flex-shrink:0;
-}
+.story{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;flex-shrink:0;}
 .story-ring{
-  width:62px;
-  height:62px;
-  border-radius:50%;
+  width:62px;height:62px;border-radius:50%;
   background:linear-gradient(135deg,#0088ee,#00ccff);
   padding:2.5px;
 }
 .story-avatar{
-  width:100%;
-  height:100%;
-  border-radius:50%;
-  background:#e0e8f0;
-  border:2.5px solid #fff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:700;
-  color:#0088ee;
-  font-size:1.1rem;
+  width:100%;height:100%;border-radius:50%;
+  background:#e0e8f0;border:2.5px solid #fff;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;color:#0088ee;font-size:1.1rem;
 }
-.story-name{
-  font-size:0.72rem;
-  color:#555;
-  max-width:62px;
-  text-align:center;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
+.story-name{font-size:0.72rem;color:#555;max-width:62px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+/* ── POST CARD ── */
+.post-card{background:#fff;border-radius:16px;margin-bottom:20px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.08);}
+.post-header{display:flex;align-items:center;gap:12px;padding:14px 16px;}
+.post-avatar{
+  width:42px;height:42px;border-radius:50%;
+  background:linear-gradient(135deg,#0088ee,#00ccff);
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-weight:700;font-size:1rem;flex-shrink:0;
 }
+.post-username{font-weight:700;font-size:0.95rem;color:#1a1a2e;}
+.post-time{font-size:0.78rem;color:#aaa;}
+.post-image-placeholder{
+  width:100%;aspect-ratio:1;
+  background:linear-gradient(135deg,#e0e8f0,#c8d8e8);
+  display:flex;align-items:center;justify-content:center;font-size:4rem;
+}
+.post-actions{display:flex;align-items:center;padding:12px 16px;border-top:1px solid #f0f0f0;}
+.action-btn{
+  display:flex;align-items:center;gap:5px;
+  background:transparent;border:none;color:#555;
+  font-size:0.9rem;cursor:pointer;padding:6px 12px;
+  border-radius:20px;transition:all 0.2s;flex:1;justify-content:center;
+}
+.action-btn:hover{background:#f0f2f5}
+.action-btn.liked{color:#e1306c}
+.post-caption{padding:10px 16px 14px;font-size:0.9rem;color:#333;line-height:1.5;}
+
+/* ── USER MENU ── */
+.user-menu{position:relative;display:none;}
+.dropdown{
+  display:none;position:absolute;
+  top:45px;left:0;
+  background:#fff;border-radius:12px;
+  box-shadow:0 4px 20px rgba(0,0,0,0.15);
+  min-width:180px;overflow:hidden;z-index:200;
+}
+.dropdown.show{display:block}
+.dropdown-item{
+  display:flex;align-items:center;gap:10px;
+  padding:12px 16px;font-size:0.9rem;color:#333;
+  cursor:pointer;border:none;background:transparent;
+  width:100%;text-align:right;
+}
+.dropdown-item:hover{background:#f0f2f5}
+.dropdown-item.danger{color:#dc3545}
+
+/* ── MODAL ── */
 .modal-overlay{
-  display:none;
-  position:fixed;
+  display:none;position:fixed;
   top:0;left:0;right:0;bottom:0;
   background:rgba(0,0,0,0.5);
-  z-index:1000;
-  align-items:center;
-  justify-content:center;
+  z-index:1000;align-items:center;justify-content:center;
 }
 .modal-overlay.show{display:flex}
 .modal-box{
-  background:#fff;
-  border-radius:20px;
-  padding:36px 32px;
-  max-width:360px;
-  width:90%;
-  text-align:center;
+  background:#fff;border-radius:20px;
+  padding:36px 32px;max-width:360px;
+  width:90%;text-align:center;
 }
 .modal-icon{font-size:3rem;margin-bottom:12px}
 .modal-title{font-size:1.3rem;font-weight:700;color:#1a1a2e;margin-bottom:8px;}
 .modal-sub{font-size:0.9rem;color:#6c757d;margin-bottom:24px;}
 .btn-modal-login{
   background:linear-gradient(135deg,#0088ee,#00ccff);
-  color:#fff;
-  border:none;
-  border-radius:12px;
-  padding:12px;
-  width:100%;
-  font-size:1rem;
-  font-weight:600;
-  cursor:pointer;
-  margin-bottom:10px;
+  color:#fff;border:none;border-radius:12px;
+  padding:12px;width:100%;font-size:1rem;
+  font-weight:600;cursor:pointer;margin-bottom:10px;
 }
 .btn-modal-close{
-  background:transparent;
-  border:1px solid #dee2e6;
-  border-radius:12px;
-  padding:10px;
-  width:100%;
-  font-size:0.9rem;
-  cursor:pointer;
-  color:#6c757d;
+  background:transparent;border:1px solid #dee2e6;
+  border-radius:12px;padding:10px;width:100%;
+  font-size:0.9rem;cursor:pointer;color:#6c757d;
 }
-.user-menu{position:relative;display:none;}
-.dropdown{
-  display:none;
-  position:absolute;
-  top:45px;
-  right:0;
-  background:#fff;
-  border-radius:12px;
-  box-shadow:0 4px 20px rgba(0,0,0,0.15);
-  min-width:180px;
-  overflow:hidden;
-  z-index:200;
-}
-.dropdown.show{display:block}
-.dropdown-item{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:12px 16px;
-  font-size:0.9rem;
-  color:#333;
-  cursor:pointer;
-  border:none;
-  background:transparent;
-  width:100%;
-  text-align:right;
-}
-.dropdown-item:hover{background:#f0f2f5}
-.dropdown-item.danger{color:#dc3545}
 </style>
 </head>
 <body>
+
+<!-- Loading Screen -->
+<div id="loading">
+  <div class="logo">Vistago</div>
+  <div class="spinner"></div>
+</div>
 
 <!-- Navbar -->
 <nav class="navbar">
@@ -264,17 +200,17 @@ body{
     <div class="user-menu" id="user-menu">
       <button class="btn-login" id="nav-user-btn" onclick="toggleDropdown()">👤</button>
       <div class="dropdown" id="user-dropdown">
-        <button class="dropdown-item" onclick="window.location.href='profile.html'">
-          <i class="bi bi-person"></i> <span id="menu-profile">حسابي</span>
+        <button class="dropdown-item" onclick="goto('profile.html')">
+          <i class="bi bi-person"></i><span id="m-profile">حسابي</span>
         </button>
-        <button class="dropdown-item" onclick="window.location.href='upload.html'">
-          <i class="bi bi-plus-square"></i> <span id="menu-upload">نشر صورة</span>
+        <button class="dropdown-item" onclick="goto('upload.html')">
+          <i class="bi bi-plus-square"></i><span id="m-upload">نشر صورة</span>
         </button>
-        <button class="dropdown-item" onclick="window.location.href='notifications.html'">
-          <i class="bi bi-bell"></i> <span id="menu-notif">الإشعارات</span>
+        <button class="dropdown-item" onclick="goto('notifications.html')">
+          <i class="bi bi-bell"></i><span id="m-notif">الإشعارات</span>
         </button>
         <button class="dropdown-item danger" onclick="signOutUser()">
-          <i class="bi bi-box-arrow-right"></i> <span id="menu-logout">تسجيل الخروج</span>
+          <i class="bi bi-box-arrow-right"></i><span id="m-out">تسجيل الخروج</span>
         </button>
       </div>
     </div>
@@ -312,23 +248,17 @@ body{
   <div class="post-card">
     <div class="post-header">
       <div class="post-avatar">أ</div>
-      <div class="post-user-info">
-        <div class="post-username" id="p1-user">أحمد الشامسي</div>
-        <div class="post-time" id="p1-time">منذ ساعتين</div>
+      <div>
+        <div class="post-username" id="p1u">أحمد الشامسي</div>
+        <div class="post-time" id="p1t">منذ ساعتين</div>
       </div>
     </div>
     <div class="post-image-placeholder">🌅</div>
-    <div class="post-caption"><b id="p1-name">أحمد</b> <span id="p1-cap">لحظة جميلة من غروب الشمس 🌅✨</span></div>
+    <div class="post-caption"><b id="p1n">أحمد</b> <span id="p1c">لحظة جميلة من غروب الشمس 🌅✨</span></div>
     <div class="post-actions">
-      <button class="action-btn" id="lb1" onclick="like(1,128)">
-        <i class="bi bi-heart" id="li1"></i><span id="lc1">128</span>
-      </button>
-      <button class="action-btn" onclick="interact()">
-        <i class="bi bi-chat"></i><span>24</span>
-      </button>
-      <button class="action-btn" onclick="share()">
-        <i class="bi bi-share"></i><span class="sh">مشاركة</span>
-      </button>
+      <button class="action-btn" id="lb1" onclick="like(1,128)"><i class="bi bi-heart" id="li1"></i><span id="lc1">128</span></button>
+      <button class="action-btn" onclick="interact()"><i class="bi bi-chat"></i><span>24</span></button>
+      <button class="action-btn" onclick="share()"><i class="bi bi-share"></i><span class="sh">مشاركة</span></button>
     </div>
   </div>
 
@@ -336,23 +266,17 @@ body{
   <div class="post-card">
     <div class="post-header">
       <div class="post-avatar">س</div>
-      <div class="post-user-info">
-        <div class="post-username" id="p2-user">سارة المطيري</div>
-        <div class="post-time" id="p2-time">منذ 4 ساعات</div>
+      <div>
+        <div class="post-username" id="p2u">سارة المطيري</div>
+        <div class="post-time" id="p2t">منذ 4 ساعات</div>
       </div>
     </div>
     <div class="post-image-placeholder">🌺</div>
-    <div class="post-caption"><b id="p2-name">سارة</b> <span id="p2-cap">طبيعة خلابة من رحلتي الأخيرة 🌺🌿</span></div>
+    <div class="post-caption"><b id="p2n">سارة</b> <span id="p2c">طبيعة خلابة من رحلتي الأخيرة 🌺🌿</span></div>
     <div class="post-actions">
-      <button class="action-btn" id="lb2" onclick="like(2,256)">
-        <i class="bi bi-heart" id="li2"></i><span id="lc2">256</span>
-      </button>
-      <button class="action-btn" onclick="interact()">
-        <i class="bi bi-chat"></i><span>42</span>
-      </button>
-      <button class="action-btn" onclick="share()">
-        <i class="bi bi-share"></i><span class="sh">مشاركة</span>
-      </button>
+      <button class="action-btn" id="lb2" onclick="like(2,256)"><i class="bi bi-heart" id="li2"></i><span id="lc2">256</span></button>
+      <button class="action-btn" onclick="interact()"><i class="bi bi-chat"></i><span>42</span></button>
+      <button class="action-btn" onclick="share()"><i class="bi bi-share"></i><span class="sh">مشاركة</span></button>
     </div>
   </div>
 
@@ -360,23 +284,17 @@ body{
   <div class="post-card">
     <div class="post-header">
       <div class="post-avatar">م</div>
-      <div class="post-user-info">
-        <div class="post-username" id="p3-user">محمد العبري</div>
-        <div class="post-time" id="p3-time">منذ 6 ساعات</div>
+      <div>
+        <div class="post-username" id="p3u">محمد العبري</div>
+        <div class="post-time" id="p3t">منذ 6 ساعات</div>
       </div>
     </div>
     <div class="post-image-placeholder">🏙️</div>
-    <div class="post-caption"><b id="p3-name">محمد</b> <span id="p3-cap">مدينة مسقط في الليل 🏙️🌙</span></div>
+    <div class="post-caption"><b id="p3n">محمد</b> <span id="p3c">مدينة مسقط في الليل 🏙️🌙</span></div>
     <div class="post-actions">
-      <button class="action-btn" id="lb3" onclick="like(3,189)">
-        <i class="bi bi-heart" id="li3"></i><span id="lc3">189</span>
-      </button>
-      <button class="action-btn" onclick="interact()">
-        <i class="bi bi-chat"></i><span>31</span>
-      </button>
-      <button class="action-btn" onclick="share()">
-        <i class="bi bi-share"></i><span class="sh">مشاركة</span>
-      </button>
+      <button class="action-btn" id="lb3" onclick="like(3,189)"><i class="bi bi-heart" id="li3"></i><span id="lc3">189</span></button>
+      <button class="action-btn" onclick="interact()"><i class="bi bi-chat"></i><span>31</span></button>
+      <button class="action-btn" onclick="share()"><i class="bi bi-share"></i><span class="sh">مشاركة</span></button>
     </div>
   </div>
 
@@ -386,107 +304,90 @@ body{
 <div class="modal-overlay" id="modal">
   <div class="modal-box">
     <div class="modal-icon">📸</div>
-    <div class="modal-title" id="modal-title">سجّل دخولك للمتابعة</div>
-    <div class="modal-sub" id="modal-sub">انضم إلى Vistago لتتفاعل مع المنشورات وتشارك لحظاتك</div>
-    <button class="btn-modal-login" onclick="window.location.href='login.html'" id="modal-btn">تسجيل الدخول / إنشاء حساب</button>
-    <button class="btn-modal-close" onclick="closeModal()" id="modal-close">ربما لاحقاً</button>
+    <div class="modal-title" id="mt">سجّل دخولك للمتابعة</div>
+    <div class="modal-sub" id="ms">انضم إلى Vistago لتتفاعل مع المنشورات وتشارك لحظاتك</div>
+    <button class="btn-modal-login" onclick="goto('login.html')" id="mb">تسجيل الدخول / إنشاء حساب</button>
+    <button class="btn-modal-close" onclick="closeModal()" id="mc">ربما لاحقاً</button>
   </div>
 </div>
 
 <script>
-// ── State ──
-window.isLoggedIn = false;
 const liked = {};
+let lang = "ar";
 
 const tr = {
   ar:{dir:"rtl",login:"تسجيل الدخول",share:"مشاركة",
-    mTitle:"سجّل دخولك للمتابعة",mSub:"انضم إلى Vistago لتتفاعل مع المنشورات وتشارك لحظاتك",
-    mBtn:"تسجيل الدخول / إنشاء حساب",mClose:"ربما لاحقاً",
-    mProfile:"حسابي",mUpload:"نشر صورة",mNotif:"الإشعارات",mOut:"تسجيل الخروج",
+    mt:"سجّل دخولك للمتابعة",ms:"انضم إلى Vistago لتتفاعل مع المنشورات وتشارك لحظاتك",
+    mb:"تسجيل الدخول / إنشاء حساب",mc:"ربما لاحقاً",
+    mp:"حسابي",mu:"نشر صورة",mn:"الإشعارات",mo:"تسجيل الخروج",
     p1u:"أحمد الشامسي",p1t:"منذ ساعتين",p1n:"أحمد",p1c:"لحظة جميلة من غروب الشمس 🌅✨",
     p2u:"سارة المطيري",p2t:"منذ 4 ساعات",p2n:"سارة",p2c:"طبيعة خلابة من رحلتي الأخيرة 🌺🌿",
     p3u:"محمد العبري",p3t:"منذ 6 ساعات",p3n:"محمد",p3c:"مدينة مسقط في الليل 🏙️🌙"},
   en:{dir:"ltr",login:"Sign In",share:"Share",
-    mTitle:"Sign in to continue",mSub:"Join Vistago to interact with posts and share your moments",
-    mBtn:"Sign In / Create Account",mClose:"Maybe later",
-    mProfile:"My Profile",mUpload:"Upload Photo",mNotif:"Notifications",mOut:"Sign Out",
+    mt:"Sign in to continue",ms:"Join Vistago to interact with posts and share your moments",
+    mb:"Sign In / Create Account",mc:"Maybe later",
+    mp:"My Profile",mu:"Upload Photo",mn:"Notifications",mo:"Sign Out",
     p1u:"Ahmed Al Shamsi",p1t:"2 hours ago",p1n:"Ahmed",p1c:"Beautiful sunset moment 🌅✨",
     p2u:"Sara Al Mutairi",p2t:"4 hours ago",p2n:"Sara",p2c:"Amazing nature from my last trip 🌺🌿",
     p3u:"Mohammed Al Abri",p3t:"6 hours ago",p3n:"Mohammed",p3c:"Muscat city at night 🏙️🌙"}
 };
 
-let lang = "ar";
-
 function setLang(l){
-  lang = l;
-  const s = tr[l];
-  document.documentElement.dir = s.dir;
-  document.documentElement.lang = l;
-  document.getElementById("nav-login-btn").textContent = s.login;
+  lang=l;
+  const s=tr[l];
+  document.documentElement.dir=s.dir;
+  document.documentElement.lang=l;
+  document.getElementById("nav-login-btn").textContent=s.login;
   document.querySelectorAll(".sh").forEach(e=>e.textContent=s.share);
-  document.getElementById("modal-title").textContent = s.mTitle;
-  document.getElementById("modal-sub").textContent = s.mSub;
-  document.getElementById("modal-btn").textContent = s.mBtn;
-  document.getElementById("modal-close").textContent = s.mClose;
-  document.getElementById("menu-profile").textContent = s.mProfile;
-  document.getElementById("menu-upload").textContent = s.mUpload;
-  document.getElementById("menu-notif").textContent = s.mNotif;
-  document.getElementById("menu-logout").textContent = s.mOut;
-  document.getElementById("p1-user").textContent = s.p1u;
-  document.getElementById("p1-time").textContent = s.p1t;
-  document.getElementById("p1-name").textContent = s.p1n;
-  document.getElementById("p1-cap").textContent = s.p1c;
-  document.getElementById("p2-user").textContent = s.p2u;
-  document.getElementById("p2-time").textContent = s.p2t;
-  document.getElementById("p2-name").textContent = s.p2n;
-  document.getElementById("p2-cap").textContent = s.p2c;
-  document.getElementById("p3-user").textContent = s.p3u;
-  document.getElementById("p3-time").textContent = s.p3t;
-  document.getElementById("p3-name").textContent = s.p3n;
-  document.getElementById("p3-cap").textContent = s.p3c;
-  document.getElementById("btn-ar").classList.toggle("active", l==="ar");
-  document.getElementById("btn-en").classList.toggle("active", l==="en");
+  document.getElementById("mt").textContent=s.mt;
+  document.getElementById("ms").textContent=s.ms;
+  document.getElementById("mb").textContent=s.mb;
+  document.getElementById("mc").textContent=s.mc;
+  document.getElementById("m-profile").textContent=s.mp;
+  document.getElementById("m-upload").textContent=s.mu;
+  document.getElementById("m-notif").textContent=s.mn;
+  document.getElementById("m-out").textContent=s.mo;
+  document.getElementById("p1u").textContent=s.p1u;
+  document.getElementById("p1t").textContent=s.p1t;
+  document.getElementById("p1n").textContent=s.p1n;
+  document.getElementById("p1c").textContent=s.p1c;
+  document.getElementById("p2u").textContent=s.p2u;
+  document.getElementById("p2t").textContent=s.p2t;
+  document.getElementById("p2n").textContent=s.p2n;
+  document.getElementById("p2c").textContent=s.p2c;
+  document.getElementById("p3u").textContent=s.p3u;
+  document.getElementById("p3t").textContent=s.p3t;
+  document.getElementById("p3n").textContent=s.p3n;
+  document.getElementById("p3c").textContent=s.p3c;
+  document.getElementById("btn-ar").classList.toggle("active",l==="ar");
+  document.getElementById("btn-en").classList.toggle("active",l==="en");
 }
 
 function interact(){
   if(!window.isLoggedIn) document.getElementById("modal").classList.add("show");
 }
 
-function like(id, base){
-  if(!window.isLoggedIn){ interact(); return; }
-  const icon = document.getElementById("li"+id);
-  const count = document.getElementById("lc"+id);
-  const btn = document.getElementById("lb"+id);
-  liked[id] = !liked[id];
-  icon.className = liked[id] ? "bi bi-heart-fill" : "bi bi-heart";
-  btn.classList.toggle("liked", liked[id]);
-  count.textContent = liked[id] ? base+1 : base;
+function like(id,base){
+  if(!window.isLoggedIn){interact();return;}
+  liked[id]=!liked[id];
+  document.getElementById("li"+id).className=liked[id]?"bi bi-heart-fill":"bi bi-heart";
+  document.getElementById("lb"+id).classList.toggle("liked",liked[id]);
+  document.getElementById("lc"+id).textContent=liked[id]?base+1:base;
 }
 
-function closeModal(){
-  document.getElementById("modal").classList.remove("show");
-}
-
-function toggleDropdown(){
-  document.getElementById("user-dropdown").classList.toggle("show");
-}
+function closeModal(){document.getElementById("modal").classList.remove("show");}
+function toggleDropdown(){document.getElementById("user-dropdown").classList.toggle("show");}
+function goto(url){window.location.href=url;}
 
 function share(){
-  if(navigator.share){
-    navigator.share({title:"Vistago",url:window.location.href});
-  } else {
-    navigator.clipboard.writeText(window.location.href);
-    alert(lang==="ar"?"تم نسخ الرابط!":"Link copied!");
-  }
+  if(navigator.share){navigator.share({title:"Vistago",url:window.location.href});}
+  else{navigator.clipboard.writeText(window.location.href);alert(lang==="ar"?"تم نسخ الرابط!":"Link copied!");}
 }
 
-document.getElementById("modal").addEventListener("click",function(e){
-  if(e.target===this) closeModal();
-});
-
+document.getElementById("modal").addEventListener("click",function(e){if(e.target===this)closeModal();});
 document.addEventListener("click",function(e){
-  const m = document.getElementById("user-menu");
-  if(!m.contains(e.target)) document.getElementById("user-dropdown").classList.remove("show");
+  if(!document.getElementById("user-menu").contains(e.target))
+    document.getElementById("user-dropdown").classList.remove("show");
 });
 </script>
 
@@ -495,18 +396,19 @@ document.addEventListener("click",function(e){
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-const app = initializeApp({
+const auth = getAuth(initializeApp({
   apiKey:"AIzaSyA4vNgF3NBWxjQfx_feHpsoIMdswlzUegA",
   authDomain:"social-media-app-da2cd.firebaseapp.com",
   projectId:"social-media-app-da2cd",
   storageBucket:"social-media-app-da2cd.firebasestorage.app",
   messagingSenderId:"41413182238",
   appId:"1:41413182238:web:bbf664b131279ec4bd3f0f"
-});
-
-const auth = getAuth(app);
+}));
 
 onAuthStateChanged(auth, user => {
+  // Hide loading screen first
+  document.getElementById("loading").style.display = "none";
+
   if(user){
     window.isLoggedIn = true;
     document.getElementById("nav-login-btn").style.display = "none";
