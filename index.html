@@ -9,7 +9,6 @@
 <meta property="og:description" content="شارك لحظاتك مع العالم">
 <meta property="og:image" content="https://omanxp45-sudo.github.io/vistago/vistago-icon.svg">
 <meta property="og:url" content="https://omanxp45-sudo.github.io/vistago/">
-<meta property="og:type" content="website">
 <link rel="icon" href="vistago-icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="vistago-icon.svg">
 <link rel="manifest" href="manifest.json">
@@ -51,12 +50,12 @@ body{background:#f0f2f5;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
 .comment-user{font-weight:700;font-size:0.82rem;color:#1a1a2e;cursor:pointer;}
 .comment-user:hover{color:#1DA1F2;}
 .comment-text{font-size:0.88rem;color:#333;margin-top:2px;}
-.comment-meta{display:flex;align-items:center;gap:12px;margin-top:6px;}
+.comment-meta{display:flex;align-items:center;gap:12px;margin-top:6px;flex-wrap:wrap;}
 .comment-time{font-size:0.72rem;color:#aaa;}
 .comment-actions{display:flex;gap:12px;}
-.cmt-action{background:transparent;border:none;font-size:0.75rem;color:#888;cursor:pointer;padding:0;display:flex;align-items:center;gap:3px;}
-.cmt-action:hover{color:#1DA1F2;}
-.cmt-action.liked{color:#e1306c;}
+.cmt-btn{background:transparent;border:none;font-size:0.75rem;color:#888;cursor:pointer;padding:0;display:flex;align-items:center;gap:3px;}
+.cmt-btn:hover{color:#1DA1F2;}
+.cmt-btn.liked{color:#e1306c;}
 .comment-input-row{display:flex;gap:8px;align-items:center;margin-top:8px;border-top:1px solid #f0f0f0;padding-top:10px;}
 .comment-input{flex:1;border:1.5px solid #e0e0e0;border-radius:20px;padding:8px 14px;font-size:0.88rem;outline:none;}
 .comment-input:focus{border-color:#1DA1F2;}
@@ -121,23 +120,20 @@ body{background:#f0f2f5;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
   <div class="post-card">
     <div class="post-header">
       <div class="post-avatar" onclick="goto('profile.html?u=ahmed_shamsi')">أ</div>
-      <div>
-        <div class="post-username" onclick="goto('profile.html?u=ahmed_shamsi')">ahmed_shamsi</div>
-        <div class="post-time">منذ ساعتين</div>
-      </div>
+      <div><div class="post-username" onclick="goto('profile.html?u=ahmed_shamsi')">ahmed_shamsi</div><div class="post-time">منذ ساعتين</div></div>
     </div>
     <div class="post-image-placeholder">🌅</div>
     <div class="post-caption"><b>ahmed_shamsi</b> لحظة جميلة من غروب الشمس 🌅✨</div>
     <div class="post-actions">
-      <button class="action-btn" id="lb-post1" onclick="likePost('post1')"><i class="bi bi-heart" id="li-post1"></i><span id="lc-post1">0</span></button>
+      <button class="action-btn" id="lb-post1"><i class="bi bi-heart" id="li-post1"></i><span id="lc-post1">0</span></button>
       <button class="action-btn" onclick="toggleComments('post1')"><i class="bi bi-chat"></i><span id="cc-post1">0</span></button>
       <button class="action-btn" onclick="sharePost('post1')"><i class="bi bi-share"></i><span id="sc-post1">0</span></button>
     </div>
     <div class="comments-section" id="cs-post1">
       <div id="cl-post1"></div>
       <div id="ci-post1" style="display:none;" class="comment-input-row">
-        <input class="comment-input" id="cin-post1" placeholder="اكتب تعليقاً..." onkeydown="if(event.key==='Enter')addComment('post1')">
-        <button class="comment-send" onclick="addComment('post1')"><i class="bi bi-send"></i></button>
+        <input class="comment-input" id="cin-post1" placeholder="اكتب تعليقاً...">
+        <button class="comment-send" id="csend-post1"><i class="bi bi-send"></i></button>
       </div>
     </div>
   </div>
@@ -146,23 +142,20 @@ body{background:#f0f2f5;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
   <div class="post-card">
     <div class="post-header">
       <div class="post-avatar" onclick="goto('profile.html?u=sara_mutairi')">س</div>
-      <div>
-        <div class="post-username" onclick="goto('profile.html?u=sara_mutairi')">sara_mutairi</div>
-        <div class="post-time">منذ 4 ساعات</div>
-      </div>
+      <div><div class="post-username" onclick="goto('profile.html?u=sara_mutairi')">sara_mutairi</div><div class="post-time">منذ 4 ساعات</div></div>
     </div>
     <div class="post-image-placeholder">🌺</div>
     <div class="post-caption"><b>sara_mutairi</b> طبيعة خلابة من رحلتي الأخيرة 🌺🌿</div>
     <div class="post-actions">
-      <button class="action-btn" id="lb-post2" onclick="likePost('post2')"><i class="bi bi-heart" id="li-post2"></i><span id="lc-post2">0</span></button>
+      <button class="action-btn" id="lb-post2"><i class="bi bi-heart" id="li-post2"></i><span id="lc-post2">0</span></button>
       <button class="action-btn" onclick="toggleComments('post2')"><i class="bi bi-chat"></i><span id="cc-post2">0</span></button>
       <button class="action-btn" onclick="sharePost('post2')"><i class="bi bi-share"></i><span id="sc-post2">0</span></button>
     </div>
     <div class="comments-section" id="cs-post2">
       <div id="cl-post2"></div>
       <div id="ci-post2" style="display:none;" class="comment-input-row">
-        <input class="comment-input" id="cin-post2" placeholder="اكتب تعليقاً..." onkeydown="if(event.key==='Enter')addComment('post2')">
-        <button class="comment-send" onclick="addComment('post2')"><i class="bi bi-send"></i></button>
+        <input class="comment-input" id="cin-post2" placeholder="اكتب تعليقاً...">
+        <button class="comment-send" id="csend-post2"><i class="bi bi-send"></i></button>
       </div>
     </div>
   </div>
@@ -171,23 +164,20 @@ body{background:#f0f2f5;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
   <div class="post-card">
     <div class="post-header">
       <div class="post-avatar" onclick="goto('profile.html?u=mohammed_abri')">م</div>
-      <div>
-        <div class="post-username" onclick="goto('profile.html?u=mohammed_abri')">mohammed_abri</div>
-        <div class="post-time">منذ 6 ساعات</div>
-      </div>
+      <div><div class="post-username" onclick="goto('profile.html?u=mohammed_abri')">mohammed_abri</div><div class="post-time">منذ 6 ساعات</div></div>
     </div>
     <div class="post-image-placeholder">🏙️</div>
     <div class="post-caption"><b>mohammed_abri</b> مدينة مسقط في الليل 🏙️🌙</div>
     <div class="post-actions">
-      <button class="action-btn" id="lb-post3" onclick="likePost('post3')"><i class="bi bi-heart" id="li-post3"></i><span id="lc-post3">0</span></button>
+      <button class="action-btn" id="lb-post3"><i class="bi bi-heart" id="li-post3"></i><span id="lc-post3">0</span></button>
       <button class="action-btn" onclick="toggleComments('post3')"><i class="bi bi-chat"></i><span id="cc-post3">0</span></button>
       <button class="action-btn" onclick="sharePost('post3')"><i class="bi bi-share"></i><span id="sc-post3">0</span></button>
     </div>
     <div class="comments-section" id="cs-post3">
       <div id="cl-post3"></div>
       <div id="ci-post3" style="display:none;" class="comment-input-row">
-        <input class="comment-input" id="cin-post3" placeholder="اكتب تعليقاً..." onkeydown="if(event.key==='Enter')addComment('post3')">
-        <button class="comment-send" onclick="addComment('post3')"><i class="bi bi-send"></i></button>
+        <input class="comment-input" id="cin-post3" placeholder="اكتب تعليقاً...">
+        <button class="comment-send" id="csend-post3"><i class="bi bi-send"></i></button>
       </div>
     </div>
   </div>
@@ -262,8 +252,8 @@ if(savedLang)setLang(savedLang);
 
 function goto(url){window.location.href=url;}
 function closeModal(){document.getElementById("modal").classList.remove("show");}
-function toggleDropdown(){document.getElementById("user-dropdown").classList.toggle("show");}
 function showLoginModal(){document.getElementById("modal").classList.add("show");}
+function toggleDropdown(){document.getElementById("user-dropdown").classList.toggle("show");}
 function requireLogin(url){if(!window.isLoggedIn){showLoginModal();}else{goto(url);}}
 
 function formatTime(ts){
@@ -287,7 +277,6 @@ function sharePost(postId){
   const url=`https://omanxp45-sudo.github.io/vistago/post.html?id=${postId}`;
   if(navigator.share){navigator.share({title:"Vistago",url});}
   else{navigator.clipboard.writeText(url);alert(tr[lang].copied);}
-  if(window._fbFuncs)window._fbFuncs.incrementShare(postId);
 }
 
 document.getElementById("modal").addEventListener("click",function(e){if(e.target===this)closeModal();});
@@ -297,12 +286,12 @@ document.addEventListener("click",function(e){
 });
 </script>
 
-<!-- Firebase -->
+<!-- Firebase Module -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import {
-  getFirestore, doc, getDoc, setDoc, updateDoc,
+  getFirestore, doc, getDoc, setDoc,
   collection, addDoc, onSnapshot,
   query, orderBy, serverTimestamp, increment
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -320,17 +309,19 @@ const auth=getAuth(app);
 const db=getFirestore(app);
 const POSTS=["post1","post2","post3"];
 
-// ── expose share increment ──
-window._fbFuncs={
-  incrementShare:async(postId)=>{
-    const ref=doc(db,"posts",postId);
-    await setDoc(ref,{shares:increment(1)},{merge:true});
-  }
-};
+// ── attach button events after DOM ready ──
+function attachPostEvents(postId){
+  // like post button
+  document.getElementById("lb-"+postId).addEventListener("click",()=>likePost(postId));
+  // comment send button
+  document.getElementById("csend-"+postId).addEventListener("click",()=>addComment(postId));
+  // comment input enter key
+  document.getElementById("cin-"+postId).addEventListener("keydown",e=>{if(e.key==="Enter")addComment(postId);});
+}
 
-// ── load post data ──
+// ── load post ──
 function loadPost(postId){
-  // post stats
+  // stats
   onSnapshot(doc(db,"posts",postId),snap=>{
     const d=snap.exists()?snap.data():{};
     document.getElementById("lc-"+postId).textContent=d.likes||0;
@@ -352,33 +343,39 @@ function loadPost(postId){
       const wrap=document.createElement("div");
       wrap.className="comment-item";
       wrap.innerHTML=`
-        <div class="comment-avatar" onclick="goto('profile.html?u=${c.username||""}')">${(c.name||"?").charAt(0)}</div>
+        <div class="comment-avatar">${(c.name||"?").charAt(0)}</div>
         <div style="flex:1">
           <div class="comment-bubble">
-            <div class="comment-user" onclick="goto('profile.html?u=${c.username||""}')">${c.name||"مجهول"}</div>
+            <div class="comment-user">${c.name||"مجهول"}</div>
             <div class="comment-text">${c.text}</div>
             <div class="comment-meta">
               <span class="comment-time">${formatTime(c.createdAt)}</span>
               <div class="comment-actions">
-                <button class="cmt-action${myLike?" liked":""}" id="cla-${cid}" onclick="likeComment('${postId}','${cid}')">
+                <button class="cmt-btn${myLike?" liked":""}" id="cla-${cid}">
                   <i class="bi bi-heart${myLike?"-fill":""}" id="cli-${cid}"></i>
                   <span id="clc-${cid}">${c.likes||0}</span>
                 </button>
-                <button class="cmt-action" onclick="toggleReply('${cid}')">
+                <button class="cmt-btn" id="crb-${cid}">
                   <i class="bi bi-reply"></i> ${tr[lang].replyBtn}
                 </button>
               </div>
             </div>
           </div>
           <div class="reply-form" id="rf-${cid}">
-            <input class="reply-input" id="ri-${cid}" placeholder="${tr[lang].rp}" onkeydown="if(event.key==='Enter')addReply('${postId}','${cid}')">
-            <button class="reply-send" onclick="addReply('${postId}','${cid}')"><i class="bi bi-send" style="font-size:0.8rem"></i></button>
+            <input class="reply-input" id="ri-${cid}" placeholder="${tr[lang].rp}">
+            <button class="reply-send" id="rs-${cid}"><i class="bi bi-send" style="font-size:0.8rem"></i></button>
           </div>
           <div class="replies-list" id="rl-${cid}"></div>
         </div>`;
       list.appendChild(wrap);
 
-      // replies
+      // attach comment button events
+      document.getElementById("cla-"+cid).addEventListener("click",()=>likeComment(postId,cid));
+      document.getElementById("crb-"+cid).addEventListener("click",()=>toggleReply(cid));
+      document.getElementById("rs-"+cid).addEventListener("click",()=>addReply(postId,cid));
+      document.getElementById("ri-"+cid).addEventListener("keydown",e=>{if(e.key==="Enter")addReply(postId,cid);});
+
+      // load replies
       const rq=query(collection(db,"posts",postId,"comments",cid,"replies"),orderBy("createdAt","asc"));
       onSnapshot(rq,rsnap=>{
         const rl=document.getElementById("rl-"+cid);
@@ -404,7 +401,7 @@ function loadPost(postId){
 }
 
 // ── like post ──
-window.likePost=async function(postId){
+async function likePost(postId){
   if(!window.isLoggedIn){showLoginModal();return;}
   const ref=doc(db,"posts",postId);
   const snap=await getDoc(ref);
@@ -418,10 +415,10 @@ window.likePost=async function(postId){
     likedBy[uid]=true;
     await setDoc(ref,{likes:(d.likes||0)+1,likedBy},{merge:true});
   }
-};
+}
 
 // ── add comment ──
-window.addComment=async function(postId){
+async function addComment(postId){
   if(!window.isLoggedIn){showLoginModal();return;}
   const input=document.getElementById("cin-"+postId);
   const text=input.value.trim();
@@ -435,18 +432,18 @@ window.addComment=async function(postId){
     createdAt:serverTimestamp()
   });
   input.value="";
-};
+}
 
 // ── like comment ──
-window.likeComment=async function(postId,commentId){
+async function likeComment(postId,commentId){
   if(!window.isLoggedIn){showLoginModal();return;}
   const ref=doc(db,"posts",postId,"comments",commentId);
   const snap=await getDoc(ref);
   const d=snap.exists()?snap.data():{likes:0,likedBy:{}};
   const likedBy={...(d.likedBy||{})};
   const uid=currentUser.uid;
-  const btn=document.getElementById("cla-"+commentId);
   const icon=document.getElementById("cli-"+commentId);
+  const btn=document.getElementById("cla-"+commentId);
   const count=document.getElementById("clc-"+commentId);
   if(likedBy[uid]){
     delete likedBy[uid];
@@ -463,17 +460,17 @@ window.likeComment=async function(postId,commentId){
     if(btn)btn.classList.add("liked");
     if(count)count.textContent=n;
   }
-};
+}
 
-// ── toggle reply form ──
-window.toggleReply=function(commentId){
+// ── toggle reply ──
+function toggleReply(commentId){
   if(!window.isLoggedIn){showLoginModal();return;}
   const rf=document.getElementById("rf-"+commentId);
   if(rf)rf.classList.toggle("open");
-};
+}
 
 // ── add reply ──
-window.addReply=async function(postId,commentId){
+async function addReply(postId,commentId){
   if(!window.isLoggedIn){showLoginModal();return;}
   const input=document.getElementById("ri-"+commentId);
   const text=input.value.trim();
@@ -485,7 +482,7 @@ window.addReply=async function(postId,commentId){
   input.value="";
   const rf=document.getElementById("rf-"+commentId);
   if(rf)rf.classList.remove("open");
-};
+}
 
 // ── auth ──
 onAuthStateChanged(auth,user=>{
@@ -500,7 +497,10 @@ onAuthStateChanged(auth,user=>{
     document.getElementById("nav-login-btn").style.display="block";
     document.getElementById("user-menu").style.display="none";
   }
-  POSTS.forEach(loadPost);
+  POSTS.forEach(postId=>{
+    attachPostEvents(postId);
+    loadPost(postId);
+  });
 });
 
 window.signOutUser=async()=>{await signOut(auth);window.location.reload();};
