@@ -102,7 +102,6 @@ body{
   transition:opacity 0.2s;margin-bottom:16px;
 }
 .btn-submit:hover{opacity:0.9;}
-.btn-submit:disabled{opacity:0.6;cursor:not-allowed;}
 .toggle-link{
   color:#1DA1F2;cursor:pointer;
   text-decoration:underline;font-weight:500;
@@ -264,7 +263,6 @@ function setLang(l){
   document.getElementById("btn-en").classList.toggle("active",l==="en");
 }
 
-// Load saved language
 const savedLang=localStorage.getItem("vistagoLang");
 if(savedLang) setLang(savedLang);
 
@@ -320,7 +318,7 @@ function checkUsername(){
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getFirestore, doc, setDoc, getDoc, collection } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const app=initializeApp({
   apiKey:"AIzaSyA4vNgF3NBWxjQfx_feHpsoIMdswlzUegA",
@@ -335,13 +333,13 @@ const auth=getAuth(app);
 const db=getFirestore(app);
 const googleProvider=new GoogleAuthProvider();
 
+// ── Check username directly by document ID ──
 window.checkUsernameFirebase=async function(username){
   const input=document.getElementById("reg-username");
   const status=document.getElementById("username-status");
   try{
-    const q=query(collection(db,"usernames"),where("username","==",username));
-    const snap=await getDocs(q);
-    if(snap.empty){
+    const snap=await getDoc(doc(db,"usernames",username));
+    if(!snap.exists()){
       usernameAvailable=true;
       status.textContent=tr[lang].usernameAvailable;
       status.className="username-status available";
@@ -352,9 +350,13 @@ window.checkUsernameFirebase=async function(username){
       status.className="username-status taken";
       input.className="form-control invalid";
     }
-  }catch(e){status.textContent="";}
+  }catch(e){
+    status.textContent="";
+    usernameAvailable=false;
+  }
 }
 
+// ── Save user to Firestore ──
 async function saveUser(user,name,username){
   await setDoc(doc(db,"users",user.uid),{
     uid:user.uid,
@@ -366,10 +368,14 @@ async function saveUser(user,name,username){
     createdAt:new Date()
   },{merge:true});
   if(username){
-    await setDoc(doc(db,"usernames",username),{username,uid:user.uid});
+    await setDoc(doc(db,"usernames",username),{
+      username,
+      uid:user.uid
+    });
   }
 }
 
+// ── Google Sign In ──
 window.signInWithGoogle=async function(){
   try{
     const result=await signInWithPopup(auth,googleProvider);
@@ -386,6 +392,7 @@ window.signInWithGoogle=async function(){
   }
 }
 
+// ── Email Login ──
 window.loginWithEmail=async function(){
   const email=document.getElementById("login-email").value.trim();
   const password=document.getElementById("login-password").value.trim();
@@ -399,6 +406,7 @@ window.loginWithEmail=async function(){
   }
 }
 
+// ── Email Register ──
 window.registerWithEmail=async function(){
   const name=document.getElementById("reg-name").value.trim();
   const username=document.getElementById("reg-username").value.trim().toLowerCase();
