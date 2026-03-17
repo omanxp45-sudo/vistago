@@ -15,6 +15,12 @@
 <meta name="theme-color" content="#1DA1F2">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+
+<!-- Firebase Compat CDN — works with regular scripts -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#f0f2f5;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;padding-bottom:70px;}
@@ -125,15 +131,15 @@ body{background:#f0f2f5;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
     <div class="post-image-placeholder">🌅</div>
     <div class="post-caption"><b>ahmed_shamsi</b> لحظة جميلة من غروب الشمس 🌅✨</div>
     <div class="post-actions">
-      <button class="action-btn" id="lb-post1" data-action="like" data-post="post1"><i class="bi bi-heart" id="li-post1"></i><span id="lc-post1">0</span></button>
-      <button class="action-btn" data-action="toggle-comments" data-post="post1"><i class="bi bi-chat"></i><span id="cc-post1">0</span></button>
-      <button class="action-btn" data-action="share" data-post="post1"><i class="bi bi-share"></i><span id="sc-post1">0</span></button>
+      <button class="action-btn" id="lb-post1" onclick="likePost('post1')"><i class="bi bi-heart" id="li-post1"></i><span id="lc-post1">0</span></button>
+      <button class="action-btn" onclick="toggleComments('post1')"><i class="bi bi-chat"></i><span id="cc-post1">0</span></button>
+      <button class="action-btn" onclick="sharePost('post1')"><i class="bi bi-share"></i><span id="sc-post1">0</span></button>
     </div>
     <div class="comments-section" id="cs-post1">
       <div id="cl-post1"></div>
       <div id="ci-post1" style="display:none;" class="comment-input-row">
-        <input class="comment-input" id="cin-post1" placeholder="اكتب تعليقاً...">
-        <button class="comment-send" data-action="add-comment" data-post="post1"><i class="bi bi-send"></i></button>
+        <input class="comment-input" id="cin-post1" placeholder="اكتب تعليقاً..." onkeydown="if(event.key==='Enter')addComment('post1')">
+        <button class="comment-send" onclick="addComment('post1')"><i class="bi bi-send"></i></button>
       </div>
     </div>
   </div>
@@ -147,15 +153,15 @@ body{background:#f0f2f5;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
     <div class="post-image-placeholder">🌺</div>
     <div class="post-caption"><b>sara_mutairi</b> طبيعة خلابة من رحلتي الأخيرة 🌺🌿</div>
     <div class="post-actions">
-      <button class="action-btn" id="lb-post2" data-action="like" data-post="post2"><i class="bi bi-heart" id="li-post2"></i><span id="lc-post2">0</span></button>
-      <button class="action-btn" data-action="toggle-comments" data-post="post2"><i class="bi bi-chat"></i><span id="cc-post2">0</span></button>
-      <button class="action-btn" data-action="share" data-post="post2"><i class="bi bi-share"></i><span id="sc-post2">0</span></button>
+      <button class="action-btn" id="lb-post2" onclick="likePost('post2')"><i class="bi bi-heart" id="li-post2"></i><span id="lc-post2">0</span></button>
+      <button class="action-btn" onclick="toggleComments('post2')"><i class="bi bi-chat"></i><span id="cc-post2">0</span></button>
+      <button class="action-btn" onclick="sharePost('post2')"><i class="bi bi-share"></i><span id="sc-post2">0</span></button>
     </div>
     <div class="comments-section" id="cs-post2">
       <div id="cl-post2"></div>
       <div id="ci-post2" style="display:none;" class="comment-input-row">
-        <input class="comment-input" id="cin-post2" placeholder="اكتب تعليقاً...">
-        <button class="comment-send" data-action="add-comment" data-post="post2"><i class="bi bi-send"></i></button>
+        <input class="comment-input" id="cin-post2" placeholder="اكتب تعليقاً..." onkeydown="if(event.key==='Enter')addComment('post2')">
+        <button class="comment-send" onclick="addComment('post2')"><i class="bi bi-send"></i></button>
       </div>
     </div>
   </div>
@@ -169,15 +175,15 @@ body{background:#f0f2f5;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
     <div class="post-image-placeholder">🏙️</div>
     <div class="post-caption"><b>mohammed_abri</b> مدينة مسقط في الليل 🏙️🌙</div>
     <div class="post-actions">
-      <button class="action-btn" id="lb-post3" data-action="like" data-post="post3"><i class="bi bi-heart" id="li-post3"></i><span id="lc-post3">0</span></button>
-      <button class="action-btn" data-action="toggle-comments" data-post="post3"><i class="bi bi-chat"></i><span id="cc-post3">0</span></button>
-      <button class="action-btn" data-action="share" data-post="post3"><i class="bi bi-share"></i><span id="sc-post3">0</span></button>
+      <button class="action-btn" id="lb-post3" onclick="likePost('post3')"><i class="bi bi-heart" id="li-post3"></i><span id="lc-post3">0</span></button>
+      <button class="action-btn" onclick="toggleComments('post3')"><i class="bi bi-chat"></i><span id="cc-post3">0</span></button>
+      <button class="action-btn" onclick="sharePost('post3')"><i class="bi bi-share"></i><span id="sc-post3">0</span></button>
     </div>
     <div class="comments-section" id="cs-post3">
       <div id="cl-post3"></div>
       <div id="ci-post3" style="display:none;" class="comment-input-row">
-        <input class="comment-input" id="cin-post3" placeholder="اكتب تعليقاً...">
-        <button class="comment-send" data-action="add-comment" data-post="post3"><i class="bi bi-send"></i></button>
+        <input class="comment-input" id="cin-post3" placeholder="اكتب تعليقاً..." onkeydown="if(event.key==='Enter')addComment('post3')">
+        <button class="comment-send" onclick="addComment('post3')"><i class="bi bi-send"></i></button>
       </div>
     </div>
   </div>
@@ -205,16 +211,32 @@ body{background:#f0f2f5;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
 </div>
 
 <script>
-let lang="ar";
-let currentUser=null;
+// ── Firebase Init ──
+const firebaseConfig = {
+  apiKey:"AIzaSyA4vNgF3NBWxjQfx_feHpsoIMdswlzUegA",
+  authDomain:"social-media-app-da2cd.firebaseapp.com",
+  projectId:"social-media-app-da2cd",
+  storageBucket:"social-media-app-da2cd.firebasestorage.app",
+  messagingSenderId:"41413182238",
+  appId:"1:41413182238:web:bbf664b131279ec4bd3f0f"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
 
+// ── State ──
+let lang = "ar";
+let currentUser = null;
+const POSTS = ["post1","post2","post3"];
+
+// ── Lang ──
 const tr={
   ar:{dir:"rtl",login:"تسجيل الدخول",
     mt:"سجّل دخولك للمتابعة",ms:"انضم إلى Vistago لتتفاعل مع المنشورات وتشارك لحظاتك",
     mb:"تسجيل الدخول / إنشاء حساب",mc:"ربما لاحقاً",
     mp:"حسابي",mu:"نشر صورة",mn:"الإشعارات",mo:"تسجيل الخروج",
     cp:"اكتب تعليقاً...",rp:"اكتب رداً...",
-    replyBtn:"رد",likeBtn:"إعجاب",
+    replyBtn:"رد",
     bnHome:"الرئيسية",bnSearch:"بحث",bnPost:"نشر",bnNotif:"إشعارات",bnProfile:"حسابي",
     copied:"تم نسخ الرابط!"},
   en:{dir:"ltr",login:"Sign In",
@@ -222,20 +244,20 @@ const tr={
     mb:"Sign In / Create Account",mc:"Maybe later",
     mp:"My Profile",mu:"Upload Photo",mn:"Notifications",mo:"Sign Out",
     cp:"Write a comment...",rp:"Write a reply...",
-    replyBtn:"Reply",likeBtn:"Like",
+    replyBtn:"Reply",
     bnHome:"Home",bnSearch:"Search",bnPost:"Post",bnNotif:"Notifications",bnProfile:"Profile",
     copied:"Link copied!"}
 };
 
 function setLang(l){
-  lang=l;localStorage.setItem("vistagoLang",l);
+  lang=l; localStorage.setItem("vistagoLang",l);
   const s=tr[l];
-  document.documentElement.dir=s.dir;document.documentElement.lang=l;
+  document.documentElement.dir=s.dir; document.documentElement.lang=l;
   document.getElementById("nav-login-btn").textContent=s.login;
-  document.getElementById("mt").textContent=s.mt;document.getElementById("ms").textContent=s.ms;
-  document.getElementById("mb").textContent=s.mb;document.getElementById("mc").textContent=s.mc;
-  document.getElementById("m-profile").textContent=s.mp;document.getElementById("m-upload").textContent=s.mu;
-  document.getElementById("m-notif").textContent=s.mn;document.getElementById("m-out").textContent=s.mo;
+  document.getElementById("mt").textContent=s.mt; document.getElementById("ms").textContent=s.ms;
+  document.getElementById("mb").textContent=s.mb; document.getElementById("mc").textContent=s.mc;
+  document.getElementById("m-profile").textContent=s.mp; document.getElementById("m-upload").textContent=s.mu;
+  document.getElementById("m-notif").textContent=s.mn; document.getElementById("m-out").textContent=s.mo;
   document.querySelectorAll(".comment-input").forEach(e=>e.placeholder=s.cp);
   document.querySelectorAll(".reply-input").forEach(e=>e.placeholder=s.rp);
   document.getElementById("bn-home").textContent=s.bnHome;
@@ -246,23 +268,23 @@ function setLang(l){
   document.getElementById("btn-ar").classList.toggle("active",l==="ar");
   document.getElementById("btn-en").classList.toggle("active",l==="en");
 }
-
 const savedLang=localStorage.getItem("vistagoLang");
-if(savedLang)setLang(savedLang);
+if(savedLang) setLang(savedLang);
 
+// ── Helpers ──
 function goto(url){window.location.href=url;}
 function closeModal(){document.getElementById("modal").classList.remove("show");}
 function showLoginModal(){document.getElementById("modal").classList.add("show");}
 function toggleDropdown(){document.getElementById("user-dropdown").classList.toggle("show");}
-function requireLogin(url){if(!window.isLoggedIn){showLoginModal();}else{goto(url);}}
+function requireLogin(url){if(!currentUser){showLoginModal();}else{goto(url);}}
 
 function formatTime(ts){
-  if(!ts)return"";
-  const date=ts.toDate?ts.toDate():new Date(ts);
-  const diff=Math.floor((Date.now()-date.getTime())/1000);
-  if(diff<60)return lang==="ar"?"الآن":"Just now";
-  if(diff<3600)return lang==="ar"?`منذ ${Math.floor(diff/60)} دقيقة`:`${Math.floor(diff/60)}m ago`;
-  if(diff<86400)return lang==="ar"?`منذ ${Math.floor(diff/3600)} ساعة`:`${Math.floor(diff/3600)}h ago`;
+  if(!ts) return "";
+  const date = ts.toDate ? ts.toDate() : new Date(ts);
+  const diff = Math.floor((Date.now()-date.getTime())/1000);
+  if(diff<60) return lang==="ar"?"الآن":"Just now";
+  if(diff<3600) return lang==="ar"?`منذ ${Math.floor(diff/60)} دقيقة`:`${Math.floor(diff/60)}m ago`;
+  if(diff<86400) return lang==="ar"?`منذ ${Math.floor(diff/3600)} ساعة`:`${Math.floor(diff/3600)}h ago`;
   return lang==="ar"?`منذ ${Math.floor(diff/86400)} يوم`:`${Math.floor(diff/86400)}d ago`;
 }
 
@@ -270,13 +292,14 @@ function toggleComments(postId){
   const section=document.getElementById("cs-"+postId);
   const inputRow=document.getElementById("ci-"+postId);
   section.classList.toggle("open");
-  inputRow.style.display=section.classList.contains("open")&&window.isLoggedIn?"flex":"none";
+  inputRow.style.display=section.classList.contains("open")&&currentUser?"flex":"none";
 }
 
 function sharePost(postId){
   const url=`https://omanxp45-sudo.github.io/vistago/post.html?id=${postId}`;
   if(navigator.share){navigator.share({title:"Vistago",url});}
   else{navigator.clipboard.writeText(url);alert(tr[lang].copied);}
+  db.collection("posts").doc(postId).set({shares:firebase.firestore.FieldValue.increment(1)},{merge:true});
 }
 
 document.getElementById("modal").addEventListener("click",function(e){if(e.target===this)closeModal();});
@@ -284,233 +307,201 @@ document.addEventListener("click",function(e){
   if(!document.getElementById("user-menu").contains(e.target))
     document.getElementById("user-dropdown").classList.remove("show");
 });
-</script>
 
-<!-- Firebase Module -->
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import {
-  getFirestore, doc, getDoc, setDoc,
-  collection, addDoc, onSnapshot,
-  query, orderBy, serverTimestamp, increment
-} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-const app=initializeApp({
-  apiKey:"AIzaSyA4vNgF3NBWxjQfx_feHpsoIMdswlzUegA",
-  authDomain:"social-media-app-da2cd.firebaseapp.com",
-  projectId:"social-media-app-da2cd",
-  storageBucket:"social-media-app-da2cd.firebasestorage.app",
-  messagingSenderId:"41413182238",
-  appId:"1:41413182238:web:bbf664b131279ec4bd3f0f"
-});
-
-const auth=getAuth(app);
-const db=getFirestore(app);
-const POSTS=["post1","post2","post3"];
-
-// ── EVENT DELEGATION — single listener handles all dynamic buttons ──
-document.addEventListener("click", async function(e){
-  const btn = e.target.closest("[data-action]");
-  if(!btn) return;
-  const action = btn.dataset.action;
-  const post = btn.dataset.post;
-  const comment = btn.dataset.comment;
-  const reply = btn.dataset.reply;
-
-  if(action==="like" && post) await likePost(post);
-  if(action==="toggle-comments" && post) toggleComments(post);
-  if(action==="share" && post) sharePost(post);
-  if(action==="add-comment" && post) await addComment(post);
-  if(action==="like-comment" && post && comment) await likeComment(post,comment);
-  if(action==="toggle-reply" && comment) toggleReply(comment);
-  if(action==="add-reply" && post && comment) await addReply(post,comment);
-});
-
-// ── ENTER KEY for inputs ──
-document.addEventListener("keydown", async function(e){
-  if(e.key!=="Enter") return;
-  const el = e.target;
-  if(el.dataset.post && el.classList.contains("comment-input")) await addComment(el.dataset.post);
-  if(el.dataset.comment && el.classList.contains("reply-input")) await addReply(el.dataset.post, el.dataset.comment);
-});
-
-// ── load post ──
+// ── Load Post ──
 function loadPost(postId){
-  onSnapshot(doc(db,"posts",postId),snap=>{
-    const d=snap.exists()?snap.data():{};
-    document.getElementById("lc-"+postId).textContent=d.likes||0;
-    document.getElementById("sc-"+postId).textContent=d.shares||0;
-    const liked=currentUser&&d.likedBy&&d.likedBy[currentUser.uid];
-    document.getElementById("li-"+postId).className=liked?"bi bi-heart-fill":"bi bi-heart";
+  // stats
+  db.collection("posts").doc(postId).onSnapshot(snap=>{
+    const d = snap.data()||{};
+    document.getElementById("lc-"+postId).textContent = d.likes||0;
+    document.getElementById("sc-"+postId).textContent = d.shares||0;
+    const liked = currentUser && d.likedBy && d.likedBy[currentUser.uid];
+    document.getElementById("li-"+postId).className = liked?"bi bi-heart-fill":"bi bi-heart";
     document.getElementById("lb-"+postId).classList.toggle("liked",!!liked);
   });
 
-  const q=query(collection(db,"posts",postId,"comments"),orderBy("createdAt","asc"));
-  onSnapshot(q,snap=>{
-    const list=document.getElementById("cl-"+postId);
-    list.innerHTML="";
-    snap.forEach(d=>{
-      const c=d.data();
-      const cid=d.id;
-      const myLike=currentUser&&c.likedBy&&c.likedBy[currentUser.uid];
-      const wrap=document.createElement("div");
-      wrap.className="comment-item";
-      wrap.innerHTML=`
-        <div class="comment-avatar">${(c.name||"?").charAt(0)}</div>
-        <div style="flex:1">
-          <div class="comment-bubble">
-            <div class="comment-user" onclick="goto('profile.html?u=${c.username||""}')">${c.name||"مجهول"}</div>
-            <div class="comment-text">${c.text}</div>
-            <div class="comment-meta">
-              <span class="comment-time">${formatTime(c.createdAt)}</span>
-              <div class="comment-actions">
-                <button class="cmt-btn${myLike?" liked":""}" data-action="like-comment" data-post="${postId}" data-comment="${cid}">
-                  <i class="bi bi-heart${myLike?"-fill":""}" id="cli-${cid}"></i>
-                  <span id="clc-${cid}">${c.likes||0}</span>
-                </button>
-                <button class="cmt-btn" data-action="toggle-reply" data-comment="${cid}">
-                  <i class="bi bi-reply"></i> ${tr[lang].replyBtn}
-                </button>
+  // comments
+  db.collection("posts").doc(postId).collection("comments")
+    .orderBy("createdAt","asc")
+    .onSnapshot(snap=>{
+      const list = document.getElementById("cl-"+postId);
+      list.innerHTML = "";
+      snap.forEach(d=>{
+        const c = d.data();
+        const cid = d.id;
+        const myLike = currentUser && c.likedBy && c.likedBy[currentUser.uid];
+        const wrap = document.createElement("div");
+        wrap.className = "comment-item";
+        wrap.innerHTML = `
+          <div class="comment-avatar">${(c.name||"?").charAt(0)}</div>
+          <div style="flex:1">
+            <div class="comment-bubble">
+              <div class="comment-user" onclick="goto('profile.html?u=${c.username||""}')">${c.name||"مجهول"}</div>
+              <div class="comment-text">${c.text}</div>
+              <div class="comment-meta">
+                <span class="comment-time">${formatTime(c.createdAt)}</span>
+                <div class="comment-actions">
+                  <button class="cmt-btn ${myLike?"liked":""}" id="cla-${cid}" onclick="likeComment('${postId}','${cid}')">
+                    <i class="bi bi-heart${myLike?"-fill":""}" id="cli-${cid}"></i>
+                    <span id="clc-${cid}">${c.likes||0}</span>
+                  </button>
+                  <button class="cmt-btn" onclick="toggleReply('${cid}')">
+                    <i class="bi bi-reply"></i> ${tr[lang].replyBtn}
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="reply-form" id="rf-${cid}">
-            <input class="reply-input" id="ri-${cid}" data-post="${postId}" data-comment="${cid}" placeholder="${tr[lang].rp}">
-            <button class="reply-send" data-action="add-reply" data-post="${postId}" data-comment="${cid}">
-              <i class="bi bi-send" style="font-size:0.8rem"></i>
-            </button>
-          </div>
-          <div class="replies-list" id="rl-${cid}"></div>
-        </div>`;
-      list.appendChild(wrap);
+            <div class="reply-form" id="rf-${cid}">
+              <input class="reply-input" id="ri-${cid}" placeholder="${tr[lang].rp}" onkeydown="if(event.key==='Enter')addReply('${postId}','${cid}')">
+              <button class="reply-send" onclick="addReply('${postId}','${cid}')">
+                <i class="bi bi-send" style="font-size:0.8rem"></i>
+              </button>
+            </div>
+            <div class="replies-list" id="rl-${cid}"></div>
+          </div>`;
+        list.appendChild(wrap);
 
-      // load replies
-      const rq=query(collection(db,"posts",postId,"comments",cid,"replies"),orderBy("createdAt","asc"));
-      onSnapshot(rq,rsnap=>{
-        const rl=document.getElementById("rl-"+cid);
-        if(!rl)return;
-        rl.innerHTML="";
-        rsnap.forEach(rd=>{
-          const r=rd.data();
-          const rdiv=document.createElement("div");
-          rdiv.className="reply-item";
-          rdiv.innerHTML=`
-            <div class="reply-avatar">${(r.name||"?").charAt(0)}</div>
-            <div class="reply-bubble">
-              <div class="reply-user">${r.name||"مجهول"}</div>
-              <div class="reply-text">${r.text}</div>
-              <div class="reply-time">${formatTime(r.createdAt)}</div>
-            </div>`;
-          rl.appendChild(rdiv);
-        });
+        // load replies
+        db.collection("posts").doc(postId)
+          .collection("comments").doc(cid)
+          .collection("replies").orderBy("createdAt","asc")
+          .onSnapshot(rsnap=>{
+            const rl = document.getElementById("rl-"+cid);
+            if(!rl) return;
+            rl.innerHTML = "";
+            rsnap.forEach(rd=>{
+              const r = rd.data();
+              const rdiv = document.createElement("div");
+              rdiv.className = "reply-item";
+              rdiv.innerHTML = `
+                <div class="reply-avatar">${(r.name||"?").charAt(0)}</div>
+                <div class="reply-bubble">
+                  <div class="reply-user">${r.name||"مجهول"}</div>
+                  <div class="reply-text">${r.text}</div>
+                  <div class="reply-time">${formatTime(r.createdAt)}</div>
+                </div>`;
+              rl.appendChild(rdiv);
+            });
+          });
       });
+      document.getElementById("cc-"+postId).textContent = snap.size;
     });
-    document.getElementById("cc-"+postId).textContent=snap.size;
+}
+
+// ── Like Post ──
+function likePost(postId){
+  if(!currentUser){showLoginModal();return;}
+  const ref = db.collection("posts").doc(postId);
+  ref.get().then(snap=>{
+    const d = snap.data()||{likes:0,likedBy:{}};
+    const likedBy = Object.assign({},d.likedBy||{});
+    const uid = currentUser.uid;
+    if(likedBy[uid]){
+      delete likedBy[uid];
+      ref.set({likes:Math.max((d.likes||1)-1,0),likedBy},{merge:true});
+    }else{
+      likedBy[uid]=true;
+      ref.set({likes:(d.likes||0)+1,likedBy},{merge:true});
+    }
   });
 }
 
-// ── like post ──
-async function likePost(postId){
-  if(!window.isLoggedIn){showLoginModal();return;}
-  const ref=doc(db,"posts",postId);
-  const snap=await getDoc(ref);
-  const d=snap.exists()?snap.data():{likes:0,likedBy:{}};
-  const likedBy={...(d.likedBy||{})};
-  const uid=currentUser.uid;
-  if(likedBy[uid]){
-    delete likedBy[uid];
-    await setDoc(ref,{likes:Math.max((d.likes||1)-1,0),likedBy},{merge:true});
-  }else{
-    likedBy[uid]=true;
-    await setDoc(ref,{likes:(d.likes||0)+1,likedBy},{merge:true});
-  }
-}
-
-// ── add comment ──
-async function addComment(postId){
-  if(!window.isLoggedIn){showLoginModal();return;}
-  const input=document.getElementById("cin-"+postId);
-  const text=input.value.trim();
-  if(!text)return;
-  const userSnap=await getDoc(doc(db,"users",currentUser.uid));
-  const username=userSnap.exists()?userSnap.data().username:"";
-  await addDoc(collection(db,"posts",postId,"comments"),{
-    text,name:currentUser.displayName||"مجهول",
-    username,uid:currentUser.uid,
-    likes:0,likedBy:{},
-    createdAt:serverTimestamp()
+// ── Add Comment ──
+function addComment(postId){
+  if(!currentUser){showLoginModal();return;}
+  const input = document.getElementById("cin-"+postId);
+  const text = input.value.trim();
+  if(!text) return;
+  db.collection("users").doc(currentUser.uid).get().then(userSnap=>{
+    const username = userSnap.exists?userSnap.data().username:"";
+    db.collection("posts").doc(postId).collection("comments").add({
+      text,
+      name: currentUser.displayName||"مجهول",
+      username,
+      uid: currentUser.uid,
+      likes: 0,
+      likedBy: {},
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    input.value = "";
   });
-  input.value="";
 }
 
-// ── like comment ──
-async function likeComment(postId,commentId){
-  if(!window.isLoggedIn){showLoginModal();return;}
-  const ref=doc(db,"posts",postId,"comments",commentId);
-  const snap=await getDoc(ref);
-  const d=snap.exists()?snap.data():{likes:0,likedBy:{}};
-  const likedBy={...(d.likedBy||{})};
-  const uid=currentUser.uid;
-  const icon=document.getElementById("cli-"+commentId);
-  const btn=document.querySelector(`[data-action="like-comment"][data-comment="${commentId}"]`);
-  const count=document.getElementById("clc-"+commentId);
-  if(likedBy[uid]){
-    delete likedBy[uid];
-    const n=Math.max((d.likes||1)-1,0);
-    await setDoc(ref,{likes:n,likedBy},{merge:true});
-    if(icon)icon.className="bi bi-heart";
-    if(btn)btn.classList.remove("liked");
-    if(count)count.textContent=n;
-  }else{
-    likedBy[uid]=true;
-    const n=(d.likes||0)+1;
-    await setDoc(ref,{likes:n,likedBy},{merge:true});
-    if(icon)icon.className="bi bi-heart-fill";
-    if(btn)btn.classList.add("liked");
-    if(count)count.textContent=n;
-  }
+// ── Like Comment ──
+function likeComment(postId,commentId){
+  if(!currentUser){showLoginModal();return;}
+  const ref = db.collection("posts").doc(postId).collection("comments").doc(commentId);
+  ref.get().then(snap=>{
+    const d = snap.data()||{likes:0,likedBy:{}};
+    const likedBy = Object.assign({},d.likedBy||{});
+    const uid = currentUser.uid;
+    const icon = document.getElementById("cli-"+commentId);
+    const btn = document.getElementById("cla-"+commentId);
+    const count = document.getElementById("clc-"+commentId);
+    if(likedBy[uid]){
+      delete likedBy[uid];
+      const n = Math.max((d.likes||1)-1,0);
+      ref.set({likes:n,likedBy},{merge:true});
+      if(icon) icon.className="bi bi-heart";
+      if(btn) btn.classList.remove("liked");
+      if(count) count.textContent=n;
+    }else{
+      likedBy[uid]=true;
+      const n = (d.likes||0)+1;
+      ref.set({likes:n,likedBy},{merge:true});
+      if(icon) icon.className="bi bi-heart-fill";
+      if(btn) btn.classList.add("liked");
+      if(count) count.textContent=n;
+    }
+  });
 }
 
-// ── toggle reply ──
+// ── Toggle Reply ──
 function toggleReply(commentId){
-  if(!window.isLoggedIn){showLoginModal();return;}
-  const rf=document.getElementById("rf-"+commentId);
-  if(rf)rf.classList.toggle("open");
+  if(!currentUser){showLoginModal();return;}
+  const rf = document.getElementById("rf-"+commentId);
+  if(rf) rf.classList.toggle("open");
 }
 
-// ── add reply ──
-async function addReply(postId,commentId){
-  if(!window.isLoggedIn){showLoginModal();return;}
-  const input=document.getElementById("ri-"+commentId);
-  const text=input.value.trim();
-  if(!text)return;
-  await addDoc(collection(db,"posts",postId,"comments",commentId,"replies"),{
-    text,name:currentUser.displayName||"مجهول",
-    uid:currentUser.uid,createdAt:serverTimestamp()
-  });
-  input.value="";
-  const rf=document.getElementById("rf-"+commentId);
-  if(rf)rf.classList.remove("open");
+// ── Add Reply ──
+function addReply(postId,commentId){
+  if(!currentUser){showLoginModal();return;}
+  const input = document.getElementById("ri-"+commentId);
+  const text = input.value.trim();
+  if(!text) return;
+  db.collection("posts").doc(postId)
+    .collection("comments").doc(commentId)
+    .collection("replies").add({
+      text,
+      name: currentUser.displayName||"مجهول",
+      uid: currentUser.uid,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+  input.value = "";
+  const rf = document.getElementById("rf-"+commentId);
+  if(rf) rf.classList.remove("open");
 }
 
-// ── auth ──
-onAuthStateChanged(auth,user=>{
+// ── Sign Out ──
+function signOutUser(){
+  auth.signOut().then(()=>window.location.reload());
+}
+
+// ── Auth State ──
+auth.onAuthStateChanged(user=>{
   document.getElementById("loading").style.display="none";
   if(user){
-    window.isLoggedIn=true;currentUser=user;
+    currentUser=user;
     document.getElementById("nav-login-btn").style.display="none";
     document.getElementById("user-menu").style.display="block";
     document.getElementById("nav-user-btn").textContent="👤 "+(user.displayName||"حسابي");
   }else{
-    window.isLoggedIn=false;currentUser=null;
+    currentUser=null;
     document.getElementById("nav-login-btn").style.display="block";
     document.getElementById("user-menu").style.display="none";
   }
   POSTS.forEach(loadPost);
 });
-
-window.signOutUser=async()=>{await signOut(auth);window.location.reload();};
 </script>
 
 </body>
