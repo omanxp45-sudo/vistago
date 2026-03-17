@@ -498,12 +498,11 @@ document.getElementById("loginModal").addEventListener("click", function(e) {
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
 
-  onAuthStateChanged(auth, user => {
+ onAuthStateChanged(auth, user => {
     if (user) {
-      // User is logged in — change login button to profile
       const btn = document.getElementById("nav-login-btn");
       btn.textContent = user.displayName || "حسابي";
-      btn.onclick = () => window.location.href = "profile.html";
+      btn.onclick = () => window.location.href = "upload.html";
     }
   });
 </script>
