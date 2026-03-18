@@ -44,6 +44,7 @@ body{background:#f0f2f5;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
 .action-btn{display:flex;align-items:center;gap:5px;background:transparent;border:none;color:#555;font-size:0.85rem;cursor:pointer;padding:6px 10px;border-radius:20px;transition:all 0.2s;flex:1;justify-content:center;}
 .action-btn:hover{background:#e8f5fe;color:#1DA1F2;}
 .action-btn.liked{color:#e1306c;}
+.action-btn:disabled{opacity:0.6;cursor:not-allowed;}
 .post-caption{padding:10px 16px 6px;font-size:0.9rem;color:#333;line-height:1.5;}
 .comments-section{padding:0 16px 14px;display:none;}
 .comments-section.open{display:block;}
@@ -59,6 +60,7 @@ body{background:#f0f2f5;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
 .cmt-btn{background:transparent;border:none;font-size:0.75rem;color:#888;cursor:pointer;padding:2px 6px;border-radius:8px;display:flex;align-items:center;gap:3px;}
 .cmt-btn:hover{background:#e8f5fe;color:#1DA1F2;}
 .cmt-btn.liked{color:#e1306c;}
+.cmt-btn:disabled{opacity:0.5;cursor:not-allowed;}
 .comment-input-row{display:flex;gap:8px;align-items:center;margin-top:8px;border-top:1px solid #f0f0f0;padding-top:10px;}
 .comment-input{flex:1;border:1.5px solid #e0e0e0;border-radius:20px;padding:8px 14px;font-size:0.88rem;outline:none;}
 .comment-input:focus{border-color:#1DA1F2;}
@@ -216,8 +218,9 @@ firebase.initializeApp({
   messagingSenderId:"41413182238",
   appId:"1:41413182238:web:bbf664b131279ec4bd3f0f"
 });
-const auth = firebase.auth();
-const db = firebase.firestore();
+const auth=firebase.auth();
+const db=firebase.firestore();
+const FieldValue=firebase.firestore.FieldValue;
 
 let lang="ar";
 let currentUser=null;
@@ -267,6 +270,7 @@ function closeModal(){document.getElementById("modal").classList.remove("show");
 function showLoginModal(){document.getElementById("modal").classList.add("show");}
 function toggleDropdown(){document.getElementById("user-dropdown").classList.toggle("show");}
 function requireLogin(url){if(!currentUser){showLoginModal();}else{goto(url);}}
+function signOutUser(){auth.signOut().then(()=>window.location.reload());}
 
 function formatTime(ts){
   if(!ts)return"";
@@ -289,9 +293,7 @@ function sharePost(postId){
   const url=`https://omanxp45-sudo.github.io/vistago/post.html?id=${postId}`;
   if(navigator.share){navigator.share({title:"Vistago",url});}
   else{navigator.clipboard.writeText(url);alert(tr[lang].copied);}
-  db.collection("posts").doc(postId).set(
-    {shares:firebase.firestore.FieldValue.increment(1)},{merge:true}
-  );
+  db.collection("posts").doc(postId).set({shares:FieldValue.increment(1)},{merge:true});
 }
 
 document.getElementById("modal").addEventListener("click",function(e){if(e.target===this)closeModal();});
@@ -306,9 +308,9 @@ function loadPost(postId){
     const d=snap.data()||{};
     document.getElementById("lc-"+postId).textContent=d.likes||0;
     document.getElementById("sc-"+postId).textContent=d.shares||0;
-    const liked=currentUser&&d.likedBy&&d.likedBy[currentUser.uid];
+    const liked=currentUser&&d.likedBy&&d.likedBy[currentUser.uid]===true;
     document.getElementById("li-"+postId).className=liked?"bi bi-heart-fill":"bi bi-heart";
-    document.getElementById("lb-"+postId).classList.toggle("liked",!!liked);
+    document.getElementById("lb-"+postId).classList.toggle("liked",liked);
   });
 
   db.collection("posts").doc(postId).collection("comments")
@@ -319,7 +321,7 @@ function loadPost(postId){
       snap.forEach(d=>{
         const c=d.data();
         const cid=d.id;
-        const myLike=currentUser&&c.likedBy&&c.likedBy[currentUser.uid];
+        const myLike=currentUser&&c.likedBy&&c.likedBy[currentUser.uid]===true;
         const wrap=document.createElement("div");
         wrap.className="comment-item";
         wrap.innerHTML=`
@@ -377,24 +379,34 @@ function loadPost(postId){
     });
 }
 
-// ── Like Post — using transaction ──
+// ── Like Post ──
 function likePost(postId){
   if(!currentUser){showLoginModal();return;}
+  const btn=document.getElementById("lb-"+postId);
+  if(btn.disabled)return;
+  btn.disabled=true;
+  const uid=currentUser.uid;
   const ref=db.collection("posts").doc(postId);
-  db.runTransaction(transaction=>{
-    return transaction.get(ref).then(snap=>{
-      const d=snap.data()||{likes:0,likedBy:{}};
-      const likedBy=Object.assign({},d.likedBy||{});
-      const uid=currentUser.uid;
-      if(likedBy[uid]){
-        delete likedBy[uid];
-        transaction.set(ref,{likes:Math.max((d.likes||1)-1,0),likedBy},{merge:true});
-      }else{
-        likedBy[uid]=true;
-        transaction.set(ref,{likes:(d.likes||0)+1,likedBy},{merge:true});
-      }
+  // First ensure document exists
+  ref.set({likes:0,likedBy:{},shares:0},{merge:true}).then(()=>{
+    return db.runTransaction(t=>{
+      return t.get(ref).then(snap=>{
+        const d=snap.data()||{};
+        const alreadyLiked=d.likedBy&&d.likedBy[uid]===true;
+        if(alreadyLiked){
+          t.update(ref,{
+            likes:FieldValue.increment(-1),
+            [`likedBy.${uid}`]:FieldValue.delete()
+          });
+        }else{
+          t.update(ref,{
+            likes:FieldValue.increment(1),
+            [`likedBy.${uid}`]:true
+          });
+        }
+      });
     });
-  });
+  }).finally(()=>{btn.disabled=false;});
 }
 
 // ── Add Comment ──
@@ -412,41 +424,47 @@ function addComment(postId){
       uid:currentUser.uid,
       likes:0,
       likedBy:{},
-      createdAt:firebase.firestore.FieldValue.serverTimestamp()
+      createdAt:FieldValue.serverTimestamp()
     });
     input.value="";
   });
 }
 
-// ── Like Comment — using transaction ──
+// ── Like Comment ──
 function likeComment(postId,commentId){
   if(!currentUser){showLoginModal();return;}
+  const btn=document.getElementById("cla-"+commentId);
+  if(btn&&btn.disabled)return;
+  if(btn)btn.disabled=true;
+  const uid=currentUser.uid;
   const ref=db.collection("posts").doc(postId).collection("comments").doc(commentId);
-  db.runTransaction(transaction=>{
-    return transaction.get(ref).then(snap=>{
-      const d=snap.data()||{likes:0,likedBy:{}};
-      const likedBy=Object.assign({},d.likedBy||{});
-      const uid=currentUser.uid;
-      const icon=document.getElementById("cli-"+commentId);
-      const btn=document.getElementById("cla-"+commentId);
-      const count=document.getElementById("clc-"+commentId);
-      if(likedBy[uid]){
-        delete likedBy[uid];
-        const n=Math.max((d.likes||1)-1,0);
-        transaction.set(ref,{likes:n,likedBy},{merge:true});
-        if(icon)icon.className="bi bi-heart";
-        if(btn)btn.classList.remove("liked");
-        if(count)count.textContent=n;
-      }else{
-        likedBy[uid]=true;
-        const n=(d.likes||0)+1;
-        transaction.set(ref,{likes:n,likedBy},{merge:true});
-        if(icon)icon.className="bi bi-heart-fill";
-        if(btn)btn.classList.add("liked");
-        if(count)count.textContent=n;
-      }
+  ref.set({likes:0,likedBy:{}},{merge:true}).then(()=>{
+    return db.runTransaction(t=>{
+      return t.get(ref).then(snap=>{
+        const d=snap.data()||{};
+        const alreadyLiked=d.likedBy&&d.likedBy[uid]===true;
+        const icon=document.getElementById("cli-"+commentId);
+        const count=document.getElementById("clc-"+commentId);
+        if(alreadyLiked){
+          t.update(ref,{
+            likes:FieldValue.increment(-1),
+            [`likedBy.${uid}`]:FieldValue.delete()
+          });
+          if(icon)icon.className="bi bi-heart";
+          if(btn)btn.classList.remove("liked");
+          if(count)count.textContent=Math.max((d.likes||1)-1,0);
+        }else{
+          t.update(ref,{
+            likes:FieldValue.increment(1),
+            [`likedBy.${uid}`]:true
+          });
+          if(icon)icon.className="bi bi-heart-fill";
+          if(btn)btn.classList.add("liked");
+          if(count)count.textContent=(d.likes||0)+1;
+        }
+      });
     });
-  });
+  }).finally(()=>{if(btn)btn.disabled=false;});
 }
 
 // ── Toggle Reply ──
@@ -468,19 +486,14 @@ function addReply(postId,commentId){
       text,
       name:currentUser.displayName||"مجهول",
       uid:currentUser.uid,
-      createdAt:firebase.firestore.FieldValue.serverTimestamp()
+      createdAt:FieldValue.serverTimestamp()
     });
   input.value="";
   const rf=document.getElementById("rf-"+commentId);
   if(rf)rf.classList.remove("open");
 }
 
-// ── Sign Out ──
-function signOutUser(){
-  auth.signOut().then(()=>window.location.reload());
-}
-
-// ── Auth State ──
+// ── Auth ──
 auth.onAuthStateChanged(user=>{
   document.getElementById("loading").style.display="none";
   if(user){
