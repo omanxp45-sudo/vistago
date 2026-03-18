@@ -387,7 +387,6 @@ function likePost(postId){
   btn.disabled=true;
   const uid=currentUser.uid;
   const ref=db.collection("posts").doc(postId);
-  // First ensure document exists
   ref.set({likes:0,likedBy:{},shares:0},{merge:true}).then(()=>{
     return db.runTransaction(t=>{
       return t.get(ref).then(snap=>{
@@ -409,24 +408,36 @@ function likePost(postId){
   }).finally(()=>{btn.disabled=false;});
 }
 
-// ── Add Comment ──
+// ── Add Comment — fixed undefined username ──
 function addComment(postId){
   if(!currentUser){showLoginModal();return;}
   const input=document.getElementById("cin-"+postId);
   const text=input.value.trim();
   if(!text)return;
+  // Clear input immediately for better UX
+  input.value="";
   db.collection("users").doc(currentUser.uid).get().then(userSnap=>{
-    const username=userSnap.exists?userSnap.data().username:"";
-    db.collection("posts").doc(postId).collection("comments").add({
-      text,
+    const username=(userSnap.exists&&userSnap.data().username)?userSnap.data().username:"";
+    return db.collection("posts").doc(postId).collection("comments").add({
+      text:text,
       name:currentUser.displayName||"مجهول",
-      username,
+      username:username,
       uid:currentUser.uid,
       likes:0,
       likedBy:{},
       createdAt:FieldValue.serverTimestamp()
     });
-    input.value="";
+  }).catch(()=>{
+    // Fallback if user doc not found
+    db.collection("posts").doc(postId).collection("comments").add({
+      text:text,
+      name:currentUser.displayName||"مجهول",
+      username:"",
+      uid:currentUser.uid,
+      likes:0,
+      likedBy:{},
+      createdAt:FieldValue.serverTimestamp()
+    });
   });
 }
 
@@ -480,15 +491,15 @@ function addReply(postId,commentId){
   const input=document.getElementById("ri-"+commentId);
   const text=input.value.trim();
   if(!text)return;
+  input.value="";
   db.collection("posts").doc(postId)
     .collection("comments").doc(commentId)
     .collection("replies").add({
-      text,
+      text:text,
       name:currentUser.displayName||"مجهول",
       uid:currentUser.uid,
       createdAt:FieldValue.serverTimestamp()
     });
-  input.value="";
   const rf=document.getElementById("rf-"+commentId);
   if(rf)rf.classList.remove("open");
 }
