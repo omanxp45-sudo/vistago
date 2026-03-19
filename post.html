@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0">
 <title>Vistago — Post</title>
 <link rel="icon" href="vistago-icon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -194,13 +195,7 @@
   .empty-state p { font-size: 0.85rem; }
 
   .no-comments { text-align: center; padding: 30px 20px; color: var(--text2); font-size: 0.88rem; }
-
-  /* LOADING */
-  #loading {
-    position: fixed; inset: 0; background: var(--bg);
-    display: flex; align-items: center; justify-content: center;
-    z-index: 999; font-size: 1.1rem; color: var(--text2);
-  }
+  #loading { display: none !important; }
 
   /* BOTTOM NAV */
   .bottom-nav {
@@ -237,7 +232,7 @@
 </head>
 <body>
 
-<div id="loading">جاري التحميل...</div>
+<div id="loading" style="display:none"></div>
 
 <!-- NAV -->
 <nav>
@@ -563,8 +558,7 @@ function loadPost(id){
   // Listen for real-time updates on likes/shares
   db.collection("posts").doc(id).onSnapshot(snap=>{
     if(!snap.exists){
-      document.getElementById("loading").style.display="none";
-      document.getElementById("error-container").style.display="block";
+          document.getElementById("error-container").style.display="block";
       document.getElementById("err-title").textContent=tr[lang].errTitle;
       document.getElementById("err-sub").textContent=tr[lang].errSub;
       return;
@@ -586,8 +580,7 @@ function loadPost(id){
       if(li) li.className=`bi ${liked?"bi-heart-fill":"bi-heart"}`;
       if(lb) lb.className=`action-btn ${liked?"liked":""}`;
     }
-    document.getElementById("loading").style.display="none";
-  });
+    });
 }
 
 // ── Auth ──
@@ -603,8 +596,7 @@ auth.onAuthStateChanged(user=>{
   }
 
   if(!postId){
-    document.getElementById("loading").style.display="none";
-    document.getElementById("error-container").style.display="block";
+      document.getElementById("error-container").style.display="block";
     return;
   }
   loadPost(postId);
