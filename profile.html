@@ -24,8 +24,12 @@
   nav {
     position: sticky; top: 0; z-index: 100;
     background: #1DA1F2; border-bottom: none;
+    height: 56px; display: flex; align-items: center; justify-content: center;
+  }
+  .nav-inner {
+    width: 100%; max-width: 640px;
     display: flex; align-items: center; justify-content: space-between;
-    padding: 0 20px; height: 56px;
+    padding: 0 20px;
   }
   .nav-logo { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 1.2rem; color: #fff; cursor: pointer; }
   .nav-logo img { width: 28px; height: 28px; }
@@ -236,6 +240,7 @@
 
 <!-- NAV -->
 <nav>
+  <div class="nav-inner">
   <div class="nav-logo" onclick="goto('index.html')">
     <img src="vistago-icon.svg" alt="V"> Vistago
   </div>
@@ -255,6 +260,7 @@
         <button onclick="signOutUser()"><i class="bi bi-box-arrow-right"></i> <span id="m-out">تسجيل الخروج</span></button>
       </div>
     </div>
+  </div>
   </div>
 </nav>
 
