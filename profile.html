@@ -424,7 +424,14 @@ if(savedTheme==="light"){
   document.getElementById("theme-toggle-btn").textContent="☀️";
 }
 
-function goto(url){ window.location.href=url; }
+function goto(url){
+  const missing = ["upload.html","search.html","notifications.html","post.html"];
+  if(missing.includes(url)){
+    showToast(lang==="ar"?"قريباً... 🚧":"Coming soon... 🚧","error");
+    return;
+  }
+  window.location.href=url;
+}
 function toggleDropdown(){ document.getElementById("user-dropdown").classList.toggle("show"); }
 function signOutUser(){ auth.signOut().then(()=>goto("index.html")); }
 
