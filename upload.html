@@ -119,24 +119,6 @@
   .caption-count { text-align: left; font-size: 0.75rem; color: var(--text2); margin-top: 5px; }
   [dir="ltr"] .caption-count { text-align: right; }
 
-  /* POST PREVIEW */
-  .preview-card {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius); overflow: hidden; margin-bottom: 16px;
-    display: none;
-  }
-  .preview-card.show { display: block; }
-  .preview-header { display: flex; align-items: center; gap: 10px; padding: 12px 14px 8px; }
-  .preview-avatar {
-    width: 38px; height: 38px; border-radius: 50%;
-    background: var(--accent); display: flex; align-items: center; justify-content: center;
-    font-weight: 700; font-size: 0.95rem; color: #fff; flex-shrink: 0;
-  }
-  .preview-name { font-weight: 600; font-size: 0.88rem; }
-  .preview-time { font-size: 0.72rem; color: var(--text2); }
-  .preview-emoji { font-size: 5rem; display: flex; align-items: center; justify-content: center; padding: 30px 0; background: var(--surface2); }
-  .preview-img { width: 100%; max-height: 400px; object-fit: cover; display: block; }
-  .preview-caption { padding: 10px 14px; font-size: 0.9rem; line-height: 1.5; }
 
   /* SUBMIT BTN */
   .submit-btn {
@@ -253,23 +235,8 @@
   <div class="caption-section">
     <div class="section-label" id="lbl-caption">✏️ الوصف</div>
     <div style="height:8px"></div>
-    <textarea class="caption-input" id="caption-input" placeholder="اكتب وصفاً للمنشور..." maxlength="500" oninput="updatePreview(); updateCount()"></textarea>
+    <textarea class="caption-input" id="caption-input" placeholder="اكتب وصفاً للمنشور..." maxlength="500" oninput="updateCount()"></textarea>
     <div class="caption-count"><span id="caption-count">0</span>/500</div>
-  </div>
-
-  <!-- PREVIEW -->
-  <div class="section-label" id="lbl-preview">👁️ معاينة المنشور</div>
-  <div style="height:8px"></div>
-  <div class="preview-card" id="preview-card">
-    <div class="preview-header">
-      <div class="preview-avatar" id="preview-avatar">?</div>
-      <div>
-        <div class="preview-name" id="preview-name">—</div>
-        <div class="preview-time" id="preview-time">الآن</div>
-      </div>
-    </div>
-    <div id="preview-media"></div>
-    <div class="preview-caption" id="preview-caption"></div>
   </div>
 
   <!-- SUBMIT -->
@@ -323,7 +290,7 @@ const tr = {
     uploadTitle:"اضغط لاختيار صورة", uploadSub:"أو اسحب وأفلت الصورة هنا",
     or:"أو اختر إيموجي", caption:"✏️ الوصف", captionPlaceholder:"اكتب وصفاً للمنشور...",
     preview:"👁️ معاينة المنشور", submit:"🚀 نشر", publishing:"جاري النشر...",
-    now:"الآن", successMsg:"تم نشر منشورك! 🎉", errNoContent:"أضف صورة أو إيموجي أولاً",
+    , successMsg:"تم نشر منشورك! 🎉", errNoContent:"أضف صورة أو إيموجي أولاً",
     errAuth:"يجب تسجيل الدخول أولاً",
     bnHome:"الرئيسية", bnSearch:"بحث", bnPost:"نشر", bnNotif:"إشعارات", bnProfile:"حسابي",
     loading:"جاري التحميل..." },
@@ -331,7 +298,7 @@ const tr = {
     uploadTitle:"Click to choose a photo", uploadSub:"Or drag and drop here",
     or:"Or choose an emoji", caption:"✏️ Caption", captionPlaceholder:"Write a caption...",
     preview:"👁️ Post Preview", submit:"🚀 Post", publishing:"Publishing...",
-    now:"Just now", successMsg:"Your post is live! 🎉", errNoContent:"Add a photo or emoji first",
+    , successMsg:"Your post is live! 🎉", errNoContent:"Add a photo or emoji first",
     errAuth:"You must be signed in",
     bnHome:"Home", bnSearch:"Search", bnPost:"Post", bnNotif:"Notifications", bnProfile:"Profile",
     loading:"Loading..." }
@@ -349,9 +316,7 @@ function setLang(l){
   document.getElementById("lbl-or").textContent=s.or;
   document.getElementById("lbl-caption").textContent=s.caption;
   document.getElementById("caption-input").placeholder=s.captionPlaceholder;
-  document.getElementById("lbl-preview").textContent=s.preview;
   document.getElementById("lbl-submit").textContent=s.submit;
-  document.getElementById("preview-time").textContent=s.now;
   document.getElementById("loading").textContent=s.loading;
   document.getElementById("bn-home").textContent=s.bnHome;
   document.getElementById("bn-search").textContent=s.bnSearch;
@@ -404,15 +369,10 @@ buildEmojiGrid();
 
 // ── Select emoji ──
 function selectEmoji(emoji, btn){
-  // If image already loaded, don't clear it — just ignore emoji selection
-  if(selectedFile){
-    showToast(lang==="en"?"Remove the image first to use an emoji":"احذف الصورة أولاً لاستخدام إيموجي","error");
-    return;
-  }
+  // If image is loaded, keep it — emoji is just decorative addition
   selectedEmoji = selectedEmoji===emoji ? "" : emoji; // toggle
   document.querySelectorAll(".emoji-btn").forEach(b=>b.classList.remove("selected"));
   if(selectedEmoji) btn.classList.add("selected");
-  updatePreview();
   updateSubmitBtn();
 }
 
@@ -434,7 +394,6 @@ function handleFile(input){
     document.getElementById("preview-img").src=e.target.result;
     document.getElementById("image-preview").style.display="block";
     document.getElementById("upload-area").style.display="none";
-    updatePreview();
     updateSubmitBtn();
   };
   reader.readAsDataURL(file);
@@ -447,29 +406,8 @@ function removeImage(){
   document.getElementById("image-preview").style.display="none";
   document.getElementById("upload-area").style.display="block";
   document.getElementById("file-input").value="";
-  updatePreview();
   updateSubmitBtn();
 }
-
-// ── Update preview ──
-function updatePreview(){
-  const caption=document.getElementById("caption-input").value.trim();
-  const card=document.getElementById("preview-card");
-  const media=document.getElementById("preview-media");
-  const capEl=document.getElementById("preview-caption");
-
-  if(!selectedFile && !selectedEmoji && !caption){
-    card.classList.remove("show"); return;
-  }
-  card.classList.add("show");
-
-  if(selectedFile){
-    media.innerHTML=`<img class="preview-img" src="${document.getElementById("preview-img").src}" style="width:100%;max-height:400px;object-fit:cover;display:block">`;
-  } else if(selectedEmoji){
-    media.innerHTML=`<div style="font-size:5rem;display:flex;align-items:center;justify-content:center;padding:30px 0;background:var(--surface2)">${selectedEmoji}</div>`;
-  } else {
-    media.innerHTML="";
-  }
 
   if(caption){
     capEl.innerHTML=`<strong>${currentUser?.displayName||"أنت"}</strong> ${caption}`;
@@ -559,9 +497,7 @@ auth.onAuthStateChanged(user=>{
   document.getElementById("loading").style.display="none";
   if(user){
     currentUser=user;
-    const initial=(user.displayName||"?").charAt(0).toUpperCase();
-    document.getElementById("preview-avatar").textContent=initial;
-    document.getElementById("preview-name").textContent=user.displayName||user.email?.split("@")[0]||"—";
+
   } else {
     // Not logged in — redirect to login
     goto("login.html");
