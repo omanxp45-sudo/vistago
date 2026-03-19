@@ -241,7 +241,7 @@ function openUpload(){
   }
 }
   function requireLogin(action){
-  const user = firebase.auth().currentUser;
+  const user = auth().currentUser;
 
   if(user){
     window.location.href = "upload.html";
