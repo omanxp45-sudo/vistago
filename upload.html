@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vistago — نشر صورة</title>
+<link rel="icon" href="vistago-icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<style>
+  :root {
+    --bg: #0f0f0f; --surface: #1a1a1a; --surface2: #242424;
+    --border: #2e2e2e; --text: #f0f0f0; --text2: #aaaaaa;
+    --accent: #6c63ff; --accent2: #a78bfa; --danger: #ef4444; --radius: 14px;
+  }
+  :root.light {
+    --bg: #f4f4f8; --surface: #ffffff; --surface2: #efefef;
+    --border: #dcdcdc; --text: #111111; --text2: #666666;
+    --accent: #6c63ff; --accent2: #5548e0; --danger: #ef4444;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { margin: 0; padding: 0; width: 100%; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', Tahoma, sans-serif; min-height: 100vh; overflow-x: hidden; }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; left: 0; right: 0; z-index: 100;
+    background: #1DA1F2; height: 56px; width: 100%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .nav-inner {
+    width: 100%; max-width: 560px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 16px;
+  }
+  .nav-left { display: flex; align-items: center; gap: 10px; }
+  .nav-back {
+    background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4);
+    color: #fff; border-radius: 50%; width: 34px; height: 34px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 1.1rem; transition: all .2s;
+  }
+  .nav-back:hover { background: rgba(255,255,255,0.35); }
+  .nav-title { font-weight: 700; font-size: 1rem; color: #fff; }
+  .nav-right { display: flex; align-items: center; gap: 6px; }
+  .theme-toggle {
+    background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4);
+    color: #fff; border-radius: 20px; padding: 5px 10px;
+    font-size: 0.9rem; cursor: pointer; transition: all .2s;
+  }
+  .theme-toggle:hover { background: rgba(255,255,255,0.35); }
+  .lang-btns { display: flex; gap: 4px; }
+  .lang-btn {
+    background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4);
+    color: #fff; border-radius: 20px; padding: 4px 8px;
+    font-size: 0.72rem; cursor: pointer; transition: all .2s;
+  }
+  .lang-btn.active, .lang-btn:hover { background: rgba(255,255,255,0.35); border-color: rgba(255,255,255,0.6); }
+  @media(max-width:480px){ .lang-btns{display:none;} .nav-inner{padding:0 10px;} }
+
+  /* PAGE */
+  .page { max-width: 560px; margin: 0 auto; padding: 20px 12px 100px; }
+
+  /* UPLOAD AREA */
+  .upload-area {
+    border: 2px dashed var(--border); border-radius: var(--radius);
+    background: var(--surface); padding: 40px 20px;
+    text-align: center; cursor: pointer; transition: all .2s;
+    margin-bottom: 16px; position: relative; overflow: hidden;
+  }
+  .upload-area:hover, .upload-area.dragover {
+    border-color: #1DA1F2; background: color-mix(in srgb, #1DA1F2 8%, var(--surface));
+  }
+  .upload-area input[type="file"] {
+    position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+  }
+  .upload-icon { font-size: 3rem; color: var(--text2); margin-bottom: 12px; }
+  .upload-title { font-size: 1rem; font-weight: 600; margin-bottom: 6px; }
+  .upload-sub { font-size: 0.82rem; color: var(--text2); }
+  .upload-preview {
+    display: none; position: relative;
+    border-radius: var(--radius); overflow: hidden; margin-bottom: 16px;
+  }
+  .upload-preview img {
+    width: 100%; max-height: 400px; object-fit: cover; display: block;
+    border-radius: var(--radius);
+  }
+  .preview-remove {
+    position: absolute; top: 10px; right: 10px;
+    background: rgba(0,0,0,0.6); color: #fff; border: none;
+    border-radius: 50%; width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 1rem; transition: background .2s;
+  }
+  .preview-remove:hover { background: var(--danger); }
+
+  /* EMOJI PICKER */
+  .emoji-section { margin-bottom: 16px; }
+  .section-label { font-size: 0.82rem; color: var(--text2); margin-bottom: 8px; font-weight: 600; }
+  .emoji-grid {
+    display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px;
+  }
+  .emoji-btn {
+    background: var(--surface2); border: 2px solid transparent;
+    border-radius: 10px; padding: 8px; font-size: 1.4rem;
+    cursor: pointer; transition: all .15s; text-align: center;
+  }
+  .emoji-btn:hover { background: var(--surface); border-color: var(--border); transform: scale(1.1); }
+  .emoji-btn.selected { border-color: #1DA1F2; background: color-mix(in srgb, #1DA1F2 15%, var(--surface2)); }
+
+  /* CAPTION */
+  .caption-section { margin-bottom: 16px; }
+  .caption-input {
+    width: 100%; background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 14px 16px; color: var(--text);
+    font-size: 0.95rem; outline: none; transition: border-color .2s;
+    resize: none; font-family: inherit; line-height: 1.5; min-height: 100px;
+  }
+  .caption-input:focus { border-color: #1DA1F2; }
+  .caption-count { text-align: left; font-size: 0.75rem; color: var(--text2); margin-top: 5px; }
+  [dir="ltr"] .caption-count { text-align: right; }
+
+  /* POST PREVIEW */
+  .preview-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); overflow: hidden; margin-bottom: 16px;
+    display: none;
+  }
+  .preview-card.show { display: block; }
+  .preview-header { display: flex; align-items: center; gap: 10px; padding: 12px 14px 8px; }
+  .preview-avatar {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: var(--accent); display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.95rem; color: #fff; flex-shrink: 0;
+  }
+  .preview-name { font-weight: 600; font-size: 0.88rem; }
+  .preview-time { font-size: 0.72rem; color: var(--text2); }
+  .preview-emoji { font-size: 5rem; display: flex; align-items: center; justify-content: center; padding: 30px 0; background: var(--surface2); }
+  .preview-img { width: 100%; max-height: 400px; object-fit: cover; display: block; }
+  .preview-caption { padding: 10px 14px; font-size: 0.9rem; line-height: 1.5; }
+
+  /* SUBMIT BTN */
+  .submit-btn {
+    width: 100%; background: #1DA1F2; color: #fff; border: none;
+    border-radius: var(--radius); padding: 14px; font-size: 1rem; font-weight: 700;
+    cursor: pointer; transition: all .2s; display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .submit-btn:hover { background: #1a8fd1; }
+  .submit-btn:disabled { background: var(--border); color: var(--text2); cursor: not-allowed; }
+  .submit-btn .spinner {
+    display: none; width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite;
+  }
+  .submit-btn.loading .spinner { display: block; }
+  .submit-btn.loading .btn-text { display: none; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* DIVIDER */
+  .or-divider {
+    display: flex; align-items: center; gap: 12px;
+    color: var(--text2); font-size: 0.82rem; margin-bottom: 16px;
+  }
+  .or-divider::before, .or-divider::after { content:''; flex:1; height:1px; background:var(--border); }
+
+  /* LOADING */
+  #loading {
+    position: fixed; inset: 0; background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 999; font-size: 1.1rem; color: var(--text2);
+  }
+
+  /* TOAST */
+  .toast {
+    display: none; position: fixed; top: 70px; left: 50%; transform: translateX(-50%);
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 10px 20px; font-size: 0.88rem;
+    z-index: 500; box-shadow: 0 4px 20px rgba(0,0,0,0.3); white-space: nowrap;
+  }
+  .toast.show { display: block; }
+  .toast.success { border-color: #22c55e; color: #4ade80; }
+  .toast.error { border-color: var(--danger); color: #f87171; }
+
+  /* BOTTOM NAV */
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(12px);
+    border-top: 1px solid var(--border);
+    display: flex; justify-content: space-around; align-items: center;
+    padding: 8px 0 10px; z-index: 100;
+  }
+  .bn-btn {
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    background: none; border: none; color: var(--text2);
+    font-size: 0.65rem; cursor: pointer; padding: 4px 12px; transition: color .15s;
+  }
+  .bn-btn i { font-size: 1.3rem; }
+  .bn-btn:hover, .bn-btn.active { color: #1DA1F2; }
+</style>
+</head>
+<body>
+
+<div id="loading">جاري التحميل...</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-left">
+      <button class="nav-back" onclick="goto('index.html')"><i class="bi bi-arrow-right"></i></button>
+      <span class="nav-title" id="nav-title">نشر منشور</span>
+    </div>
+    <div class="nav-right">
+      <button class="theme-toggle" id="theme-toggle-btn" onclick="toggleTheme()">🌙</button>
+      <div class="lang-btns">
+        <button class="lang-btn active" id="btn-ar" onclick="setLang('ar')">🇸🇦 ع</button>
+        <button class="lang-btn" id="btn-en" onclick="setLang('en')">🇬🇧 EN</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE -->
+<div class="page">
+
+  <!-- UPLOAD IMAGE -->
+  <div class="section-label" id="lbl-photo">📷 أضف صورة (اختياري)</div>
+  <div style="height:8px"></div>
+  <div class="upload-area" id="upload-area">
+    <input type="file" accept="image/*" id="file-input" onchange="handleFile(this)">
+    <div class="upload-icon"><i class="bi bi-image"></i></div>
+    <div class="upload-title" id="lbl-upload-title">اضغط لاختيار صورة</div>
+    <div class="upload-sub" id="lbl-upload-sub">أو اسحب وأفلت الصورة هنا</div>
+  </div>
+
+  <!-- IMAGE PREVIEW -->
+  <div class="upload-preview" id="image-preview">
+    <img id="preview-img" src="" alt="preview">
+    <button class="preview-remove" onclick="removeImage()" title="حذف الصورة"><i class="bi bi-x"></i></button>
+  </div>
+
+  <!-- OR DIVIDER -->
+  <div class="or-divider" id="or-divider"><span id="lbl-or">أو اختر إيموجي</span></div>
+
+  <!-- EMOJI PICKER -->
+  <div class="emoji-section">
+    <div class="emoji-grid" id="emoji-grid">
+      🌅 🌺 🏙️ 🌊 🌸 🍕 ⚽ 🎵
+      🦋 🌿 🔥 ❄️ 🌙 ☀️ 🌈 ⭐
+      🎉 💪 🧠 💡 📚 ✈️ 🏔️ 🌍
+      😊 😍 🥰 😎 🤩 🎯 💫 🙌
+    </div>
+  </div>
+
+  <!-- CAPTION -->
+  <div class="caption-section">
+    <div class="section-label" id="lbl-caption">✏️ الوصف</div>
+    <div style="height:8px"></div>
+    <textarea class="caption-input" id="caption-input" placeholder="اكتب وصفاً للمنشور..." maxlength="500" oninput="updatePreview(); updateCount()"></textarea>
+    <div class="caption-count"><span id="caption-count">0</span>/500</div>
+  </div>
+
+  <!-- PREVIEW -->
+  <div class="section-label" id="lbl-preview">👁️ معاينة المنشور</div>
+  <div style="height:8px"></div>
+  <div class="preview-card" id="preview-card">
+    <div class="preview-header">
+      <div class="preview-avatar" id="preview-avatar">?</div>
+      <div>
+        <div class="preview-name" id="preview-name">—</div>
+        <div class="preview-time" id="preview-time">الآن</div>
+      </div>
+    </div>
+    <div id="preview-media"></div>
+    <div class="preview-caption" id="preview-caption"></div>
+  </div>
+
+  <!-- SUBMIT -->
+  <button class="submit-btn" id="submit-btn" onclick="submitPost()" disabled>
+    <div class="spinner"></div>
+    <span class="btn-text" id="lbl-submit">🚀 نشر</span>
+  </button>
+
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <button class="bn-btn" onclick="goto('index.html')"><i class="bi bi-house"></i><span id="bn-home">الرئيسية</span></button>
+  <button class="bn-btn" onclick="goto('search.html')"><i class="bi bi-search"></i><span id="bn-search">بحث</span></button>
+  <button class="bn-btn active" onclick="goto('upload.html')"><i class="bi bi-plus-square"></i><span id="bn-post">نشر</span></button>
+  <button class="bn-btn" onclick="goto('notifications.html')"><i class="bi bi-bell"></i><span id="bn-notif">إشعارات</span></button>
+  <button class="bn-btn" onclick="goto('profile.html')"><i class="bi bi-person"></i><span id="bn-profile">حسابي</span></button>
+</div>
+
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+<script>
+firebase.initializeApp({
+  apiKey:"AIzaSyA4vNgF3NBWxjQfx_feHpsoIMdswlzUegA",
+  authDomain:"social-media-app-da2cd.firebaseapp.com",
+  projectId:"social-media-app-da2cd",
+  storageBucket:"social-media-app-da2cd.firebasestorage.app",
+  messagingSenderId:"41413182238",
+  appId:"1:41413182238:web:bbf664b131279ec4bd3f0f"
+});
+const auth = firebase.auth();
+const db = firebase.firestore();
+const storage = firebase.storage();
+const FieldValue = firebase.firestore.FieldValue;
+
+let lang = "ar";
+let currentUser = null;
+let selectedEmoji = "";
+let selectedFile = null;
+
+const EMOJIS = ["🌅","🌺","🏙️","🌊","🌸","🍕","⚽","🎵","🦋","🌿","🔥","❄️","🌙","☀️","🌈","⭐","🎉","💪","🧠","💡","📚","✈️","🏔️","🌍","😊","😍","🥰","😎","🤩","🎯","💫","🙌"];
+
+const tr = {
+  ar:{ dir:"rtl", navTitle:"نشر منشور", photo:"📷 أضف صورة (اختياري)",
+    uploadTitle:"اضغط لاختيار صورة", uploadSub:"أو اسحب وأفلت الصورة هنا",
+    or:"أو اختر إيموجي", caption:"✏️ الوصف", captionPlaceholder:"اكتب وصفاً للمنشور...",
+    preview:"👁️ معاينة المنشور", submit:"🚀 نشر", publishing:"جاري النشر...",
+    now:"الآن", successMsg:"تم نشر منشورك! 🎉", errNoContent:"أضف صورة أو إيموجي أولاً",
+    errAuth:"يجب تسجيل الدخول أولاً",
+    bnHome:"الرئيسية", bnSearch:"بحث", bnPost:"نشر", bnNotif:"إشعارات", bnProfile:"حسابي",
+    loading:"جاري التحميل..." },
+  en:{ dir:"ltr", navTitle:"Create Post", photo:"📷 Add a photo (optional)",
+    uploadTitle:"Click to choose a photo", uploadSub:"Or drag and drop here",
+    or:"Or choose an emoji", caption:"✏️ Caption", captionPlaceholder:"Write a caption...",
+    preview:"👁️ Post Preview", submit:"🚀 Post", publishing:"Publishing...",
+    now:"Just now", successMsg:"Your post is live! 🎉", errNoContent:"Add a photo or emoji first",
+    errAuth:"You must be signed in",
+    bnHome:"Home", bnSearch:"Search", bnPost:"Post", bnNotif:"Notifications", bnProfile:"Profile",
+    loading:"Loading..." }
+};
+
+function setLang(l){
+  lang=l; localStorage.setItem("vistagoLang",l);
+  const s=tr[l];
+  document.documentElement.setAttribute("dir",s.dir);
+  document.documentElement.setAttribute("lang",l);
+  document.getElementById("nav-title").textContent=s.navTitle;
+  document.getElementById("lbl-photo").textContent=s.photo;
+  document.getElementById("lbl-upload-title").textContent=s.uploadTitle;
+  document.getElementById("lbl-upload-sub").textContent=s.uploadSub;
+  document.getElementById("lbl-or").textContent=s.or;
+  document.getElementById("lbl-caption").textContent=s.caption;
+  document.getElementById("caption-input").placeholder=s.captionPlaceholder;
+  document.getElementById("lbl-preview").textContent=s.preview;
+  document.getElementById("lbl-submit").textContent=s.submit;
+  document.getElementById("preview-time").textContent=s.now;
+  document.getElementById("loading").textContent=s.loading;
+  document.getElementById("bn-home").textContent=s.bnHome;
+  document.getElementById("bn-search").textContent=s.bnSearch;
+  document.getElementById("bn-post").textContent=s.bnPost;
+  document.getElementById("bn-notif").textContent=s.bnNotif;
+  document.getElementById("bn-profile").textContent=s.bnProfile;
+  document.getElementById("btn-ar").classList.toggle("active",l==="ar");
+  document.getElementById("btn-en").classList.toggle("active",l==="en");
+}
+
+const savedLang = localStorage.getItem("vistagoLang");
+if(savedLang) setLang(savedLang);
+
+function toggleTheme(){
+  const isLight=document.documentElement.classList.toggle("light");
+  localStorage.setItem("vistagoTheme",isLight?"light":"dark");
+  document.getElementById("theme-toggle-btn").textContent=isLight?"☀️":"🌙";
+}
+const savedTheme = localStorage.getItem("vistagoTheme");
+if(savedTheme==="light"){
+  document.documentElement.classList.add("light");
+  document.getElementById("theme-toggle-btn").textContent="☀️";
+}
+
+function goto(url){
+  const missing=["search.html","notifications.html"];
+  if(missing.includes(url.split("?")[0])){ showToast(lang==="en"?"Coming soon... 🚧":"قريباً... 🚧","error"); return; }
+  window.location.href=url;
+}
+
+function showToast(msg,type="success"){
+  const el=document.getElementById("toast");
+  el.textContent=msg; el.className="toast show "+type;
+  setTimeout(()=>el.className="toast",3000);
+}
+
+// ── Build emoji grid ──
+function buildEmojiGrid(){
+  const grid=document.getElementById("emoji-grid");
+  grid.innerHTML="";
+  EMOJIS.forEach(emoji=>{
+    const btn=document.createElement("button");
+    btn.className="emoji-btn";
+    btn.textContent=emoji;
+    btn.onclick=()=>selectEmoji(emoji, btn);
+    grid.appendChild(btn);
+  });
+}
+buildEmojiGrid();
+
+// ── Select emoji ──
+function selectEmoji(emoji, btn){
+  selectedEmoji=emoji;
+  document.querySelectorAll(".emoji-btn").forEach(b=>b.classList.remove("selected"));
+  btn.classList.add("selected");
+  // Clear image if emoji selected
+  removeImage();
+  updatePreview();
+  updateSubmitBtn();
+}
+
+// ── Handle file ──
+function handleFile(input){
+  const file=input.files[0];
+  if(!file) return;
+  if(!file.type.startsWith("image/")){
+    showToast(lang==="en"?"Please select an image file":"يرجى اختيار صورة","error"); return;
+  }
+  if(file.size > 5 * 1024 * 1024){
+    showToast(lang==="en"?"Image must be under 5MB":"الصورة يجب أن تكون أقل من 5MB","error"); return;
+  }
+  selectedFile=file;
+  selectedEmoji="";
+  document.querySelectorAll(".emoji-btn").forEach(b=>b.classList.remove("selected"));
+  const reader=new FileReader();
+  reader.onload=e=>{
+    document.getElementById("preview-img").src=e.target.result;
+    document.getElementById("image-preview").style.display="block";
+    document.getElementById("upload-area").style.display="none";
+    updatePreview();
+    updateSubmitBtn();
+  };
+  reader.readAsDataURL(file);
+}
+
+// ── Remove image ──
+function removeImage(){
+  selectedFile=null;
+  document.getElementById("preview-img").src="";
+  document.getElementById("image-preview").style.display="none";
+  document.getElementById("upload-area").style.display="block";
+  document.getElementById("file-input").value="";
+  updatePreview();
+  updateSubmitBtn();
+}
+
+// ── Update preview ──
+function updatePreview(){
+  const caption=document.getElementById("caption-input").value.trim();
+  const card=document.getElementById("preview-card");
+  const media=document.getElementById("preview-media");
+  const capEl=document.getElementById("preview-caption");
+
+  if(!selectedFile && !selectedEmoji && !caption){
+    card.classList.remove("show"); return;
+  }
+  card.classList.add("show");
+
+  if(selectedFile){
+    media.innerHTML=`<img class="preview-img" src="${document.getElementById("preview-img").src}" style="width:100%;max-height:400px;object-fit:cover;display:block">`;
+  } else if(selectedEmoji){
+    media.innerHTML=`<div style="font-size:5rem;display:flex;align-items:center;justify-content:center;padding:30px 0;background:var(--surface2)">${selectedEmoji}</div>`;
+  } else {
+    media.innerHTML="";
+  }
+
+  if(caption){
+    capEl.innerHTML=`<strong>${currentUser?.displayName||"أنت"}</strong> ${caption}`;
+  } else {
+    capEl.innerHTML="";
+  }
+}
+
+// ── Update caption count ──
+function updateCount(){
+  const len=document.getElementById("caption-input").value.length;
+  document.getElementById("caption-count").textContent=len;
+  updateSubmitBtn();
+}
+
+// ── Update submit button ──
+function updateSubmitBtn(){
+  const btn=document.getElementById("submit-btn");
+  btn.disabled = !selectedFile && !selectedEmoji;
+}
+
+// ── Drag & drop ──
+const area=document.getElementById("upload-area");
+area.addEventListener("dragover",e=>{e.preventDefault();area.classList.add("dragover");});
+area.addEventListener("dragleave",()=>area.classList.remove("dragover"));
+area.addEventListener("drop",e=>{
+  e.preventDefault(); area.classList.remove("dragover");
+  const file=e.dataTransfer.files[0];
+  if(file){ const dt=new DataTransfer(); dt.items.add(file); document.getElementById("file-input").files=dt.files; handleFile(document.getElementById("file-input")); }
+});
+
+// ── Submit post ──
+function submitPost(){
+  if(!currentUser){ showToast(tr[lang].errAuth,"error"); goto("login.html"); return; }
+  if(!selectedFile && !selectedEmoji){ showToast(tr[lang].errNoContent,"error"); return; }
+
+  const btn=document.getElementById("submit-btn");
+  btn.classList.add("loading"); btn.disabled=true;
+  document.getElementById("lbl-submit").textContent=tr[lang].publishing;
+
+  const caption=document.getElementById("caption-input").value.trim();
+  const postData={
+    uid: currentUser.uid,
+    name: currentUser.displayName||"",
+    username: currentUser.email?currentUser.email.split("@")[0]:"",
+    photo: currentUser.photoURL||"",
+    caption: caption,
+    emoji: selectedEmoji||"",
+    likes: 0, shares: 0, comments: 0,
+    likedBy: {},
+    createdAt: FieldValue.serverTimestamp()
+  };
+
+  if(selectedFile){
+    // Upload image to Firebase Storage
+    const ref=storage.ref(`posts/${currentUser.uid}/${Date.now()}_${selectedFile.name}`);
+    ref.put(selectedFile).then(snap=>snap.ref.getDownloadURL()).then(url=>{
+      postData.imageUrl=url;
+      return savePost(postData);
+    }).catch(err=>{
+      // Storage might not be enabled — save without image
+      console.warn("Storage error, saving without image:", err);
+      postData.emoji="📷";
+      return savePost(postData);
+    });
+  } else {
+    savePost(postData);
+  }
+}
+
+function savePost(data){
+  db.collection("posts").add(data).then(doc=>{
+    // Update user post count
+    db.collection("users").doc(currentUser.uid).update({posts: FieldValue.increment(1)}).catch(()=>{});
+    showToast(tr[lang].successMsg,"success");
+    setTimeout(()=>goto("index.html"), 1500);
+  }).catch(err=>{
+    showToast(lang==="en"?"Failed to post. Try again.":"فشل النشر، حاول مرة أخرى","error");
+    const btn=document.getElementById("submit-btn");
+    btn.classList.remove("loading"); btn.disabled=false;
+    console.error(err);
+  });
+}
+
+// ── Auth ──
+auth.onAuthStateChanged(user=>{
+  document.getElementById("loading").style.display="none";
+  if(user){
+    currentUser=user;
+    const initial=(user.displayName||"?").charAt(0).toUpperCase();
+    document.getElementById("preview-avatar").textContent=initial;
+    document.getElementById("preview-name").textContent=user.displayName||user.email?.split("@")[0]||"—";
+  } else {
+    // Not logged in — redirect to login
+    goto("login.html");
+  }
+});
+</script>
+</body>
+</html>

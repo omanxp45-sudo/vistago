@@ -373,7 +373,7 @@ if(savedTheme==="light"){
 }
 
 function goto(url){
-  const missing=["upload.html","search.html","notifications.html"];
+  const missing=["search.html","notifications.html"];
   if(missing.includes(url)){ showToast(lang==="en"?"Coming soon... 🚧":"قريباً... 🚧","error"); return; }
   window.location.href=url;
 }
