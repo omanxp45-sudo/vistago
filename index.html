@@ -262,114 +262,7 @@
 </nav>
 
 <!-- FEED -->
-<div class="feed" id="feed">
-
-  <!-- POST 1 -->
-  <div class="post-card" id="card-post1">
-    <div class="post-header">
-      <div class="avatar" onclick="goto('profile.html?u=ahmed_shamsi')">أ</div>
-      <div class="post-meta">
-        <div class="post-username" onclick="goto('profile.html?u=ahmed_shamsi')">ahmed_shamsi</div>
-        <div class="post-time" id="time-post1">منذ ساعتين</div>
-      </div>
-    </div>
-    <a href="post.html?id=post1"><div class="post-emoji" style="cursor:pointer">🌅</div></a>
-    <a href="post.html?id=post1" style="color:inherit;text-decoration:none"><div class="post-caption" id="caption-post1" style="cursor:pointer"><strong>ahmed_shamsi</strong> لحظة جميلة من غروب الشمس 🌅✨</div>
-    </div></a>
-    <div class="post-actions">
-      <button class="action-btn" id="lb-post1" onclick="likePost('post1')">
-        <i class="bi bi-heart" id="li-post1"></i>
-        <span id="lc-post1">0</span>
-      </button>
-      <button class="action-btn" onclick="toggleComments('post1')">
-        <i class="bi bi-chat"></i>
-        <span id="cc-post1">0</span>
-      </button>
-      <button class="action-btn" onclick="sharePost('post1')">
-        <i class="bi bi-share"></i>
-        <span id="sc-post1">0</span>
-      </button>
-    </div>
-    <div class="comments-section" id="cs-post1">
-      <div class="comment-list" id="cl-post1"></div>
-      <div class="comment-input-row" id="ci-post1">
-        <input class="comment-input" id="cin-post1" placeholder="اكتب تعليقاً..." onkeydown="if(event.key==='Enter')addComment('post1')">
-        <button class="comment-send" onclick="addComment('post1')"><i class="bi bi-send"></i></button>
-      </div>
-    </div>
-  </div>
-
-  <!-- POST 2 -->
-  <div class="post-card" id="card-post2">
-    <div class="post-header">
-      <div class="avatar" onclick="goto('profile.html?u=sara_mutairi')">س</div>
-      <div class="post-meta">
-        <div class="post-username" onclick="goto('profile.html?u=sara_mutairi')">sara_mutairi</div>
-        <div class="post-time" id="time-post2">منذ 4 ساعات</div>
-      </div>
-    </div>
-    <a href="post.html?id=post2"><div class="post-emoji" style="cursor:pointer">🌺</div></a>
-    <a href="post.html?id=post2" style="color:inherit;text-decoration:none"><div class="post-caption" id="caption-post2" style="cursor:pointer"><strong>sara_mutairi</strong> طبيعة خلابة من رحلتي الأخيرة 🌺🌿</div>
-    </div></a>
-    <div class="post-actions">
-      <button class="action-btn" id="lb-post2" onclick="likePost('post2')">
-        <i class="bi bi-heart" id="li-post2"></i>
-        <span id="lc-post2">0</span>
-      </button>
-      <button class="action-btn" onclick="toggleComments('post2')">
-        <i class="bi bi-chat"></i>
-        <span id="cc-post2">0</span>
-      </button>
-      <button class="action-btn" onclick="sharePost('post2')">
-        <i class="bi bi-share"></i>
-        <span id="sc-post2">0</span>
-      </button>
-    </div>
-    <div class="comments-section" id="cs-post2">
-      <div class="comment-list" id="cl-post2"></div>
-      <div class="comment-input-row" id="ci-post2">
-        <input class="comment-input" id="cin-post2" placeholder="اكتب تعليقاً..." onkeydown="if(event.key==='Enter')addComment('post2')">
-        <button class="comment-send" onclick="addComment('post2')"><i class="bi bi-send"></i></button>
-      </div>
-    </div>
-  </div>
-
-  <!-- POST 3 -->
-  <div class="post-card" id="card-post3">
-    <div class="post-header">
-      <div class="avatar" onclick="goto('profile.html?u=mohammed_abri')">م</div>
-      <div class="post-meta">
-        <div class="post-username" onclick="goto('profile.html?u=mohammed_abri')">mohammed_abri</div>
-        <div class="post-time" id="time-post3">منذ 6 ساعات</div>
-      </div>
-    </div>
-    <a href="post.html?id=post3"><div class="post-emoji" style="cursor:pointer">🏙️</div></a>
-    <a href="post.html?id=post3" style="color:inherit;text-decoration:none"><div class="post-caption" id="caption-post3" style="cursor:pointer"><strong>mohammed_abri</strong> مدينة مسقط في الليل 🏙️🌙</div>
-    </div></a>
-    <div class="post-actions">
-      <button class="action-btn" id="lb-post3" onclick="likePost('post3')">
-        <i class="bi bi-heart" id="li-post3"></i>
-        <span id="lc-post3">0</span>
-      </button>
-      <button class="action-btn" onclick="toggleComments('post3')">
-        <i class="bi bi-chat"></i>
-        <span id="cc-post3">0</span>
-      </button>
-      <button class="action-btn" onclick="sharePost('post3')">
-        <i class="bi bi-share"></i>
-        <span id="sc-post3">0</span>
-      </button>
-    </div>
-    <div class="comments-section" id="cs-post3">
-      <div class="comment-list" id="cl-post3"></div>
-      <div class="comment-input-row" id="ci-post3">
-        <input class="comment-input" id="cin-post3" placeholder="اكتب تعليقاً..." onkeydown="if(event.key==='Enter')addComment('post3')">
-        <button class="comment-send" onclick="addComment('post3')"><i class="bi bi-send"></i></button>
-      </div>
-    </div>
-  </div>
-
-</div>
+<div class="feed" id="feed"></div>
 
 <!-- LOGIN MODAL -->
 <div class="modal-overlay" id="modal">
@@ -410,7 +303,6 @@ const FieldValue = firebase.firestore.FieldValue;
 
 let lang = "ar";
 let currentUser = null;
-const POSTS = ["post1","post2","post3"];
 
 const tr = {
   ar:{dir:"rtl",login:"تسجيل الدخول",mt:"سجّل دخولك للمتابعة",ms:"انضم إلى Vistago لتتفاعل مع المنشورات وتشارك لحظاتك",mb:"تسجيل الدخول / إنشاء حساب",mc:"ربما لاحقاً",mp:"حسابي",mu:"نشر صورة",mn:"الإشعارات",mo:"تسجيل الخروج",cp:"اكتب تعليقاً...",bnHome:"الرئيسية",bnSearch:"بحث",bnPost:"نشر",bnNotif:"إشعارات",bnProfile:"حسابي",copied:"تم نسخ الرابط!",loading:"جاري التحميل...",anon:"مجهول",myProfile:"حسابي",t1:"منذ ساعتين",t2:"منذ 4 ساعات",t3:"منذ 6 ساعات"},
@@ -521,37 +413,106 @@ document.addEventListener("click",function(e){
     document.getElementById("user-dropdown").classList.remove("show");
 });
 
-// ── Load Post ──
+// ── Load Post (likes/comments listener) ──
 function loadPost(postId){
   db.collection("posts").doc(postId).onSnapshot(snap=>{
-    const d = snap.data()||{};
-    document.getElementById("lc-"+postId).textContent = d.likes||0;
-    document.getElementById("sc-"+postId).textContent = d.shares||0;
-    const liked = currentUser && d.likedBy && d.likedBy[currentUser.uid]===true;
-    document.getElementById("li-"+postId).className = liked ? "bi bi-heart-fill" : "bi bi-heart";
-    document.getElementById("lb-"+postId).classList.toggle("liked", liked);
+    const d=snap.data()||{};
+    const lcEl=document.getElementById("lc-"+postId);
+    const scEl=document.getElementById("sc-"+postId);
+    const liEl=document.getElementById("li-"+postId);
+    const lbEl=document.getElementById("lb-"+postId);
+    if(!lcEl) return;
+    lcEl.textContent=d.likes||0;
+    if(scEl) scEl.textContent=d.shares||0;
+    const liked=currentUser&&d.likedBy&&d.likedBy[currentUser.uid]===true;
+    if(liEl) liEl.className=liked?"bi bi-heart-fill":"bi bi-heart";
+    if(lbEl) lbEl.classList.toggle("liked",liked);
   });
   db.collection("posts").doc(postId).collection("comments")
     .orderBy("createdAt","asc")
     .onSnapshot(snap=>{
-      const list = document.getElementById("cl-"+postId);
-      list.innerHTML = "";
+      const list=document.getElementById("cl-"+postId);
+      if(!list) return;
+      list.innerHTML="";
       snap.forEach(d=>{
-        const c = d.data();
-        const wrap = document.createElement("div");
-        wrap.className = "comment-item";
-        wrap.innerHTML = `
+        const c=d.data();
+        const wrap=document.createElement("div");
+        wrap.className="comment-item";
+        wrap.innerHTML=`
           <div class="comment-avatar">${(c.name||"?").charAt(0)}</div>
           <div style="flex:1">
             <div class="comment-bubble">
-              <div class="comment-user" onclick="goto('profile.html?u=${c.username||""}')">${c.name||"مجهول"}</div>
+              <div class="comment-user" onclick="goto('profile.html?u=${c.username||""}')">${c.name||tr[lang].anon}</div>
               <div class="comment-text">${c.text}</div>
               <div class="comment-time">${formatTime(c.createdAt)}</div>
             </div>
           </div>`;
         list.appendChild(wrap);
       });
-      document.getElementById("cc-"+postId).textContent = snap.size;
+      const ccEl=document.getElementById("cc-"+postId);
+      if(ccEl) ccEl.textContent=snap.size;
+    });
+}
+
+// ── Render post card ──
+function renderPostCard(docId, d){
+  const liked=currentUser&&d.likedBy&&d.likedBy[currentUser.uid]===true;
+  const mediaHTML=d.imageUrl
+    ? `<a href="post.html?id=${docId}"><img class="post-img" src="${d.imageUrl}" alt="post" style="cursor:pointer"></a>`
+    : d.emoji ? `<a href="post.html?id=${docId}"><div class="post-emoji" style="cursor:pointer">${d.emoji}</div></a>` : "";
+  const card=document.createElement("div");
+  card.className="post-card"; card.id="card-"+docId;
+  card.innerHTML=`
+    <div class="post-header">
+      <div class="avatar" onclick="goto('profile.html?u=${d.username||""}')">${(d.name||"?").charAt(0).toUpperCase()}</div>
+      <div class="post-meta">
+        <div class="post-username" onclick="goto('profile.html?u=${d.username||""}')">${d.name||d.username||"—"}</div>
+        <div class="post-time">${formatTime(d.createdAt)}</div>
+      </div>
+    </div>
+    ${mediaHTML}
+    <a href="post.html?id=${docId}" style="color:inherit;text-decoration:none">
+      <div class="post-caption">${d.caption||""}</div>
+    </a>
+    <div class="post-actions">
+      <button class="action-btn ${liked?"liked":""}" id="lb-${docId}" onclick="likePost('${docId}')">
+        <i class="bi ${liked?"bi-heart-fill":"bi-heart"}" id="li-${docId}"></i>
+        <span id="lc-${docId}">${d.likes||0}</span>
+      </button>
+      <button class="action-btn" onclick="toggleComments('${docId}')">
+        <i class="bi bi-chat"></i>
+        <span id="cc-${docId}">0</span>
+      </button>
+      <button class="action-btn" onclick="sharePost('${docId}')">
+        <i class="bi bi-share"></i>
+        <span id="sc-${docId}">${d.shares||0}</span>
+      </button>
+    </div>
+    <div class="comments-section" id="cs-${docId}">
+      <div class="comment-list" id="cl-${docId}"></div>
+      <div class="comment-input-row" id="ci-${docId}">
+        <input class="comment-input" id="cin-${docId}" placeholder="${tr[lang].cp}" onkeydown="if(event.key==='Enter')addComment('${docId}')">
+        <button class="comment-send" onclick="addComment('${docId}')"><i class="bi bi-send"></i></button>
+      </div>
+    </div>`;
+  return card;
+}
+
+// ── Load feed dynamically ──
+function loadFeed(){
+  const feed=document.getElementById("feed");
+  feed.innerHTML='<div style="text-align:center;padding:40px;color:var(--text2)"><i class="bi bi-hourglass-split" style="font-size:2rem"></i></div>';
+  db.collection("posts").orderBy("createdAt","desc").limit(30)
+    .onSnapshot(snap=>{
+      feed.innerHTML="";
+      if(snap.empty){
+        feed.innerHTML=`<div style="text-align:center;padding:40px;color:var(--text2)">${lang==="ar"?"لا توجد منشورات بعد":"No posts yet"}</div>`;
+        return;
+      }
+      snap.forEach(doc=>{
+        feed.appendChild(renderPostCard(doc.id, doc.data()));
+        loadPost(doc.id);
+      });
     });
 }
 
@@ -624,7 +585,7 @@ auth.onAuthStateChanged(user=>{
     document.getElementById("nav-login-btn").style.display = "block";
     document.getElementById("user-menu").style.display = "none";
   }
-  POSTS.forEach(loadPost);
+  loadFeed();
 });
 </script>
 </body>

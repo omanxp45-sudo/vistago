@@ -404,11 +404,14 @@ buildEmojiGrid();
 
 // ── Select emoji ──
 function selectEmoji(emoji, btn){
-  selectedEmoji=emoji;
+  // If image already loaded, don't clear it — just ignore emoji selection
+  if(selectedFile){
+    showToast(lang==="en"?"Remove the image first to use an emoji":"احذف الصورة أولاً لاستخدام إيموجي","error");
+    return;
+  }
+  selectedEmoji = selectedEmoji===emoji ? "" : emoji; // toggle
   document.querySelectorAll(".emoji-btn").forEach(b=>b.classList.remove("selected"));
-  btn.classList.add("selected");
-  // Clear image if emoji selected
-  removeImage();
+  if(selectedEmoji) btn.classList.add("selected");
   updatePreview();
   updateSubmitBtn();
 }
