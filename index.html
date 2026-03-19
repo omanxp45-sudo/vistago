@@ -3,9 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
 <title>Vistago</title>
 <link rel="icon" href="vistago-icon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -234,14 +231,6 @@
 </style>
 </head>
 <body>
-<script>
-// Force clear old cache - runs before anything else
-if('caches' in window){ caches.keys().then(keys=>keys.forEach(k=>caches.delete(k))); }
-if(navigator.serviceWorker){ navigator.serviceWorker.getRegistrations().then(regs=>regs.forEach(r=>r.unregister())); }
-const _v = '4.0';
-if(localStorage.getItem('vv')!==_v){ localStorage.setItem('vv',_v); location.reload(true); }
-</script>
-
 <!-- NAV -->
 <nav>
   <div class="nav-inner">
