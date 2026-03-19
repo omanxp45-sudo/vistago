@@ -4,165 +4,350 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vistago</title>
-<meta name="description" content="Vistago — شارك لحظاتك مع العالم">
-<meta property="og:title" content="Vistago">
-<meta property="og:description" content="شارك لحظاتك مع العالم">
-<meta property="og:image" content="https://omanxp45-sudo.github.io/vistago/vistago-icon.svg">
-<meta property="og:url" content="https://omanxp45-sudo.github.io/vistago/">
 <link rel="icon" href="vistago-icon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="vistago-icon.svg">
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#1DA1F2">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#f0f2f5;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;padding-bottom:70px;}
-#loading{position:fixed;top:0;left:0;right:0;bottom:0;background:#fff;display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;gap:16px;}
-#loading .logo{font-size:2rem;font-weight:800;color:#1DA1F2;}
-#loading .spinner{width:36px;height:36px;border:3px solid #e0e0e0;border-top-color:#1DA1F2;border-radius:50%;animation:spin 0.8s linear infinite;}
-@keyframes spin{to{transform:rotate(360deg)}}
-.navbar{background:#1DA1F2;padding:10px 20px;position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(29,161,242,0.3);}
-.navbar-logo{font-size:1.6rem;font-weight:800;color:#fff;letter-spacing:-1px;display:flex;align-items:center;gap:8px;}
-.navbar-logo img{width:32px;height:32px;border-radius:8px;}
-.navbar-right{display:flex;align-items:center;gap:10px;}
-.lang-btn{border:1px solid rgba(255,255,255,0.6);background:transparent;color:#fff;border-radius:20px;padding:4px 14px;font-size:0.8rem;cursor:pointer;}
-.lang-btn.active{background:rgba(255,255,255,0.25);font-weight:600;}
-.btn-login{background:#fff;color:#1DA1F2;border:none;border-radius:20px;padding:6px 20px;font-size:0.9rem;font-weight:700;cursor:pointer;}
-.main-layout{max-width:680px;margin:0 auto;padding:20px 16px;}
-.post-card{background:#fff;border-radius:16px;margin-bottom:20px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.08);}
-.post-header{display:flex;align-items:center;gap:12px;padding:14px 16px;}
-.post-avatar{width:42px;height:42px;border-radius:50%;background:#1DA1F2;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:1rem;flex-shrink:0;cursor:pointer;}
-.post-username{font-weight:700;font-size:0.95rem;color:#1a1a2e;cursor:pointer;}
-.post-username:hover{color:#1DA1F2;}
-.post-time{font-size:0.78rem;color:#aaa;}
-.post-image-placeholder{width:100%;aspect-ratio:1;background:linear-gradient(135deg,#e8f5fe,#c8e8f8);display:flex;align-items:center;justify-content:center;font-size:4rem;}
-.post-actions{display:flex;align-items:center;padding:8px 16px;border-top:1px solid #f0f0f0;}
-.action-btn{display:flex;align-items:center;gap:5px;background:transparent;border:none;color:#555;font-size:0.85rem;cursor:pointer;padding:6px 10px;border-radius:20px;transition:all 0.2s;flex:1;justify-content:center;}
-.action-btn:hover{background:#e8f5fe;color:#1DA1F2;}
-.action-btn.liked{color:#e1306c;}
-.action-btn:disabled{opacity:0.6;cursor:not-allowed;}
-.post-caption{padding:10px 16px 6px;font-size:0.9rem;color:#333;line-height:1.5;}
-.comments-section{padding:0 16px 14px;display:none;}
-.comments-section.open{display:block;}
-.comment-item{display:flex;gap:10px;margin-bottom:12px;align-items:flex-start;}
-.comment-avatar{width:32px;height:32px;border-radius:50%;background:#1DA1F2;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:0.8rem;flex-shrink:0;}
-.comment-bubble{background:#f0f2f5;border-radius:12px;padding:8px 12px;flex:1;}
-.comment-user{font-weight:700;font-size:0.82rem;color:#1a1a2e;cursor:pointer;}
-.comment-user:hover{color:#1DA1F2;}
-.comment-text{font-size:0.88rem;color:#333;margin-top:2px;}
-.comment-time{font-size:0.72rem;color:#aaa;margin-top:4px;}
-.comment-input-row{display:flex;gap:8px;align-items:center;margin-top:8px;border-top:1px solid #f0f0f0;padding-top:10px;}
-.comment-input{flex:1;border:1.5px solid #e0e0e0;border-radius:20px;padding:8px 14px;font-size:0.88rem;outline:none;}
-.comment-input:focus{border-color:#1DA1F2;}
-.comment-send{background:#1DA1F2;color:#fff;border:none;border-radius:50%;width:36px;height:36px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.user-menu{position:relative;display:none;}
-.dropdown{display:none;position:absolute;top:45px;left:0;background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.15);min-width:180px;overflow:hidden;z-index:200;}
-.dropdown.show{display:block}
-.dropdown-item{display:flex;align-items:center;gap:10px;padding:12px 16px;font-size:0.9rem;color:#333;cursor:pointer;border:none;background:transparent;width:100%;text-align:right;}
-.dropdown-item:hover{background:#e8f5fe;color:#1DA1F2;}
-.dropdown-item.danger{color:#dc3545;}
-.modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center;}
-.modal-overlay.show{display:flex}
-.modal-box{background:#fff;border-radius:20px;padding:36px 32px;max-width:360px;width:90%;text-align:center;}
-.modal-icon{font-size:3rem;margin-bottom:12px}
-.modal-title{font-size:1.3rem;font-weight:700;color:#1a1a2e;margin-bottom:8px;}
-.modal-sub{font-size:0.9rem;color:#6c757d;margin-bottom:24px;}
-.btn-modal-login{background:#1DA1F2;color:#fff;border:none;border-radius:12px;padding:12px;width:100%;font-size:1rem;font-weight:600;cursor:pointer;margin-bottom:10px;}
-.btn-modal-close{background:transparent;border:1px solid #dee2e6;border-radius:12px;padding:10px;width:100%;font-size:0.9rem;cursor:pointer;color:#6c757d;}
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #e0e0e0;display:flex;align-items:center;justify-content:space-around;padding:8px 0;z-index:100;box-shadow:0 -2px 8px rgba(0,0,0,0.06);}
-.bnb{display:flex;flex-direction:column;align-items:center;gap:3px;background:transparent;border:none;color:#888;cursor:pointer;padding:4px 16px;font-size:0.7rem;transition:color 0.2s;}
-.bnb i{font-size:1.4rem;}
-.bnb:hover,.bnb.active{color:#1DA1F2;}
+  :root {
+    --bg: #0f0f0f;
+    --surface: #1a1a1a;
+    --surface2: #242424;
+    --border: #2e2e2e;
+    --text: #f0f0f0;
+    --text2: #aaaaaa;
+    --accent: #6c63ff;
+    --accent2: #a78bfa;
+    --danger: #ef4444;
+    --radius: 14px;
+  }
+  :root.light {
+    --bg: #f4f4f8;
+    --surface: #ffffff;
+    --surface2: #efefef;
+    --border: #dcdcdc;
+    --text: #111111;
+    --text2: #666666;
+    --accent: #6c63ff;
+    --accent2: #5548e0;
+    --danger: #ef4444;
+  }
+
+  /* Theme toggle button */
+  .theme-toggle {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all .2s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .theme-toggle:hover {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', Tahoma, sans-serif; min-height: 100vh; }
+  a { color: inherit; text-decoration: none; }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: color-mix(in srgb, var(--bg) 85%, transparent); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 20px; height: 56px;
+  }
+  .nav-logo { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 1.2rem; }
+  .nav-logo img { width: 28px; height: 28px; }
+  .nav-right { display: flex; align-items: center; gap: 10px; }
+  .lang-btns { display: flex; gap: 4px; }
+  .lang-btn {
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--text2); border-radius: 20px; padding: 4px 10px;
+    font-size: 0.78rem; cursor: pointer; transition: all .2s;
+  }
+  .lang-btn.active, .lang-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .btn-login {
+    background: var(--accent); color: #fff; border: none;
+    border-radius: 20px; padding: 6px 16px; font-size: 0.85rem;
+    cursor: pointer; transition: background .2s;
+  }
+  .btn-login:hover { background: var(--accent2); }
+  .user-menu { position: relative; }
+  .user-btn {
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--text); border-radius: 20px; padding: 6px 14px;
+    font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 6px;
+  }
+  .user-dropdown {
+    display: none; position: absolute; top: 44px; right: 0;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); min-width: 180px; overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  [dir="rtl"] .user-dropdown { right: auto; left: 0; }
+  .user-dropdown.show { display: block; }
+  .user-dropdown button {
+    display: flex; align-items: center; gap: 10px;
+    width: 100%; padding: 12px 16px; background: none; border: none;
+    color: var(--text); font-size: 0.88rem; cursor: pointer; text-align: right;
+    transition: background .15s;
+  }
+  .user-dropdown button:hover { background: var(--surface2); }
+
+  /* FEED */
+  .feed { max-width: 560px; margin: 0 auto; padding: 20px 12px 80px; }
+
+  /* POST CARD */
+  .post-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); margin-bottom: 18px; overflow: hidden;
+  }
+  .post-header { display: flex; align-items: center; gap: 10px; padding: 14px 16px 10px; }
+  .avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--accent); display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 1rem; flex-shrink: 0; cursor: pointer;
+  }
+  .post-meta { flex: 1; }
+  .post-username { font-weight: 600; font-size: 0.92rem; cursor: pointer; }
+  .post-username:hover { color: var(--accent2); }
+  .post-time { font-size: 0.75rem; color: var(--text2); margin-top: 2px; }
+  .post-caption { padding: 0 16px 10px; font-size: 0.92rem; line-height: 1.5; }
+  .post-img { width: 100%; display: block; max-height: 500px; object-fit: cover; }
+  .post-emoji { font-size: 4rem; display: flex; align-items: center; justify-content: center; padding: 30px 0; background: var(--surface2); }
+
+  /* ACTIONS */
+  .post-actions { display: flex; align-items: center; gap: 4px; padding: 10px 12px; border-top: 1px solid var(--border); }
+  .action-btn {
+    display: flex; align-items: center; gap: 5px;
+    background: none; border: none; color: var(--text2);
+    font-size: 0.85rem; cursor: pointer; padding: 6px 10px;
+    border-radius: 8px; transition: all .15s;
+  }
+  .action-btn:hover { background: var(--surface2); color: var(--text); }
+  .action-btn i { font-size: 1.1rem; }
+  .action-btn.liked { color: var(--danger); }
+  .action-btn.liked i { color: var(--danger); }
+
+  /* COMMENTS */
+  .comments-section { display: none; flex-direction: column; gap: 0; border-top: 1px solid var(--border); }
+  .comments-section.open { display: flex; }
+  .comment-list { display: flex; flex-direction: column; gap: 0; max-height: 260px; overflow-y: auto; padding: 10px 14px 4px; }
+  .comment-item { display: flex; gap: 8px; margin-bottom: 10px; }
+  .comment-avatar {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: var(--accent2); display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.75rem; flex-shrink: 0;
+  }
+  .comment-bubble { background: var(--surface2); border-radius: 12px; padding: 8px 12px; flex: 1; }
+  .comment-user { font-weight: 600; font-size: 0.8rem; cursor: pointer; color: var(--accent2); margin-bottom: 2px; }
+  .comment-user:hover { text-decoration: underline; }
+  .comment-text { font-size: 0.85rem; line-height: 1.4; }
+  .comment-time { font-size: 0.7rem; color: var(--text2); margin-top: 3px; }
+  .comment-input-row {
+    display: none; align-items: center; gap: 8px;
+    padding: 8px 14px 12px; border-top: 1px solid var(--border);
+  }
+  .comment-input {
+    flex: 1; background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 20px; padding: 8px 14px; color: var(--text);
+    font-size: 0.85rem; outline: none;
+  }
+  .comment-input:focus { border-color: var(--accent); }
+  .comment-send {
+    background: var(--accent); border: none; color: #fff;
+    border-radius: 50%; width: 34px; height: 34px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: background .2s; font-size: 1rem;
+  }
+  .comment-send:hover { background: var(--accent2); }
+
+  /* LOADING */
+  #loading {
+    position: fixed; inset: 0; background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 999; font-size: 1.1rem; color: var(--text2);
+  }
+
+  /* MODAL */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
+    z-index: 200; align-items: center; justify-content: center;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal-box {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 32px 28px; max-width: 360px;
+    width: 90%; text-align: center;
+  }
+  .modal-icon { font-size: 2.5rem; margin-bottom: 14px; }
+  .modal-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
+  .modal-sub { font-size: 0.88rem; color: var(--text2); margin-bottom: 22px; }
+  .modal-btn-main {
+    width: 100%; background: var(--accent); color: #fff; border: none;
+    border-radius: 10px; padding: 12px; font-size: 0.95rem;
+    cursor: pointer; margin-bottom: 10px; transition: background .2s;
+  }
+  .modal-btn-main:hover { background: var(--accent2); }
+  .modal-btn-sec {
+    width: 100%; background: none; color: var(--text2); border: none;
+    font-size: 0.85rem; cursor: pointer; padding: 6px;
+  }
+  .modal-btn-sec:hover { color: var(--text); }
+
+  /* BOTTOM NAV */
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(12px);
+    border-top: 1px solid var(--border);
+    display: flex; justify-content: space-around; align-items: center;
+    padding: 8px 0 10px; z-index: 100;
+  }
+  .bn-btn {
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    background: none; border: none; color: var(--text2);
+    font-size: 0.65rem; cursor: pointer; padding: 4px 12px;
+    transition: color .15s;
+  }
+  .bn-btn i { font-size: 1.3rem; }
+  .bn-btn:hover, .bn-btn.active { color: var(--accent2); }
 </style>
 </head>
 <body>
 
-<div id="loading"><div class="logo">Vistago</div><div class="spinner"></div></div>
+<div id="loading">Loading...</div>
 
-<nav class="navbar">
-  <div class="navbar-logo"><img src="vistago-icon.svg" alt="V">Vistago</div>
-  <div class="navbar-right">
-    <button id="btn-ar" class="lang-btn active" onclick="setLang('ar')">🇸🇦 ع</button>
-    <button id="btn-en" class="lang-btn" onclick="setLang('en')">🇬🇧 EN</button>
-    <button class="btn-login" id="nav-login-btn" onclick="goto('login.html')">تسجيل الدخول</button>
-    <div class="user-menu" id="user-menu">
-      <button class="btn-login" id="nav-user-btn" onclick="toggleDropdown()">👤</button>
-      <div class="dropdown" id="user-dropdown">
-        <button class="dropdown-item" onclick="goto('profile.html')"><i class="bi bi-person"></i><span id="m-profile">حسابي</span></button>
-        <button class="dropdown-item" onclick="goto('upload.html')"><i class="bi bi-plus-square"></i><span id="m-upload">نشر صورة</span></button>
-        <button class="dropdown-item" onclick="goto('notifications.html')"><i class="bi bi-bell"></i><span id="m-notif">الإشعارات</span></button>
-        <button class="dropdown-item danger" onclick="signOutUser()"><i class="bi bi-box-arrow-right"></i><span id="m-out">تسجيل الخروج</span></button>
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <img src="vistago-icon.svg" alt="V">
+    Vistago
+  </div>
+  <div class="nav-right">
+    <button class="theme-toggle" id="theme-toggle-btn" onclick="toggleTheme()" title="Toggle theme">🌙</button>
+    <div class="lang-btns">
+      <button class="lang-btn" id="btn-ar" onclick="setLang('ar')">🇸🇦 ع</button>
+      <button class="lang-btn" id="btn-en" onclick="setLang('en')">🇬🇧 EN</button>
+    </div>
+    <button class="btn-login" id="nav-login-btn" onclick="showLoginModal()">تسجيل الدخول</button>
+    <div class="user-menu" id="user-menu" style="display:none">
+      <button class="user-btn" id="nav-user-btn" onclick="toggleDropdown()">👤 حسابي</button>
+      <div class="user-dropdown" id="user-dropdown">
+        <button onclick="goto('profile.html')"><i class="bi bi-person"></i> <span id="m-profile">حسابي</span></button>
+        <button onclick="requireLogin('upload.html')"><i class="bi bi-image"></i> <span id="m-upload">نشر صورة</span></button>
+        <button onclick="requireLogin('notifications.html')"><i class="bi bi-bell"></i> <span id="m-notif">الإشعارات</span></button>
+        <button onclick="signOutUser()"><i class="bi bi-box-arrow-right"></i> <span id="m-out">تسجيل الخروج</span></button>
       </div>
     </div>
   </div>
 </nav>
 
-<div class="main-layout">
+<!-- FEED -->
+<div class="feed" id="feed">
 
-  <!-- Post 1 -->
-  <div class="post-card">
+  <!-- POST 1 -->
+  <div class="post-card" id="card-post1">
     <div class="post-header">
-      <div class="post-avatar" onclick="goto('profile.html?u=ahmed_shamsi')">أ</div>
-      <div><div class="post-username" onclick="goto('profile.html?u=ahmed_shamsi')">ahmed_shamsi</div><div class="post-time">منذ ساعتين</div></div>
+      <div class="avatar" onclick="goto('profile.html?u=ahmed_shamsi')">أ</div>
+      <div class="post-meta">
+        <div class="post-username" onclick="goto('profile.html?u=ahmed_shamsi')">ahmed_shamsi</div>
+        <div class="post-time" id="time-post1">منذ ساعتين</div>
+      </div>
     </div>
-    <div class="post-image-placeholder">🌅</div>
-    <div class="post-caption"><b>ahmed_shamsi</b> لحظة جميلة من غروب الشمس 🌅✨</div>
+    <div class="post-emoji">🌅</div>
+    <div class="post-caption" id="caption-post1"><strong>ahmed_shamsi</strong> لحظة جميلة من غروب الشمس 🌅✨</div>
     <div class="post-actions">
-      <button class="action-btn" id="lb-post1" onclick="likePost('post1')"><i class="bi bi-heart" id="li-post1"></i><span id="lc-post1">0</span></button>
-      <button class="action-btn" onclick="toggleComments('post1')"><i class="bi bi-chat"></i><span id="cc-post1">0</span></button>
-      <button class="action-btn" onclick="sharePost('post1')"><i class="bi bi-share"></i><span id="sc-post1">0</span></button>
+      <button class="action-btn" id="lb-post1" onclick="likePost('post1')">
+        <i class="bi bi-heart" id="li-post1"></i>
+        <span id="lc-post1">0</span>
+      </button>
+      <button class="action-btn" onclick="toggleComments('post1')">
+        <i class="bi bi-chat"></i>
+        <span id="cc-post1">0</span>
+      </button>
+      <button class="action-btn" onclick="sharePost('post1')">
+        <i class="bi bi-share"></i>
+        <span id="sc-post1">0</span>
+      </button>
     </div>
     <div class="comments-section" id="cs-post1">
-      <div id="cl-post1"></div>
-      <div id="ci-post1" style="display:none;" class="comment-input-row">
+      <div class="comment-list" id="cl-post1"></div>
+      <div class="comment-input-row" id="ci-post1">
         <input class="comment-input" id="cin-post1" placeholder="اكتب تعليقاً..." onkeydown="if(event.key==='Enter')addComment('post1')">
         <button class="comment-send" onclick="addComment('post1')"><i class="bi bi-send"></i></button>
       </div>
     </div>
   </div>
 
-  <!-- Post 2 -->
-  <div class="post-card">
+  <!-- POST 2 -->
+  <div class="post-card" id="card-post2">
     <div class="post-header">
-      <div class="post-avatar" onclick="goto('profile.html?u=sara_mutairi')">س</div>
-      <div><div class="post-username" onclick="goto('profile.html?u=sara_mutairi')">sara_mutairi</div><div class="post-time">منذ 4 ساعات</div></div>
+      <div class="avatar" onclick="goto('profile.html?u=sara_mutairi')">س</div>
+      <div class="post-meta">
+        <div class="post-username" onclick="goto('profile.html?u=sara_mutairi')">sara_mutairi</div>
+        <div class="post-time" id="time-post2">منذ 4 ساعات</div>
+      </div>
     </div>
-    <div class="post-image-placeholder">🌺</div>
-    <div class="post-caption"><b>sara_mutairi</b> طبيعة خلابة من رحلتي الأخيرة 🌺🌿</div>
+    <div class="post-emoji">🌺</div>
+    <div class="post-caption" id="caption-post2"><strong>sara_mutairi</strong> طبيعة خلابة من رحلتي الأخيرة 🌺🌿</div>
     <div class="post-actions">
-      <button class="action-btn" id="lb-post2" onclick="likePost('post2')"><i class="bi bi-heart" id="li-post2"></i><span id="lc-post2">0</span></button>
-      <button class="action-btn" onclick="toggleComments('post2')"><i class="bi bi-chat"></i><span id="cc-post2">0</span></button>
-      <button class="action-btn" onclick="sharePost('post2')"><i class="bi bi-share"></i><span id="sc-post2">0</span></button>
+      <button class="action-btn" id="lb-post2" onclick="likePost('post2')">
+        <i class="bi bi-heart" id="li-post2"></i>
+        <span id="lc-post2">0</span>
+      </button>
+      <button class="action-btn" onclick="toggleComments('post2')">
+        <i class="bi bi-chat"></i>
+        <span id="cc-post2">0</span>
+      </button>
+      <button class="action-btn" onclick="sharePost('post2')">
+        <i class="bi bi-share"></i>
+        <span id="sc-post2">0</span>
+      </button>
     </div>
     <div class="comments-section" id="cs-post2">
-      <div id="cl-post2"></div>
-      <div id="ci-post2" style="display:none;" class="comment-input-row">
+      <div class="comment-list" id="cl-post2"></div>
+      <div class="comment-input-row" id="ci-post2">
         <input class="comment-input" id="cin-post2" placeholder="اكتب تعليقاً..." onkeydown="if(event.key==='Enter')addComment('post2')">
         <button class="comment-send" onclick="addComment('post2')"><i class="bi bi-send"></i></button>
       </div>
     </div>
   </div>
 
-  <!-- Post 3 -->
-  <div class="post-card">
+  <!-- POST 3 -->
+  <div class="post-card" id="card-post3">
     <div class="post-header">
-      <div class="post-avatar" onclick="goto('profile.html?u=mohammed_abri')">م</div>
-      <div><div class="post-username" onclick="goto('profile.html?u=mohammed_abri')">mohammed_abri</div><div class="post-time">منذ 6 ساعات</div></div>
+      <div class="avatar" onclick="goto('profile.html?u=mohammed_abri')">م</div>
+      <div class="post-meta">
+        <div class="post-username" onclick="goto('profile.html?u=mohammed_abri')">mohammed_abri</div>
+        <div class="post-time" id="time-post3">منذ 6 ساعات</div>
+      </div>
     </div>
-    <div class="post-image-placeholder">🏙️</div>
-    <div class="post-caption"><b>mohammed_abri</b> مدينة مسقط في الليل 🏙️🌙</div>
+    <div class="post-emoji">🏙️</div>
+    <div class="post-caption" id="caption-post3"><strong>mohammed_abri</strong> مدينة مسقط في الليل 🏙️🌙</div>
     <div class="post-actions">
-      <button class="action-btn" id="lb-post3" onclick="likePost('post3')"><i class="bi bi-heart" id="li-post3"></i><span id="lc-post3">0</span></button>
-      <button class="action-btn" onclick="toggleComments('post3')"><i class="bi bi-chat"></i><span id="cc-post3">0</span></button>
-      <button class="action-btn" onclick="sharePost('post3')"><i class="bi bi-share"></i><span id="sc-post3">0</span></button>
+      <button class="action-btn" id="lb-post3" onclick="likePost('post3')">
+        <i class="bi bi-heart" id="li-post3"></i>
+        <span id="lc-post3">0</span>
+      </button>
+      <button class="action-btn" onclick="toggleComments('post3')">
+        <i class="bi bi-chat"></i>
+        <span id="cc-post3">0</span>
+      </button>
+      <button class="action-btn" onclick="sharePost('post3')">
+        <i class="bi bi-share"></i>
+        <span id="sc-post3">0</span>
+      </button>
     </div>
     <div class="comments-section" id="cs-post3">
-      <div id="cl-post3"></div>
-      <div id="ci-post3" style="display:none;" class="comment-input-row">
+      <div class="comment-list" id="cl-post3"></div>
+      <div class="comment-input-row" id="ci-post3">
         <input class="comment-input" id="cin-post3" placeholder="اكتب تعليقاً..." onkeydown="if(event.key==='Enter')addComment('post3')">
         <button class="comment-send" onclick="addComment('post3')"><i class="bi bi-send"></i></button>
       </div>
@@ -171,26 +356,30 @@ body{background:#f0f2f5;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
 
 </div>
 
-<!-- Login Modal -->
+<!-- LOGIN MODAL -->
 <div class="modal-overlay" id="modal">
   <div class="modal-box">
     <div class="modal-icon">📸</div>
     <div class="modal-title" id="mt">سجّل دخولك للمتابعة</div>
     <div class="modal-sub" id="ms">انضم إلى Vistago لتتفاعل مع المنشورات وتشارك لحظاتك</div>
-    <button class="btn-modal-login" onclick="goto('login.html')" id="mb">تسجيل الدخول / إنشاء حساب</button>
-    <button class="btn-modal-close" onclick="closeModal()" id="mc">ربما لاحقاً</button>
+    <button class="modal-btn-main" id="mb" onclick="goto('auth.html')">تسجيل الدخول / إنشاء حساب</button>
+    <button class="modal-btn-sec" id="mc" onclick="closeModal()">ربما لاحقاً</button>
   </div>
 </div>
 
-<!-- Bottom Nav -->
+<!-- BOTTOM NAV -->
 <div class="bottom-nav">
-  <button class="bnb active" onclick="goto('index.html')"><i class="bi bi-house-fill"></i><span id="bn-home">الرئيسية</span></button>
-  <button class="bnb" onclick="goto('search.html')"><i class="bi bi-search"></i><span id="bn-search">بحث</span></button>
-  <button class="bnb" onclick="requireLogin('upload.html')"><i class="bi bi-plus-circle-fill" style="font-size:1.8rem;color:#1DA1F2;"></i><span id="bn-post">نشر</span></button>
-  <button class="bnb" onclick="requireLogin('notifications.html')"><i class="bi bi-bell"></i><span id="bn-notif">إشعارات</span></button>
-  <button class="bnb" onclick="requireLogin('profile.html')"><i class="bi bi-person-circle"></i><span id="bn-profile">حسابي</span></button>
+  <button class="bn-btn active" onclick="goto('index.html')"><i class="bi bi-house"></i><span id="bn-home">الرئيسية</span></button>
+  <button class="bn-btn" onclick="goto('search.html')"><i class="bi bi-search"></i><span id="bn-search">بحث</span></button>
+  <button class="bn-btn" onclick="requireLogin('upload.html')"><i class="bi bi-plus-square"></i><span id="bn-post">نشر</span></button>
+  <button class="bn-btn" onclick="requireLogin('notifications.html')"><i class="bi bi-bell"></i><span id="bn-notif">إشعارات</span></button>
+  <button class="bn-btn" onclick="requireLogin('profile.html')"><i class="bi bi-person"></i><span id="bn-profile">حسابي</span></button>
 </div>
 
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script>
 firebase.initializeApp({
   apiKey:"AIzaSyA4vNgF3NBWxjQfx_feHpsoIMdswlzUegA",
@@ -200,40 +389,32 @@ firebase.initializeApp({
   messagingSenderId:"41413182238",
   appId:"1:41413182238:web:bbf664b131279ec4bd3f0f"
 });
-const auth=firebase.auth();
-const db=firebase.firestore();
-const FieldValue=firebase.firestore.FieldValue;
+const auth = firebase.auth();
+const db = firebase.firestore();
+const FieldValue = firebase.firestore.FieldValue;
 
-let lang="ar";
-let currentUser=null;
-const POSTS=["post1","post2","post3"];
+let lang = "ar";
+let currentUser = null;
+const POSTS = ["post1","post2","post3"];
 
-const tr={
-  ar:{dir:"rtl",login:"تسجيل الدخول",
-    mt:"سجّل دخولك للمتابعة",ms:"انضم إلى Vistago لتتفاعل مع المنشورات وتشارك لحظاتك",
-    mb:"تسجيل الدخول / إنشاء حساب",mc:"ربما لاحقاً",
-    mp:"حسابي",mu:"نشر صورة",mn:"الإشعارات",mo:"تسجيل الخروج",
-    cp:"اكتب تعليقاً...",
-    bnHome:"الرئيسية",bnSearch:"بحث",bnPost:"نشر",bnNotif:"إشعارات",bnProfile:"حسابي",
-    copied:"تم نسخ الرابط!"},
-  en:{dir:"ltr",login:"Sign In",
-    mt:"Sign in to continue",ms:"Join Vistago to interact with posts and share your moments",
-    mb:"Sign In / Create Account",mc:"Maybe later",
-    mp:"My Profile",mu:"Upload Photo",mn:"Notifications",mo:"Sign Out",
-    cp:"Write a comment...",
-    bnHome:"Home",bnSearch:"Search",bnPost:"Post",bnNotif:"Notifications",bnProfile:"Profile",
-    copied:"Link copied!"}
+const tr = {
+  ar:{dir:"rtl",login:"تسجيل الدخول",mt:"سجّل دخولك للمتابعة",ms:"انضم إلى Vistago لتتفاعل مع المنشورات وتشارك لحظاتك",mb:"تسجيل الدخول / إنشاء حساب",mc:"ربما لاحقاً",mp:"حسابي",mu:"نشر صورة",mn:"الإشعارات",mo:"تسجيل الخروج",cp:"اكتب تعليقاً...",bnHome:"الرئيسية",bnSearch:"بحث",bnPost:"نشر",bnNotif:"إشعارات",bnProfile:"حسابي",copied:"تم نسخ الرابط!",loading:"جاري التحميل...",anon:"مجهول",myProfile:"حسابي",t1:"منذ ساعتين",t2:"منذ 4 ساعات",t3:"منذ 6 ساعات"},
+  en:{dir:"ltr",login:"Sign In",mt:"Sign in to continue",ms:"Join Vistago to interact with posts and share your moments",mb:"Sign In / Create Account",mc:"Maybe later",mp:"My Profile",mu:"Upload Photo",mn:"Notifications",mo:"Sign Out",cp:"Write a comment...",bnHome:"Home",bnSearch:"Search",bnPost:"Post",bnNotif:"Notifications",bnProfile:"Profile",copied:"Link copied!",loading:"Loading...",anon:"Anonymous",myProfile:"My Profile",t1:"2 hours ago",t2:"4 hours ago",t3:"6 hours ago"}
 };
 
 function setLang(l){
-  lang=l;localStorage.setItem("vistagoLang",l);
+  lang=l; localStorage.setItem("vistagoLang",l);
   const s=tr[l];
-  document.documentElement.dir=s.dir;document.documentElement.lang=l;
+  document.documentElement.dir=s.dir; document.documentElement.lang=l;
   document.getElementById("nav-login-btn").textContent=s.login;
-  document.getElementById("mt").textContent=s.mt;document.getElementById("ms").textContent=s.ms;
-  document.getElementById("mb").textContent=s.mb;document.getElementById("mc").textContent=s.mc;
-  document.getElementById("m-profile").textContent=s.mp;document.getElementById("m-upload").textContent=s.mu;
-  document.getElementById("m-notif").textContent=s.mn;document.getElementById("m-out").textContent=s.mo;
+  document.getElementById("mt").textContent=s.mt;
+  document.getElementById("ms").textContent=s.ms;
+  document.getElementById("mb").textContent=s.mb;
+  document.getElementById("mc").textContent=s.mc;
+  document.getElementById("m-profile").textContent=s.mp;
+  document.getElementById("m-upload").textContent=s.mu;
+  document.getElementById("m-notif").textContent=s.mn;
+  document.getElementById("m-out").textContent=s.mo;
   document.querySelectorAll(".comment-input").forEach(e=>e.placeholder=s.cp);
   document.getElementById("bn-home").textContent=s.bnHome;
   document.getElementById("bn-search").textContent=s.bnSearch;
@@ -242,42 +423,75 @@ function setLang(l){
   document.getElementById("bn-profile").textContent=s.bnProfile;
   document.getElementById("btn-ar").classList.toggle("active",l==="ar");
   document.getElementById("btn-en").classList.toggle("active",l==="en");
+  // Post times
+  document.getElementById("time-post1").textContent=s.t1;
+  document.getElementById("time-post2").textContent=s.t2;
+  document.getElementById("time-post3").textContent=s.t3;
+  // Loading text
+  document.getElementById("loading").textContent=s.loading;
+  // Post captions
+  document.getElementById("caption-post1").innerHTML = l==="ar"
+    ? "<strong>ahmed_shamsi</strong> لحظة جميلة من غروب الشمس 🌅✨"
+    : "<strong>ahmed_shamsi</strong> A beautiful sunset moment 🌅✨";
+  document.getElementById("caption-post2").innerHTML = l==="ar"
+    ? "<strong>sara_mutairi</strong> طبيعة خلابة من رحلتي الأخيرة 🌺🌿"
+    : "<strong>sara_mutairi</strong> Stunning nature from my last trip 🌺🌿";
+  document.getElementById("caption-post3").innerHTML = l==="ar"
+    ? "<strong>mohammed_abri</strong> مدينة مسقط في الليل 🏙️🌙"
+    : "<strong>mohammed_abri</strong> Muscat city at night 🏙️🌙";
+  // Logged-in user button fallback label
+  if(currentUser){
+    document.getElementById("nav-user-btn").textContent = "👤 "+(currentUser.displayName||s.myProfile);
+  }
 }
-const savedLang=localStorage.getItem("vistagoLang");
-if(savedLang)setLang(savedLang);
 
-function goto(url){window.location.href=url;}
-function closeModal(){document.getElementById("modal").classList.remove("show");}
-function showLoginModal(){document.getElementById("modal").classList.add("show");}
-function toggleDropdown(){document.getElementById("user-dropdown").classList.toggle("show");}
-function requireLogin(url){if(!currentUser){showLoginModal();}else{goto(url);}}
-function signOutUser(){auth.signOut().then(()=>window.location.reload());}
+const savedLang = localStorage.getItem("vistagoLang");
+if(savedLang) setLang(savedLang);
+
+// ── Theme Toggle ──
+function toggleTheme(){
+  const isLight = document.documentElement.classList.toggle("light");
+  localStorage.setItem("vistagoTheme", isLight ? "light" : "dark");
+  document.getElementById("theme-toggle-btn").textContent = isLight ? "☀️" : "🌙";
+}
+const savedTheme = localStorage.getItem("vistagoTheme");
+if(savedTheme === "light"){
+  document.documentElement.classList.add("light");
+  document.getElementById("theme-toggle-btn").textContent = "☀️";
+}
+
+function goto(url){ window.location.href=url; }
+function closeModal(){ document.getElementById("modal").classList.remove("show"); }
+function showLoginModal(){ document.getElementById("modal").classList.add("show"); }
+function toggleDropdown(){ document.getElementById("user-dropdown").classList.toggle("show"); }
+function requireLogin(url){ if(!currentUser){ showLoginModal(); }else{ goto(url); } }
+function signOutUser(){ auth.signOut().then(()=>window.location.reload()); }
 
 function formatTime(ts){
-  if(!ts)return"";
-  const date=ts.toDate?ts.toDate():new Date(ts);
-  const diff=Math.floor((Date.now()-date.getTime())/1000);
-  if(diff<60)return lang==="ar"?"الآن":"Just now";
-  if(diff<3600)return lang==="ar"?`منذ ${Math.floor(diff/60)} دقيقة`:`${Math.floor(diff/60)}m ago`;
-  if(diff<86400)return lang==="ar"?`منذ ${Math.floor(diff/3600)} ساعة`:`${Math.floor(diff/3600)}h ago`;
+  if(!ts) return "";
+  const date = ts.toDate ? ts.toDate() : new Date(ts);
+  const diff = Math.floor((Date.now()-date.getTime())/1000);
+  if(diff<60) return lang==="ar"?"الآن":"Just now";
+  if(diff<3600) return lang==="ar"?`منذ ${Math.floor(diff/60)} دقيقة`:`${Math.floor(diff/60)}m ago`;
+  if(diff<86400) return lang==="ar"?`منذ ${Math.floor(diff/3600)} ساعة`:`${Math.floor(diff/3600)}h ago`;
   return lang==="ar"?`منذ ${Math.floor(diff/86400)} يوم`:`${Math.floor(diff/86400)}d ago`;
 }
 
 function toggleComments(postId){
-  const section=document.getElementById("cs-"+postId);
-  const inputRow=document.getElementById("ci-"+postId);
+  const section = document.getElementById("cs-"+postId);
+  const inputRow = document.getElementById("ci-"+postId);
   section.classList.toggle("open");
-  inputRow.style.display=section.classList.contains("open")&&currentUser?"flex":"none";
+  inputRow.style.display = section.classList.contains("open") && currentUser ? "flex" : "none";
 }
 
 function sharePost(postId){
-  const url=`https://omanxp45-sudo.github.io/vistago/post.html?id=${postId}`;
-  if(navigator.share){navigator.share({title:"Vistago",url});}
-  else{navigator.clipboard.writeText(url);alert(tr[lang].copied);}
+  const url = `https://omanxp45-sudo.github.io/vistago/post.html?id=${postId}`;
+  if(navigator.share){ navigator.share({title:"Vistago",url}); }
+  else{ navigator.clipboard.writeText(url); alert(tr[lang].copied); }
   db.collection("posts").doc(postId).set({shares:FieldValue.increment(1)},{merge:true});
 }
 
-document.getElementById("modal").addEventListener("click",function(e){if(e.target===this)closeModal();});
+document.getElementById("modal").addEventListener("click",function(e){ if(e.target===this) closeModal(); });
 document.addEventListener("click",function(e){
   if(!document.getElementById("user-menu").contains(e.target))
     document.getElementById("user-dropdown").classList.remove("show");
@@ -286,25 +500,23 @@ document.addEventListener("click",function(e){
 // ── Load Post ──
 function loadPost(postId){
   db.collection("posts").doc(postId).onSnapshot(snap=>{
-    const d=snap.data()||{};
-    document.getElementById("lc-"+postId).textContent=d.likes||0;
-    document.getElementById("sc-"+postId).textContent=d.shares||0;
-    const liked=currentUser&&d.likedBy&&d.likedBy[currentUser.uid]===true;
-    document.getElementById("li-"+postId).className=liked?"bi bi-heart-fill":"bi bi-heart";
-    document.getElementById("lb-"+postId).classList.toggle("liked",liked);
+    const d = snap.data()||{};
+    document.getElementById("lc-"+postId).textContent = d.likes||0;
+    document.getElementById("sc-"+postId).textContent = d.shares||0;
+    const liked = currentUser && d.likedBy && d.likedBy[currentUser.uid]===true;
+    document.getElementById("li-"+postId).className = liked ? "bi bi-heart-fill" : "bi bi-heart";
+    document.getElementById("lb-"+postId).classList.toggle("liked", liked);
   });
-
   db.collection("posts").doc(postId).collection("comments")
     .orderBy("createdAt","asc")
     .onSnapshot(snap=>{
-      const list=document.getElementById("cl-"+postId);
-      list.innerHTML="";
+      const list = document.getElementById("cl-"+postId);
+      list.innerHTML = "";
       snap.forEach(d=>{
-        const c=d.data();
-        const cid=d.id;
-        const wrap=document.createElement("div");
-        wrap.className="comment-item";
-        wrap.innerHTML=`
+        const c = d.data();
+        const wrap = document.createElement("div");
+        wrap.className = "comment-item";
+        wrap.innerHTML = `
           <div class="comment-avatar">${(c.name||"?").charAt(0)}</div>
           <div style="flex:1">
             <div class="comment-bubble">
@@ -315,71 +527,81 @@ function loadPost(postId){
           </div>`;
         list.appendChild(wrap);
       });
-      document.getElementById("cc-"+postId).textContent=snap.size;
+      document.getElementById("cc-"+postId).textContent = snap.size;
     });
 }
 
-// ── Like Post ──
+// ── Like Post (FIXED) ──
 function likePost(postId){
-  if(!currentUser){showLoginModal();return;}
-  const btn=document.getElementById("lb-"+postId);
-  if(btn.disabled)return;
-  btn.disabled=true;
-  const uid=currentUser.uid;
-  const ref=db.collection("posts").doc(postId);
-  ref.set({likes:0,likedBy:{},shares:0},{merge:true}).then(()=>{
-    return db.runTransaction(t=>{
-      return t.get(ref).then(snap=>{
-        const d=snap.data()||{};
-        const alreadyLiked=d.likedBy&&d.likedBy[uid]===true;
-        if(alreadyLiked){
+  if(!currentUser){ showLoginModal(); return; }
+  const btn = document.getElementById("lb-"+postId);
+  if(btn.disabled) return;
+  btn.disabled = true;
+  const uid = currentUser.uid;
+  const ref = db.collection("posts").doc(postId);
+
+  // FIX: Removed the ref.set() call that was wiping likedBy before every transaction.
+  // Now we go straight into the transaction which handles missing docs safely.
+  db.runTransaction(t=>{
+    return t.get(ref).then(snap=>{
+      const d = snap.data()||{};
+      const alreadyLiked = d.likedBy && d.likedBy[uid]===true;
+      if(alreadyLiked){
+        if(snap.exists){
           t.update(ref,{
-            likes:FieldValue.increment(-1),
-            [`likedBy.${uid}`]:FieldValue.delete()
-          });
-        }else{
-          t.update(ref,{
-            likes:FieldValue.increment(1),
-            [`likedBy.${uid}`]:true
+            likes: FieldValue.increment(-1),
+            [`likedBy.${uid}`]: FieldValue.delete()
           });
         }
-      });
+      } else {
+        if(snap.exists){
+          t.update(ref,{
+            likes: FieldValue.increment(1),
+            [`likedBy.${uid}`]: true
+          });
+        } else {
+          t.set(ref,{
+            likes: 1,
+            likedBy: {[uid]: true},
+            shares: 0
+          });
+        }
+      }
     });
-  }).finally(()=>{btn.disabled=false;});
+  }).finally(()=>{ btn.disabled=false; });
 }
 
 // ── Add Comment ──
 function addComment(postId){
-  if(!currentUser){showLoginModal();return;}
-  const input=document.getElementById("cin-"+postId);
-  const text=input.value.trim();
-  if(!text)return;
-  input.value="";
+  if(!currentUser){ showLoginModal(); return; }
+  const input = document.getElementById("cin-"+postId);
+  const text = input.value.trim();
+  if(!text) return;
+  input.value = "";
   db.collection("posts").doc(postId).collection("comments").add({
-    text:text,
-    name:currentUser.displayName||"مجهول",
-    username:currentUser.email?currentUser.email.split("@")[0]:"",
-    uid:currentUser.uid,
-    createdAt:FieldValue.serverTimestamp()
+    text: text,
+    name: currentUser.displayName||tr[lang].anon,
+    username: currentUser.email ? currentUser.email.split("@")[0] : "",
+    uid: currentUser.uid,
+    createdAt: FieldValue.serverTimestamp()
   }).catch(err=>console.error("Comment error:",err));
 }
 
 // ── Auth ──
 auth.onAuthStateChanged(user=>{
-  document.getElementById("loading").style.display="none";
+  document.getElementById("loading").style.display = "none";
   if(user){
-    currentUser=user;
-    document.getElementById("nav-login-btn").style.display="none";
-    document.getElementById("user-menu").style.display="block";
-    document.getElementById("nav-user-btn").textContent="👤 "+(user.displayName||"حسابي");
-  }else{
-    currentUser=null;
-    document.getElementById("nav-login-btn").style.display="block";
-    document.getElementById("user-menu").style.display="none";
+    currentUser = user;
+    document.getElementById("nav-login-btn").style.display = "none";
+    document.getElementById("user-menu").style.display = "block";
+    document.getElementById("nav-user-btn").textContent = "👤 "+(user.displayName||tr[lang].myProfile);
+  } else {
+    currentUser = null;
+    document.getElementById("nav-login-btn").style.display = "block";
+    document.getElementById("user-menu").style.display = "none";
   }
   POSTS.forEach(loadPost);
 });
 </script>
-
 </body>
 </html>
