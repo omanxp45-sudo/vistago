@@ -433,11 +433,9 @@ if(savedTheme==="light"){
 }
 
 function goto(url){
-  const missing = ["upload.html","search.html","notifications.html"];
-  if(missing.includes(url)){
-    showToast(lang==="ar"?"قريباً... 🚧":"Coming soon... 🚧","error");
-    return;
-  }
+  const missing=["upload.html","search.html","notifications.html"];
+  const base=url.split("?")[0];
+  if(missing.includes(base)){showToast(lang==="ar"?"قريباً... 🚧":"Coming soon... 🚧","error");return;}
   window.location.href=url;
 }
 function toggleDropdown(){ document.getElementById("user-dropdown").classList.toggle("show"); }
