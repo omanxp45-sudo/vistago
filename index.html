@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <title>Vistago</title>
@@ -181,12 +181,6 @@
   }
   .comment-send:hover { background: var(--accent2); }
 
-  /* LOADING */
-  #loading {
-    position: fixed; inset: 0; background: var(--bg);
-    display: flex; align-items: center; justify-content: center;
-    z-index: 999; font-size: 1.1rem; color: var(--text2);
-  }
 
   /* MODAL */
   .modal-overlay {
@@ -234,8 +228,6 @@
 </style>
 </head>
 <body>
-
-<div id="loading" style="display:none">جاري التحميل...</div>
 
 <!-- NAV -->
 <nav>
@@ -338,7 +330,6 @@ function setLang(l){
   document.getElementById("time-post2").textContent=s.t2;
   document.getElementById("time-post3").textContent=s.t3;
   // Loading text
-  document.getElementById("loading").textContent=s.loading;
   // Post captions
   document.getElementById("caption-post1").innerHTML = l==="ar"
     ? "<strong>ahmed_shamsi</strong> لحظة جميلة من غروب الشمس 🌅✨"
@@ -594,7 +585,6 @@ function addComment(postId){
 }
 
 // ── Auth ──
-document.getElementById("loading").style.display = "none";
 
 // Load feed immediately for ALL users — no auth required
 loadFeed();
