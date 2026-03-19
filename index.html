@@ -122,6 +122,12 @@
     border-radius: var(--radius); margin-bottom: 18px; overflow: hidden;
   }
   .post-header { display: flex; align-items: center; gap: 10px; padding: 14px 16px 10px; }
+  .delete-btn {
+    margin-left: auto; background: none; border: none;
+    color: var(--text2); font-size: 1rem; cursor: pointer;
+    padding: 4px 8px; border-radius: 8px; transition: all .2s;
+  }
+  .delete-btn:hover { color: #ef4444; background: rgba(239,68,68,0.1); }
   .avatar {
     width: 40px; height: 40px; border-radius: 50%;
     background: var(--accent); display: flex; align-items: center; justify-content: center;
@@ -228,6 +234,13 @@
 </style>
 </head>
 <body>
+<script>
+// Force clear old cache - runs before anything else
+if('caches' in window){ caches.keys().then(keys=>keys.forEach(k=>caches.delete(k))); }
+if(navigator.serviceWorker){ navigator.serviceWorker.getRegistrations().then(regs=>regs.forEach(r=>r.unregister())); }
+const _v = '4.0';
+if(localStorage.getItem('vv')!==_v){ localStorage.setItem('vv',_v); location.reload(true); }
+</script>
 
 <!-- NAV -->
 <nav>
@@ -448,9 +461,23 @@ function loadPost(postId){
     });
 }
 
+// ── Delete Post ──
+function deletePost(postId){
+  if(!currentUser) return;
+  const msg = lang==="ar" ? "هل تريد حذف هذا المنشور؟" : "Delete this post?";
+  if(!confirm(msg)) return;
+  db.collection("posts").doc(postId).delete().then(()=>{
+    const card = document.getElementById("card-"+postId);
+    if(card) card.remove();
+    // Update user post count
+    db.collection("users").doc(currentUser.uid).update({posts: FieldValue.increment(-1)}).catch(()=>{});
+  }).catch(err=>console.error("Delete error:",err));
+}
+
 // ── Render post card ──
 function renderPostCard(docId, d){
   const liked=currentUser&&d.likedBy&&d.likedBy[currentUser.uid]===true;
+  const isOwner=currentUser&&currentUser.uid===d.uid;
   const mediaHTML=d.imageUrl
     ? `<a href="post.html?id=${docId}"><img class="post-img" src="${d.imageUrl}" alt="post" style="cursor:pointer"></a>`
     : d.emoji ? `<a href="post.html?id=${docId}"><div class="post-emoji" style="cursor:pointer">${d.emoji}</div></a>` : "";
@@ -463,6 +490,7 @@ function renderPostCard(docId, d){
         <div class="post-username" onclick="goto('profile.html?u=${d.username||""}')">${d.name||d.username||"—"}</div>
         <div class="post-time">${formatTime(d.createdAt)}</div>
       </div>
+      ${isOwner ? `<button class="delete-btn" onclick="deletePost('${docId}')" title="حذف المنشور"><i class="bi bi-trash"></i></button>` : ""}
     </div>
     ${mediaHTML}
     <a href="post.html?id=${docId}" style="color:inherit;text-decoration:none">
@@ -493,11 +521,9 @@ function renderPostCard(docId, d){
 }
 
 // ── Load feed dynamically ──
-let feedLoaded = false;
 function loadFeed(){
-  if(feedLoaded) return; // only load once
-  feedLoaded = true;
   const feed=document.getElementById("feed");
+  if(!feed) return;
   feed.innerHTML='<div style="text-align:center;padding:40px;color:var(--text2)"><i class="bi bi-hourglass-split" style="font-size:2rem"></i></div>';
 
   // Use get() instead of onSnapshot to avoid slow real-time listener on full feed
