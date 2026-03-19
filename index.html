@@ -473,10 +473,9 @@ if(savedTheme === "light"){
 }
 
 function goto(url){
-  const missing = ["upload.html","search.html","notifications.html"];
-  const base = url.split("?")[0];
-  if(missing.includes(base)){
-    const msg = (typeof lang !== "undefined" && lang==="en") ? "Coming soon... 🚧" : "قريباً... 🚧";
+  const missing=["upload.html","search.html","notifications.html"];
+  if(missing.includes(url.split("?")[0])){
+    const msg=(typeof lang!=="undefined"&&lang==="en")?"Coming soon... 🚧":"قريباً... 🚧";
     alert(msg);
     return;
   }
