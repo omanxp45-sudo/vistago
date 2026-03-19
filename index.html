@@ -240,6 +240,15 @@ function openUpload(){
     showLoginModal();
   }
 }
+  function requireLogin(action){
+  const user = firebase.auth().currentUser;
+
+  if(user){
+    window.location.href = "upload.html";
+  } else {
+    showLoginModal();
+  }
+}
 <div id="loading">Loading...</div>
 
 <!-- NAV -->
@@ -260,7 +269,7 @@ function openUpload(){
       <button class="user-btn" id="nav-user-btn" onclick="toggleDropdown()">👤 حسابي</button>
       <div class="user-dropdown" id="user-dropdown">
         <button onclick="goto('profile.html')"><i class="bi bi-person"></i> <span id="m-profile">حسابي</span></button>
-      <button class="bn-btn" onclick="openUpload()">
+      <button class="bn-btn" onclick="requireLogin(action)()">
   <i class="bi bi-plus-square"></i>
   <span>نشر</span>
 </button>
