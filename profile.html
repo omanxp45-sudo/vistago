@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vistago — Profile</title>
+<link rel="icon" href="vistago-icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<style>
+  :root {
+    --bg: #0f0f0f; --surface: #1a1a1a; --surface2: #242424;
+    --border: #2e2e2e; --text: #f0f0f0; --text2: #aaaaaa;
+    --accent: #6c63ff; --accent2: #a78bfa; --danger: #ef4444; --radius: 14px;
+  }
+  :root.light {
+    --bg: #f4f4f8; --surface: #ffffff; --surface2: #efefef;
+    --border: #dcdcdc; --text: #111111; --text2: #666666;
+    --accent: #6c63ff; --accent2: #5548e0; --danger: #ef4444;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', Tahoma, sans-serif; min-height: 100vh; }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: #1DA1F2; border-bottom: none;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 20px; height: 56px;
+  }
+  .nav-logo { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 1.2rem; color: #fff; cursor: pointer; }
+  .nav-logo img { width: 28px; height: 28px; }
+  .nav-right { display: flex; align-items: center; gap: 10px; }
+  .lang-btns { display: flex; gap: 4px; }
+  .lang-btn {
+    background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4);
+    color: #fff; border-radius: 20px; padding: 4px 10px;
+    font-size: 0.78rem; cursor: pointer; transition: all .2s;
+  }
+  .lang-btn.active, .lang-btn:hover { background: rgba(255,255,255,0.35); border-color: rgba(255,255,255,0.6); }
+  .theme-toggle {
+    background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4);
+    color: #fff; border-radius: 20px; padding: 5px 12px;
+    font-size: 1rem; cursor: pointer; transition: all .2s;
+  }
+  .theme-toggle:hover { background: rgba(255,255,255,0.35); }
+  .btn-login {
+    background: #fff; color: #1DA1F2; border: none;
+    border-radius: 20px; padding: 6px 16px; font-size: 0.85rem;
+    cursor: pointer; font-weight: 600;
+  }
+  .user-menu { position: relative; }
+  .user-btn {
+    background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4);
+    color: #fff; border-radius: 20px; padding: 6px 14px;
+    font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 6px;
+  }
+  .user-dropdown {
+    display: none; position: absolute; top: 44px; right: 0;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); min-width: 180px; overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  [dir="rtl"] .user-dropdown { right: auto; left: 0; }
+  .user-dropdown.show { display: block; }
+  .user-dropdown button {
+    display: flex; align-items: center; gap: 10px;
+    width: 100%; padding: 12px 16px; background: none; border: none;
+    color: var(--text); font-size: 0.88rem; cursor: pointer; text-align: right; transition: background .15s;
+  }
+  .user-dropdown button:hover { background: var(--surface2); }
+
+  /* COVER */
+  .profile-cover { height: 150px; background: linear-gradient(135deg, #1DA1F2 0%, #6c63ff 100%); }
+
+  /* PROFILE HEADER */
+  .profile-header { max-width: 640px; margin: 0 auto; padding: 0 16px; }
+  .profile-avatar-wrap { position: relative; display: inline-block; margin-top: -44px; margin-bottom: 10px; }
+  .profile-avatar {
+    width: 88px; height: 88px; border-radius: 50%;
+    background: var(--accent); border: 4px solid var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem; font-weight: 700; overflow: hidden; color: #fff;
+  }
+  .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .profile-top-row { display: flex; justify-content: flex-end; margin-top: -36px; margin-bottom: 8px; gap: 8px; }
+  .profile-info { padding: 0 0 16px; }
+  .profile-name { font-size: 1.25rem; font-weight: 800; }
+  .profile-username { color: var(--text2); font-size: 0.88rem; margin-bottom: 10px; }
+  .profile-bio { font-size: 0.9rem; line-height: 1.5; margin-bottom: 12px; }
+  .profile-stats { display: flex; gap: 20px; margin-bottom: 14px; flex-wrap: wrap; }
+  .stat { display: flex; align-items: center; gap: 5px; font-size: 0.88rem; cursor: pointer; }
+  .stat strong { font-size: 1rem; }
+  .stat span { color: var(--text2); }
+  .stat:hover span { color: #1DA1F2; }
+
+  /* BUTTONS */
+  .btn-edit {
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--text); border-radius: 20px; padding: 7px 20px;
+    font-size: 0.88rem; font-weight: 600; cursor: pointer; transition: all .2s;
+  }
+  .btn-edit:hover { border-color: #1DA1F2; color: #1DA1F2; }
+  .btn-follow {
+    background: var(--text); color: var(--bg); border: 1px solid transparent;
+    border-radius: 20px; padding: 7px 20px;
+    font-size: 0.88rem; font-weight: 700; cursor: pointer; transition: all .2s;
+  }
+  .btn-follow.following { background: none; color: var(--text); border-color: var(--border); }
+  .btn-follow.following:hover { border-color: var(--danger); color: var(--danger); }
+  .btn-msg {
+    background: none; border: 1px solid var(--border); color: var(--text);
+    border-radius: 50%; width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: all .2s; font-size: 1rem;
+  }
+  .btn-msg:hover { border-color: #1DA1F2; color: #1DA1F2; }
+
+  /* TABS */
+  .profile-tabs { display: flex; border-bottom: 1px solid var(--border); max-width: 640px; margin: 0 auto; }
+  .tab-btn {
+    flex: 1; background: none; border: none; color: var(--text2);
+    padding: 14px; font-size: 0.88rem; font-weight: 600; cursor: pointer;
+    border-bottom: 2px solid transparent; transition: all .2s;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .tab-btn.active { color: var(--text); border-bottom-color: #1DA1F2; }
+  .tab-btn:hover { color: var(--text); background: var(--surface2); }
+
+  /* GRID */
+  .posts-container { max-width: 640px; margin: 0 auto; padding: 16px 12px 80px; }
+  .posts-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; }
+  .grid-item {
+    aspect-ratio: 1; background: var(--surface2);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; overflow: hidden; position: relative; transition: opacity .2s;
+  }
+  .grid-item:hover .grid-overlay { display: flex; }
+  .grid-item img { width: 100%; height: 100%; object-fit: cover; }
+  .grid-overlay {
+    display: none; position: absolute; inset: 0;
+    background: rgba(0,0,0,0.45); align-items: center; justify-content: center;
+    gap: 14px; color: #fff; font-size: 0.85rem; font-weight: 600;
+  }
+  .grid-overlay span { display: flex; align-items: center; gap: 4px; }
+
+  /* POST CARD (liked tab) */
+  .post-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); margin-bottom: 14px; overflow: hidden; cursor: pointer;
+  }
+  .post-card:hover { border-color: var(--accent); }
+  .pc-header { display: flex; align-items: center; gap: 10px; padding: 12px 14px 8px; }
+  .pc-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--accent); display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.85rem; color: #fff; flex-shrink: 0;
+  }
+  .pc-name { font-weight: 600; font-size: 0.88rem; }
+  .pc-caption { padding: 0 14px 12px; font-size: 0.88rem; line-height: 1.5; }
+
+  /* EDIT MODAL */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
+    z-index: 200; align-items: center; justify-content: center;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal-box {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 28px 24px; max-width: 400px; width: 92%;
+  }
+  .modal-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 20px; }
+  .form-group { margin-bottom: 14px; }
+  .form-label { font-size: 0.8rem; color: var(--text2); margin-bottom: 5px; display: block; }
+  .form-control {
+    width: 100%; background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 10px 13px; color: var(--text);
+    font-size: 0.9rem; outline: none; transition: border-color .2s; font-family: inherit;
+  }
+  .form-control:focus { border-color: #1DA1F2; }
+  textarea.form-control { resize: vertical; min-height: 80px; }
+  .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+  .btn-save {
+    flex: 1; background: #1DA1F2; color: #fff; border: none;
+    border-radius: 10px; padding: 11px; font-size: 0.92rem; font-weight: 600; cursor: pointer;
+  }
+  .btn-save:hover { background: #1a8fd1; }
+  .btn-cancel {
+    flex: 1; background: var(--surface2); color: var(--text); border: 1px solid var(--border);
+    border-radius: 10px; padding: 11px; font-size: 0.92rem; cursor: pointer;
+  }
+  .btn-cancel:hover { border-color: var(--danger); color: var(--danger); }
+
+  /* EMPTY */
+  .empty-state { text-align: center; padding: 50px 20px; color: var(--text2); }
+  .empty-state i { font-size: 3rem; margin-bottom: 14px; display: block; }
+
+  /* LOADING */
+  #loading {
+    position: fixed; inset: 0; background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 999; font-size: 1.1rem; color: var(--text2);
+  }
+
+  /* BOTTOM NAV */
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(12px);
+    border-top: 1px solid var(--border);
+    display: flex; justify-content: space-around; align-items: center;
+    padding: 8px 0 10px; z-index: 100;
+  }
+  .bn-btn {
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    background: none; border: none; color: var(--text2);
+    font-size: 0.65rem; cursor: pointer; padding: 4px 12px; transition: color .15s;
+  }
+  .bn-btn i { font-size: 1.3rem; }
+  .bn-btn:hover, .bn-btn.active { color: #1DA1F2; }
+
+  /* TOAST */
+  .toast {
+    display: none; position: fixed; top: 70px; left: 50%; transform: translateX(-50%);
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 10px 20px; font-size: 0.88rem;
+    z-index: 500; box-shadow: 0 4px 20px rgba(0,0,0,0.3); white-space: nowrap;
+  }
+  .toast.show { display: block; }
+  .toast.success { border-color: #22c55e; color: #4ade80; }
+  .toast.error { border-color: var(--danger); color: #f87171; }
+</style>
+</head>
+<body>
+
+<div id="loading">جاري التحميل...</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo" onclick="goto('index.html')">
+    <img src="vistago-icon.svg" alt="V"> Vistago
+  </div>
+  <div class="nav-right">
+    <button class="theme-toggle" id="theme-toggle-btn" onclick="toggleTheme()">🌙</button>
+    <div class="lang-btns">
+      <button class="lang-btn active" id="btn-ar" onclick="setLang('ar')">🇸🇦 ع</button>
+      <button class="lang-btn" id="btn-en" onclick="setLang('en')">🇬🇧 EN</button>
+    </div>
+    <button class="btn-login" id="nav-login-btn" onclick="goto('login.html')" style="display:none">تسجيل الدخول</button>
+    <div class="user-menu" id="user-menu" style="display:none">
+      <button class="user-btn" id="nav-user-btn" onclick="toggleDropdown()">👤 حسابي</button>
+      <div class="user-dropdown" id="user-dropdown">
+        <button onclick="goto('profile.html')"><i class="bi bi-person"></i> <span id="m-profile">حسابي</span></button>
+        <button onclick="goto('upload.html')"><i class="bi bi-image"></i> <span id="m-upload">نشر صورة</span></button>
+        <button onclick="goto('notifications.html')"><i class="bi bi-bell"></i> <span id="m-notif">الإشعارات</span></button>
+        <button onclick="signOutUser()"><i class="bi bi-box-arrow-right"></i> <span id="m-out">تسجيل الخروج</span></button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- COVER -->
+<div class="profile-cover"></div>
+
+<!-- HEADER -->
+<div class="profile-header">
+  <div style="display:flex; justify-content:space-between; align-items:flex-end;">
+    <div class="profile-avatar-wrap">
+      <div class="profile-avatar" id="profile-avatar">?</div>
+    </div>
+    <div class="profile-top-row" id="action-buttons" style="margin-top:0; margin-bottom:10px;"></div>
+  </div>
+  <div class="profile-info">
+    <div class="profile-name" id="profile-name">—</div>
+    <div class="profile-username" id="profile-username">@—</div>
+    <div class="profile-bio" id="profile-bio"></div>
+    <div class="profile-stats">
+      <div class="stat"><strong id="stat-posts">0</strong>&nbsp;<span id="lbl-posts">منشور</span></div>
+      <div class="stat"><strong id="stat-followers">0</strong>&nbsp;<span id="lbl-followers">متابع</span></div>
+      <div class="stat"><strong id="stat-following">0</strong>&nbsp;<span id="lbl-following">يتابع</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="profile-tabs">
+  <button class="tab-btn active" id="tab-posts" onclick="switchTab('posts')">
+    <i class="bi bi-grid-3x3"></i><span id="lbl-tab-posts">المنشورات</span>
+  </button>
+  <button class="tab-btn" id="tab-liked" onclick="switchTab('liked')">
+    <i class="bi bi-heart"></i><span id="lbl-tab-liked">الإعجابات</span>
+  </button>
+</div>
+
+<!-- CONTENT -->
+<div class="posts-container">
+  <div id="posts-grid" class="posts-grid"></div>
+  <div id="liked-list" style="display:none"></div>
+  <div id="empty-posts" class="empty-state" style="display:none">
+    <i class="bi bi-camera"></i><p id="lbl-no-posts">لا توجد منشورات بعد</p>
+  </div>
+  <div id="empty-liked" class="empty-state" style="display:none">
+    <i class="bi bi-heart"></i><p id="lbl-no-liked">لا توجد إعجابات بعد</p>
+  </div>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="edit-modal">
+  <div class="modal-box">
+    <div class="modal-title" id="lbl-edit-title">تعديل الملف الشخصي</div>
+    <div class="form-group">
+      <label class="form-label" id="lbl-edit-name">الاسم المعروض</label>
+      <input class="form-control" id="edit-name" type="text">
+    </div>
+    <div class="form-group">
+      <label class="form-label" id="lbl-edit-bio">النبذة الشخصية</label>
+      <textarea class="form-control" id="edit-bio"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" id="lbl-cancel" onclick="closeEditModal()">إلغاء</button>
+      <button class="btn-save" id="lbl-save" onclick="saveProfile()">حفظ</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <button class="bn-btn" onclick="goto('index.html')"><i class="bi bi-house"></i><span id="bn-home">الرئيسية</span></button>
+  <button class="bn-btn" onclick="goto('search.html')"><i class="bi bi-search"></i><span id="bn-search">بحث</span></button>
+  <button class="bn-btn" onclick="goto('upload.html')"><i class="bi bi-plus-square"></i><span id="bn-post">نشر</span></button>
+  <button class="bn-btn" onclick="goto('notifications.html')"><i class="bi bi-bell"></i><span id="bn-notif">إشعارات</span></button>
+  <button class="bn-btn active" onclick="goto('profile.html')"><i class="bi bi-person"></i><span id="bn-profile">حسابي</span></button>
+</div>
+
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script>
+firebase.initializeApp({
+  apiKey:"AIzaSyA4vNgF3NBWxjQfx_feHpsoIMdswlzUegA",
+  authDomain:"social-media-app-da2cd.firebaseapp.com",
+  projectId:"social-media-app-da2cd",
+  storageBucket:"social-media-app-da2cd.firebasestorage.app",
+  messagingSenderId:"41413182238",
+  appId:"1:41413182238:web:bbf664b131279ec4bd3f0f"
+});
+const auth = firebase.auth();
+const db = firebase.firestore();
+const FieldValue = firebase.firestore.FieldValue;
+
+let lang = "ar";
+let currentUser = null;
+let profileUid = null;
+let isOwnProfile = false;
+
+const tr = {
+  ar:{ dir:"rtl", posts:"منشور", followers:"متابع", following:"يتابع",
+    tabPosts:"المنشورات", tabLiked:"الإعجابات",
+    noPosts:"لا توجد منشورات بعد", noLiked:"لا توجد إعجابات بعد",
+    editProfile:"تعديل الملف الشخصي", follow:"متابعة", followingBtn:"تتابعه", message:"رسالة",
+    editTitle:"تعديل الملف الشخصي", editName:"الاسم المعروض", editBio:"النبذة الشخصية",
+    cancel:"إلغاء", save:"حفظ", saved:"تم الحفظ ✓",
+    mp:"حسابي", mu:"نشر صورة", mn:"الإشعارات", mo:"تسجيل الخروج",
+    bnHome:"الرئيسية", bnSearch:"بحث", bnPost:"نشر", bnNotif:"إشعارات", bnProfile:"حسابي",
+    login:"تسجيل الدخول", loading:"جاري التحميل..." },
+  en:{ dir:"ltr", posts:"Posts", followers:"Followers", following:"Following",
+    tabPosts:"Posts", tabLiked:"Liked",
+    noPosts:"No posts yet", noLiked:"No liked posts yet",
+    editProfile:"Edit Profile", follow:"Follow", followingBtn:"Following", message:"Message",
+    editTitle:"Edit Profile", editName:"Display name", editBio:"Bio",
+    cancel:"Cancel", save:"Save", saved:"Saved ✓",
+    mp:"My Profile", mu:"Upload Photo", mn:"Notifications", mo:"Sign Out",
+    bnHome:"Home", bnSearch:"Search", bnPost:"Post", bnNotif:"Notifications", bnProfile:"Profile",
+    login:"Sign In", loading:"Loading..." }
+};
+
+function setLang(l){
+  lang=l; localStorage.setItem("vistagoLang",l);
+  const s=tr[l];
+  document.documentElement.setAttribute("dir",s.dir);
+  document.documentElement.setAttribute("lang",l);
+  document.getElementById("lbl-posts").textContent=s.posts;
+  document.getElementById("lbl-followers").textContent=s.followers;
+  document.getElementById("lbl-following").textContent=s.following;
+  document.getElementById("lbl-tab-posts").textContent=s.tabPosts;
+  document.getElementById("lbl-tab-liked").textContent=s.tabLiked;
+  document.getElementById("lbl-no-posts").textContent=s.noPosts;
+  document.getElementById("lbl-no-liked").textContent=s.noLiked;
+  document.getElementById("lbl-edit-title").textContent=s.editTitle;
+  document.getElementById("lbl-edit-name").textContent=s.editName;
+  document.getElementById("lbl-edit-bio").textContent=s.editBio;
+  document.getElementById("lbl-cancel").textContent=s.cancel;
+  document.getElementById("lbl-save").textContent=s.save;
+  document.getElementById("m-profile").textContent=s.mp;
+  document.getElementById("m-upload").textContent=s.mu;
+  document.getElementById("m-notif").textContent=s.mn;
+  document.getElementById("m-out").textContent=s.mo;
+  document.getElementById("bn-home").textContent=s.bnHome;
+  document.getElementById("bn-search").textContent=s.bnSearch;
+  document.getElementById("bn-post").textContent=s.bnPost;
+  document.getElementById("bn-notif").textContent=s.bnNotif;
+  document.getElementById("bn-profile").textContent=s.bnProfile;
+  document.getElementById("nav-login-btn").textContent=s.login;
+  document.getElementById("loading").textContent=s.loading;
+  document.getElementById("btn-ar").classList.toggle("active",l==="ar");
+  document.getElementById("btn-en").classList.toggle("active",l==="en");
+  renderActionButtons();
+}
+
+const savedLang = localStorage.getItem("vistagoLang");
+if(savedLang) setLang(savedLang);
+
+function toggleTheme(){
+  const isLight = document.documentElement.classList.toggle("light");
+  localStorage.setItem("vistagoTheme", isLight?"light":"dark");
+  document.getElementById("theme-toggle-btn").textContent = isLight?"☀️":"🌙";
+}
+const savedTheme = localStorage.getItem("vistagoTheme");
+if(savedTheme==="light"){
+  document.documentElement.classList.add("light");
+  document.getElementById("theme-toggle-btn").textContent="☀️";
+}
+
+function goto(url){ window.location.href=url; }
+function toggleDropdown(){ document.getElementById("user-dropdown").classList.toggle("show"); }
+function signOutUser(){ auth.signOut().then(()=>goto("index.html")); }
+
+document.addEventListener("click",function(e){
+  const menu=document.getElementById("user-menu");
+  if(menu&&!menu.contains(e.target)) document.getElementById("user-dropdown").classList.remove("show");
+});
+
+function showToast(msg,type="success"){
+  const el=document.getElementById("toast");
+  el.textContent=msg; el.className="toast show "+type;
+  setTimeout(()=>el.className="toast",3000);
+}
+
+// ── Tabs ──
+function switchTab(tab){
+  document.getElementById("tab-posts").classList.toggle("active",tab==="posts");
+  document.getElementById("tab-liked").classList.toggle("active",tab==="liked");
+  document.getElementById("posts-grid").style.display=tab==="posts"?"grid":"none";
+  document.getElementById("liked-list").style.display=tab==="liked"?"block":"none";
+  document.getElementById("empty-posts").style.display="none";
+  document.getElementById("empty-liked").style.display="none";
+  if(tab==="liked") loadLikedPosts();
+}
+
+// ── Action Buttons ──
+function renderActionButtons(){
+  const c=document.getElementById("action-buttons");
+  if(!currentUser){c.innerHTML="";return;}
+  const s=tr[lang];
+  if(isOwnProfile){
+    c.innerHTML=`<button class="btn-edit" onclick="openEditModal()">${s.editProfile}</button>`;
+  } else {
+    c.innerHTML=`
+      <button class="btn-msg" onclick="goto('index.html')" title="${s.message}"><i class="bi bi-chat"></i></button>
+      <button class="btn-follow" id="follow-btn" onclick="toggleFollow()">${s.follow}</button>`;
+    checkFollowing();
+  }
+}
+
+function checkFollowing(){
+  if(!currentUser||!profileUid||isOwnProfile) return;
+  db.collection("users").doc(currentUser.uid).collection("following").doc(profileUid).get().then(snap=>{
+    const btn=document.getElementById("follow-btn");
+    if(!btn) return;
+    if(snap.exists){ btn.textContent=tr[lang].followingBtn; btn.classList.add("following"); }
+    else { btn.textContent=tr[lang].follow; btn.classList.remove("following"); }
+  });
+}
+
+function toggleFollow(){
+  if(!currentUser||!profileUid) return;
+  const btn=document.getElementById("follow-btn");
+  const myRef=db.collection("users").doc(currentUser.uid).collection("following").doc(profileUid);
+  const theirRef=db.collection("users").doc(profileUid).collection("followers").doc(currentUser.uid);
+  const isFollowing=btn.classList.contains("following");
+  const delta=isFollowing?-1:1;
+  if(isFollowing){ myRef.delete(); theirRef.delete(); }
+  else { myRef.set({uid:profileUid,at:new Date()}); theirRef.set({uid:currentUser.uid,at:new Date()}); }
+  db.collection("users").doc(profileUid).update({followers:FieldValue.increment(delta)});
+  db.collection("users").doc(currentUser.uid).update({following:FieldValue.increment(delta)});
+  const el=document.getElementById("stat-followers");
+  el.textContent=Math.max(0,parseInt(el.textContent)+delta);
+  if(isFollowing){ btn.textContent=tr[lang].follow; btn.classList.remove("following"); }
+  else { btn.textContent=tr[lang].followingBtn; btn.classList.add("following"); }
+}
+
+// ── Edit Modal ──
+function openEditModal(){
+  document.getElementById("edit-name").value=document.getElementById("profile-name").textContent;
+  document.getElementById("edit-bio").value=document.getElementById("profile-bio").textContent;
+  document.getElementById("edit-modal").classList.add("show");
+}
+function closeEditModal(){ document.getElementById("edit-modal").classList.remove("show"); }
+document.getElementById("edit-modal").addEventListener("click",function(e){if(e.target===this)closeEditModal();});
+
+function saveProfile(){
+  if(!currentUser) return;
+  const name=document.getElementById("edit-name").value.trim();
+  const bio=document.getElementById("edit-bio").value.trim();
+  if(!name) return;
+  db.collection("users").doc(currentUser.uid).update({name,bio}).then(()=>{
+    currentUser.updateProfile({displayName:name});
+    document.getElementById("profile-name").textContent=name;
+    document.getElementById("profile-bio").textContent=bio;
+    closeEditModal();
+    showToast(tr[lang].saved);
+  });
+}
+
+// ── Load Profile ──
+function loadProfile(uid){
+  db.collection("users").doc(uid).onSnapshot(snap=>{
+    const d=snap.data()||{};
+    const avatarEl=document.getElementById("profile-avatar");
+    if(d.photo){ avatarEl.innerHTML=`<img src="${d.photo}" alt="avatar">`; }
+    else { avatarEl.textContent=(d.name||d.username||"?").charAt(0).toUpperCase(); }
+    document.getElementById("profile-name").textContent=d.name||d.username||"—";
+    document.getElementById("profile-username").textContent="@"+(d.username||"");
+    document.getElementById("profile-bio").textContent=d.bio||"";
+    document.getElementById("stat-followers").textContent=d.followers||0;
+    document.getElementById("stat-following").textContent=d.following||0;
+    document.title=`Vistago — ${d.name||d.username||"Profile"}`;
+  });
+  loadUserPosts(uid);
+}
+
+// ── Load Posts ──
+function loadUserPosts(uid){
+  db.collection("posts").where("uid","==",uid)
+    .orderBy("createdAt","desc").onSnapshot(snap=>{
+      const grid=document.getElementById("posts-grid");
+      const empty=document.getElementById("empty-posts");
+      grid.innerHTML="";
+      document.getElementById("stat-posts").textContent=snap.size;
+      if(snap.empty){empty.style.display="block";return;}
+      empty.style.display="none";
+      snap.forEach(doc=>{
+        const d=doc.data();
+        const item=document.createElement("div");
+        item.className="grid-item";
+        item.onclick=()=>goto(`post.html?id=${doc.id}`);
+        if(d.imageUrl){
+          item.innerHTML=`<img src="${d.imageUrl}" alt="">
+            <div class="grid-overlay">
+              <span><i class="bi bi-heart-fill"></i>${d.likes||0}</span>
+              <span><i class="bi bi-chat-fill"></i>${d.comments||0}</span>
+            </div>`;
+        } else {
+          item.innerHTML=`<span style="font-size:2.2rem">${d.emoji||"📷"}</span>
+            <div class="grid-overlay"><span><i class="bi bi-heart-fill"></i>${d.likes||0}</span></div>`;
+        }
+        grid.appendChild(item);
+      });
+    });
+}
+
+// ── Load Liked Posts ──
+function loadLikedPosts(){
+  const list=document.getElementById("liked-list");
+  const empty=document.getElementById("empty-liked");
+  list.innerHTML=`<div style="text-align:center;padding:30px;color:var(--text2)"><i class="bi bi-hourglass-split" style="font-size:2rem"></i></div>`;
+  db.collection("posts").where(`likedBy.${profileUid}`,"==",true)
+    .orderBy("createdAt","desc").limit(20).get().then(snap=>{
+      list.innerHTML="";
+      if(snap.empty){empty.style.display="block";return;}
+      empty.style.display="none";
+      snap.forEach(doc=>{
+        const d=doc.data();
+        const card=document.createElement("div");
+        card.className="post-card";
+        card.onclick=()=>goto(`post.html?id=${doc.id}`);
+        card.innerHTML=`
+          <div class="pc-header">
+            <div class="pc-avatar">${(d.name||"?").charAt(0)}</div>
+            <div class="pc-name">${d.name||d.username||"—"}</div>
+          </div>
+          <div class="pc-caption">${d.caption||d.emoji||""}</div>`;
+        list.appendChild(card);
+      });
+    }).catch(()=>{list.innerHTML="";empty.style.display="block";});
+}
+
+// ── Auth ──
+auth.onAuthStateChanged(user=>{
+  document.getElementById("loading").style.display="none";
+  currentUser=user;
+  if(user){
+    document.getElementById("nav-login-btn").style.display="none";
+    document.getElementById("user-menu").style.display="block";
+    document.getElementById("nav-user-btn").textContent="👤 "+(user.displayName||tr[lang].mp);
+  } else {
+    document.getElementById("nav-login-btn").style.display="block";
+    document.getElementById("user-menu").style.display="none";
+  }
+  const params=new URLSearchParams(window.location.search);
+  const uParam=params.get("u");
+  const uidParam=params.get("uid");
+  if(uidParam){
+    profileUid=uidParam;
+    isOwnProfile=user&&user.uid===uidParam;
+    renderActionButtons();
+    loadProfile(uidParam);
+  } else if(uParam){
+    db.collection("usernames").doc(uParam).get().then(snap=>{
+      if(snap.exists){
+        profileUid=snap.data().uid;
+        isOwnProfile=user&&user.uid===profileUid;
+        renderActionButtons();
+        loadProfile(profileUid);
+      }
+    });
+  } else if(user){
+    profileUid=user.uid;
+    isOwnProfile=true;
+    renderActionButtons();
+    loadProfile(user.uid);
+  } else {
+    goto("login.html");
+  }
+});
+</script>
+</body>
+</html>
