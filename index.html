@@ -499,20 +499,38 @@ function renderPostCard(docId, d){
 }
 
 // ── Load feed dynamically ──
+let feedLoaded = false;
 function loadFeed(){
+  if(feedLoaded) return; // only load once
+  feedLoaded = true;
   const feed=document.getElementById("feed");
   feed.innerHTML='<div style="text-align:center;padding:40px;color:var(--text2)"><i class="bi bi-hourglass-split" style="font-size:2rem"></i></div>';
-  db.collection("posts").orderBy("createdAt","desc").limit(30)
-    .onSnapshot(snap=>{
+
+  // Use get() instead of onSnapshot to avoid slow real-time listener on full feed
+  // No orderBy to avoid needing a Firestore index
+  db.collection("posts").limit(30).get()
+    .then(snap=>{
       feed.innerHTML="";
       if(snap.empty){
         feed.innerHTML=`<div style="text-align:center;padding:40px;color:var(--text2)">${lang==="ar"?"لا توجد منشورات بعد":"No posts yet"}</div>`;
         return;
       }
-      snap.forEach(doc=>{
-        feed.appendChild(renderPostCard(doc.id, doc.data()));
-        loadPost(doc.id);
+      // Sort client-side by createdAt descending
+      const docs = [];
+      snap.forEach(doc => docs.push({id: doc.id, data: doc.data()}));
+      docs.sort((a,b) => {
+        const ta = a.data.createdAt?.toDate?.() || new Date(0);
+        const tb = b.data.createdAt?.toDate?.() || new Date(0);
+        return tb - ta;
       });
+      docs.forEach(({id, data}) => {
+        feed.appendChild(renderPostCard(id, data));
+        loadPost(id);
+      });
+    })
+    .catch(err=>{
+      feed.innerHTML=`<div style="text-align:center;padding:40px;color:var(--text2)">⚠️ ${lang==="ar"?"حدث خطأ، أعد تحميل الصفحة":"Error loading posts, refresh the page"}</div>`;
+      console.error(err);
     });
 }
 
@@ -573,8 +591,11 @@ function addComment(postId){
 }
 
 // ── Auth ──
+// Hide loading immediately — don't wait for auth
+document.getElementById("loading").style.display = "none";
+loadFeed();
+
 auth.onAuthStateChanged(user=>{
-  document.getElementById("loading").style.display = "none";
   if(user){
     currentUser = user;
     document.getElementById("nav-login-btn").style.display = "none";
@@ -585,7 +606,6 @@ auth.onAuthStateChanged(user=>{
     document.getElementById("nav-login-btn").style.display = "block";
     document.getElementById("user-menu").style.display = "none";
   }
-  loadFeed();
 });
 </script>
 </body>
