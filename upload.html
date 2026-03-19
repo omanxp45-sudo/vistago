@@ -167,6 +167,11 @@
 <script>
 if('caches' in window){ caches.keys().then(keys=>keys.forEach(k=>caches.delete(k))); }
 if(navigator.serviceWorker){ navigator.serviceWorker.getRegistrations().then(regs=>regs.forEach(r=>r.unregister())); }
+const _v2='2.0'; if(localStorage.getItem('vv2')!==_v2){ localStorage.setItem('vv2',_v2); location.reload(true); }
+</script>
+<script>
+if('caches' in window){ caches.keys().then(keys=>keys.forEach(k=>caches.delete(k))); }
+if(navigator.serviceWorker){ navigator.serviceWorker.getRegistrations().then(regs=>regs.forEach(r=>r.unregister())); }
 const _v = '4.0';
 if(localStorage.getItem('vv_upload')!=='4.0'){ localStorage.setItem('vv_upload','4.0'); location.reload(true); }
 </script>
@@ -268,16 +273,16 @@ const tr = {
   ar:{ dir:"rtl", navTitle:"نشر منشور", photo:"📷 أضف صورة (اختياري)",
     uploadTitle:"اضغط لاختيار صورة", uploadSub:"أو اسحب وأفلت الصورة هنا",
     or:"أو اختر إيموجي", caption:"✏️ الوصف", captionPlaceholder:"اكتب وصفاً للمنشور...",
-    preview:"👁️ معاينة المنشور", submit:"🚀 نشر", publishing:"جاري النشر...",
-    , successMsg:"تم نشر منشورك! 🎉", errNoContent:"أضف صورة أو إيموجي أولاً",
+    submit:"🚀 نشر", publishing:"جاري النشر...",
+    successMsg:"تم نشر منشورك! 🎉", errNoContent:"أضف صورة أو إيموجي أولاً",
     errAuth:"يجب تسجيل الدخول أولاً",
     bnHome:"الرئيسية", bnSearch:"بحث", bnPost:"نشر", bnNotif:"إشعارات", bnProfile:"حسابي",
     loading:"جاري التحميل..." },
   en:{ dir:"ltr", navTitle:"Create Post", photo:"📷 Add a photo (optional)",
     uploadTitle:"Click to choose a photo", uploadSub:"Or drag and drop here",
     or:"Or choose an emoji", caption:"✏️ Caption", captionPlaceholder:"Write a caption...",
-    preview:"👁️ Post Preview", submit:"🚀 Post", publishing:"Publishing...",
-    , successMsg:"Your post is live! 🎉", errNoContent:"Add a photo or emoji first",
+    submit:"🚀 Post", publishing:"Publishing...",
+    successMsg:"Your post is live! 🎉", errNoContent:"Add a photo or emoji first",
     errAuth:"You must be signed in",
     bnHome:"Home", bnSearch:"Search", bnPost:"Post", bnNotif:"Notifications", bnProfile:"Profile",
     loading:"Loading..." }
@@ -441,10 +446,10 @@ function savePost(data){
 }
 
 // ── Auth ──
+// Show page immediately, check auth in background
 auth.onAuthStateChanged(user=>{
   if(user){
     currentUser=user;
-
   } else {
     // Not logged in — redirect to login
     goto("login.html");
