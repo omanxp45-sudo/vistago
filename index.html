@@ -231,7 +231,15 @@
 </style>
 </head>
 <body>
+function openUpload(){
+  const user = auth.currentUser;
 
+  if(user){
+    window.location.href = "upload.html";
+  } else {
+    showLoginModal();
+  }
+}
 <div id="loading">Loading...</div>
 
 <!-- NAV -->
@@ -252,7 +260,10 @@
       <button class="user-btn" id="nav-user-btn" onclick="toggleDropdown()">👤 حسابي</button>
       <div class="user-dropdown" id="user-dropdown">
         <button onclick="goto('profile.html')"><i class="bi bi-person"></i> <span id="m-profile">حسابي</span></button>
-        <button onclick="requireLogin('upload.html')"><i class="bi bi-image"></i> <span id="m-upload">نشر صورة</span></button>
+      <button class="bn-btn" onclick="openUpload()">
+  <i class="bi bi-plus-square"></i>
+  <span>نشر</span>
+</button>
         <button onclick="requireLogin('notifications.html')"><i class="bi bi-bell"></i> <span id="m-notif">الإشعارات</span></button>
         <button onclick="signOutUser()"><i class="bi bi-box-arrow-right"></i> <span id="m-out">تسجيل الخروج</span></button>
       </div>
@@ -474,16 +485,70 @@ if(savedTheme === "light"){
   document.documentElement.classList.add("light");
   document.getElementById("theme-toggle-btn").textContent = "☀️";
 }
+  auth.onAuthStateChanged(user=>{
+  document.getElementById("loading").style.display = "none";
 
+  if(user){
+    currentUser = user;
+    document.getElementById("nav-login-btn").style.display = "none";
+    document.getElementById("user-menu").style.display = "block";
+  } else {
+    currentUser = null;
+    document.getElementById("nav-login-btn").style.display = "block";
+    document.getElementById("user-menu").style.display = "none";
+  }
+
+  loadFeed(); // 🔥 أهم سطر
+});
+function loadFeed(){
+  const feed = document.getElementById("feed");
+
+  db.collection("posts")
+    .orderBy("createdAt", "desc")
+    .onSnapshot(snapshot=>{
+      
+      feed.innerHTML = "";
+
+      snapshot.forEach(doc=>{
+        const post = doc.data();
+        const id = doc.id;
+
+        const el = document.createElement("div");
+        el.className = "post-card";
+
+        el.innerHTML = `
+          <div class="post-header">
+            <div class="avatar">${(post.name||"?").charAt(0)}</div>
+            <div class="post-meta">
+              <div class="post-username">${post.name || "مستخدم"}</div>
+              <div class="post-time">${formatTime(post.createdAt)}</div>
+            </div>
+          </div>
+
+          <img src="${post.image}" class="post-img">
+
+          <div class="post-caption">
+            <strong>${post.name || ""}</strong> ${post.caption || ""}
+          </div>
+        `;
+
+        feed.appendChild(el);
+      });
+
+    });
+}
 function goto(url){
-  const missing = ["upload.html","search.html","notifications.html"];
+  const missing = ["search.html","notifications.html"]; // حذف upload
+
   const base = url.split("?")[0];
+
   if(missing.includes(base)){
-    const msg = (typeof lang !== "undefined" && lang==="en") ? "Coming soon... 🚧" : "قريباً... 🚧";
+    const msg = (lang==="en") ? "Coming soon... 🚧" : "قريباً... 🚧";
     alert(msg);
     return;
   }
-  window.location.href=url;
+
+  window.location.href = url;
 }
 function closeModal(){ document.getElementById("modal").classList.remove("show"); }
 function showLoginModal(){ document.getElementById("modal").classList.add("show"); }
