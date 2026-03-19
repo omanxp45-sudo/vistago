@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl"> 
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -273,9 +273,9 @@
         <div class="post-time" id="time-post1">منذ ساعتين</div>
       </div>
     </div>
-    <div class="post-emoji" onclick="goto('post.html?id=post1')
-" style="cursor:pointer">🌅</div>
-    <div class="post-caption" id="caption-post1" onclick="goto('post.html?id=post1')" style="cursor:pointer"><strong>ahmed_shamsi</strong> لحظة جميلة من غروب الشمس 🌅✨</div>
+    <a href="post.html?id=post1"><div class="post-emoji" style="cursor:pointer">🌅</div></a>
+    <a href="post.html?id=post1" style="color:inherit;text-decoration:none"><div class="post-caption" id="caption-post1" style="cursor:pointer"><strong>ahmed_shamsi</strong> لحظة جميلة من غروب الشمس 🌅✨</div>
+    </div></a>
     <div class="post-actions">
       <button class="action-btn" id="lb-post1" onclick="likePost('post1')">
         <i class="bi bi-heart" id="li-post1"></i>
@@ -308,8 +308,9 @@
         <div class="post-time" id="time-post2">منذ 4 ساعات</div>
       </div>
     </div>
-    <div class="post-emoji" onclick="goto('post.html?id=post2')" style="cursor:pointer">🌺</div>
-    <div class="post-caption" id="caption-post2" onclick="goto('post.html?id=post2')" style="cursor:pointer"><strong>sara_mutairi</strong> طبيعة خلابة من رحلتي الأخيرة 🌺🌿</div>
+    <a href="post.html?id=post2"><div class="post-emoji" style="cursor:pointer">🌺</div></a>
+    <a href="post.html?id=post2" style="color:inherit;text-decoration:none"><div class="post-caption" id="caption-post2" style="cursor:pointer"><strong>sara_mutairi</strong> طبيعة خلابة من رحلتي الأخيرة 🌺🌿</div>
+    </div></a>
     <div class="post-actions">
       <button class="action-btn" id="lb-post2" onclick="likePost('post2')">
         <i class="bi bi-heart" id="li-post2"></i>
@@ -342,8 +343,9 @@
         <div class="post-time" id="time-post3">منذ 6 ساعات</div>
       </div>
     </div>
-    <div class="post-emoji" onclick="goto('post.html?id=post3')" style="cursor:pointer">🏙️</div>
-    <div class="post-caption" id="caption-post3" onclick="goto('post.html?id=post3')" style="cursor:pointer"><strong>mohammed_abri</strong> مدينة مسقط في الليل 🏙️🌙</div>
+    <a href="post.html?id=post3"><div class="post-emoji" style="cursor:pointer">🏙️</div></a>
+    <a href="post.html?id=post3" style="color:inherit;text-decoration:none"><div class="post-caption" id="caption-post3" style="cursor:pointer"><strong>mohammed_abri</strong> مدينة مسقط في الليل 🏙️🌙</div>
+    </div></a>
     <div class="post-actions">
       <button class="action-btn" id="lb-post3" onclick="likePost('post3')">
         <i class="bi bi-heart" id="li-post3"></i>
@@ -474,9 +476,10 @@ if(savedTheme === "light"){
 }
 
 function goto(url){
-  const missing=["upload.html","search.html","notifications.html"];
-  if(missing.includes(url.split("?")[0])){
-    const msg=(typeof lang!=="undefined"&&lang==="en")?"Coming soon... 🚧":"قريباً... 🚧";
+  const missing = ["upload.html","search.html","notifications.html"];
+  const base = url.split("?")[0];
+  if(missing.includes(base)){
+    const msg = (typeof lang !== "undefined" && lang==="en") ? "Coming soon... 🚧" : "قريباً... 🚧";
     alert(msg);
     return;
   }
