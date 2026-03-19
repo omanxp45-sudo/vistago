@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -354,7 +354,7 @@ const auth = firebase.auth();
 const db = firebase.firestore();
 const FieldValue = firebase.firestore.FieldValue;
 
-let lang = "ar";
+let lang = "en";
 let currentUser = null;
 let profileUid = null;
 let isOwnProfile = false;
@@ -542,19 +542,25 @@ function loadProfile(uid){
 
 // ── Load Posts ──
 function loadUserPosts(uid){
-  db.collection("posts").where("uid","==",uid)
-    .orderBy("createdAt","desc").onSnapshot(snap=>{
+  db.collection("posts").where("uid","==",uid).get().then(snap=>{
       const grid=document.getElementById("posts-grid");
       const empty=document.getElementById("empty-posts");
       grid.innerHTML="";
       document.getElementById("stat-posts").textContent=snap.size;
       if(snap.empty){empty.style.display="block";return;}
       empty.style.display="none";
-      snap.forEach(doc=>{
-        const d=doc.data();
+      // Sort client-side to avoid needing Firestore composite index
+      const docs=[];
+      snap.forEach(doc=>docs.push({id:doc.id,data:doc.data()}));
+      docs.sort((a,b)=>{
+        const ta=a.data.createdAt?.toDate?.()|| new Date(0);
+        const tb=b.data.createdAt?.toDate?.()|| new Date(0);
+        return tb-ta;
+      });
+      docs.forEach(({id,data:d})=>{
         const item=document.createElement("div");
         item.className="grid-item";
-        item.onclick=()=>goto(`post.html?id=${doc.id}`);
+        item.onclick=()=>goto(`post.html?id=${id}`);
         if(d.imageUrl){
           item.innerHTML=`<img src="${d.imageUrl}" alt="">
             <div class="grid-overlay">
@@ -567,6 +573,9 @@ function loadUserPosts(uid){
         }
         grid.appendChild(item);
       });
+    }).catch(err=>{
+      console.error("loadUserPosts error:", err);
+      document.getElementById("empty-posts").style.display="block";
     });
 }
 
