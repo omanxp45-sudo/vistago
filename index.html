@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>Vistago</title>
 <link rel="icon" href="vistago-icon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -232,7 +235,7 @@
 </head>
 <body>
 
-<div id="loading">Loading...</div>
+<div id="loading" style="display:none">جاري التحميل...</div>
 
 <!-- NAV -->
 <nav>
@@ -591,8 +594,9 @@ function addComment(postId){
 }
 
 // ── Auth ──
-// Hide loading immediately — don't wait for auth
 document.getElementById("loading").style.display = "none";
+
+// Load feed immediately for ALL users — no auth required
 loadFeed();
 
 auth.onAuthStateChanged(user=>{
