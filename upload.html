@@ -96,20 +96,6 @@
   }
   .preview-remove:hover { background: var(--danger); }
 
-  /* EMOJI PICKER */
-  .emoji-section { margin-bottom: 16px; }
-  .section-label { font-size: 0.82rem; color: var(--text2); margin-bottom: 8px; font-weight: 600; }
-  .emoji-grid {
-    display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px;
-  }
-  .emoji-btn {
-    background: var(--surface2); border: 2px solid transparent;
-    border-radius: 10px; padding: 8px; font-size: 1.4rem;
-    cursor: pointer; transition: all .15s; text-align: center;
-  }
-  .emoji-btn:hover { background: var(--surface); border-color: var(--border); transform: scale(1.1); }
-  .emoji-btn.selected { border-color: #1DA1F2; background: color-mix(in srgb, #1DA1F2 15%, var(--surface2)); }
-
   /* CAPTION */
   .caption-section { margin-bottom: 16px; }
   .caption-input {
@@ -178,6 +164,12 @@
 </style>
 </head>
 <body>
+<script>
+if('caches' in window){ caches.keys().then(keys=>keys.forEach(k=>caches.delete(k))); }
+if(navigator.serviceWorker){ navigator.serviceWorker.getRegistrations().then(regs=>regs.forEach(r=>r.unregister())); }
+const _v = '4.0';
+if(localStorage.getItem('vv_upload')!=='4.0'){ localStorage.setItem('vv_upload','4.0'); location.reload(true); }
+</script>
 
 <div id="loading" style="display:none"></div>
 
@@ -219,16 +211,6 @@
 
   <!-- OR DIVIDER -->
   <div class="or-divider" id="or-divider"><span id="lbl-or">أو اختر إيموجي</span></div>
-
-  <!-- EMOJI PICKER -->
-  <div class="emoji-section">
-    <div class="emoji-grid" id="emoji-grid">
-      🌅 🌺 🏙️ 🌊 🌸 🍕 ⚽ 🎵
-      🦋 🌿 🔥 ❄️ 🌙 ☀️ 🌈 ⭐
-      🎉 💪 🧠 💡 📚 ✈️ 🏔️ 🌍
-      😊 😍 🥰 😎 🤩 🎯 💫 🙌
-    </div>
-  </div>
 
   <!-- CAPTION -->
   <div class="caption-section">
@@ -279,10 +261,8 @@ const FieldValue = firebase.firestore.FieldValue;
 
 let lang = "ar";
 let currentUser = null;
-let selectedEmoji = "";
 let selectedFile = null;
 
-const EMOJIS = ["🌅","🌺","🏙️","🌊","🌸","🍕","⚽","🎵","🦋","🌿","🔥","❄️","🌙","☀️","🌈","⭐","🎉","💪","🧠","💡","📚","✈️","🏔️","🌍","😊","😍","🥰","😎","🤩","🎯","💫","🙌"];
 
 const tr = {
   ar:{ dir:"rtl", navTitle:"نشر منشور", photo:"📷 أضف صورة (اختياري)",
@@ -312,7 +292,6 @@ function setLang(l){
   document.getElementById("lbl-photo").textContent=s.photo;
   document.getElementById("lbl-upload-title").textContent=s.uploadTitle;
   document.getElementById("lbl-upload-sub").textContent=s.uploadSub;
-  document.getElementById("lbl-or").textContent=s.or;
   document.getElementById("lbl-caption").textContent=s.caption;
   document.getElementById("caption-input").placeholder=s.captionPlaceholder;
   document.getElementById("lbl-submit").textContent=s.submit;
@@ -351,28 +330,8 @@ function showToast(msg,type="success"){
   setTimeout(()=>el.className="toast",3000);
 }
 
-// ── Build emoji grid ──
-function buildEmojiGrid(){
-  const grid=document.getElementById("emoji-grid");
-  grid.innerHTML="";
-  EMOJIS.forEach(emoji=>{
-    const btn=document.createElement("button");
-    btn.className="emoji-btn";
-    btn.textContent=emoji;
-    btn.onclick=()=>selectEmoji(emoji, btn);
-    grid.appendChild(btn);
-  });
-}
-buildEmojiGrid();
 
-// ── Select emoji ──
-function selectEmoji(emoji, btn){
-  // If image is loaded, keep it — emoji is just decorative addition
-  selectedEmoji = selectedEmoji===emoji ? "" : emoji; // toggle
-  document.querySelectorAll(".emoji-btn").forEach(b=>b.classList.remove("selected"));
-  if(selectedEmoji) btn.classList.add("selected");
-  updateSubmitBtn();
-}
+
 
 // ── Handle file ──
 function handleFile(input){
@@ -385,8 +344,6 @@ function handleFile(input){
     showToast(lang==="en"?"Image must be under 5MB":"الصورة يجب أن تكون أقل من 5MB","error"); return;
   }
   selectedFile=file;
-  selectedEmoji="";
-  document.querySelectorAll(".emoji-btn").forEach(b=>b.classList.remove("selected"));
   const reader=new FileReader();
   reader.onload=e=>{
     document.getElementById("preview-img").src=e.target.result;
@@ -417,7 +374,7 @@ function updateCount(){
 // ── Update submit button ──
 function updateSubmitBtn(){
   const btn=document.getElementById("submit-btn");
-  btn.disabled = !selectedFile && !selectedEmoji;
+  btn.disabled = !selectedFile;
 }
 
 // ── Drag & drop ──
@@ -446,7 +403,7 @@ function submitPost(){
     username: currentUser.email?currentUser.email.split("@")[0]:"",
     photo: currentUser.photoURL||"",
     caption: caption,
-    emoji: selectedEmoji||"",
+    emoji: "",
     likes: 0, shares: 0, comments: 0,
     likedBy: {},
     createdAt: FieldValue.serverTimestamp()
