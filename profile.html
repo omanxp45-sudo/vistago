@@ -574,16 +574,26 @@ function loadLikedPosts(){
   const list=document.getElementById("liked-list");
   const empty=document.getElementById("empty-liked");
   list.innerHTML=`<div style="text-align:center;padding:30px;color:var(--text2)"><i class="bi bi-hourglass-split" style="font-size:2rem"></i></div>`;
-  db.collection("posts").where(`likedBy.${profileUid}`,"==",true)
-    .orderBy("createdAt","desc").limit(20).get().then(snap=>{
+  // Fixed: client-side filter to avoid Firestore composite index requirement
+  db.collection("posts").get()
+    .then(snap=>{
       list.innerHTML="";
-      if(snap.empty){empty.style.display="block";return;}
-      empty.style.display="none";
+      const liked=[];
       snap.forEach(doc=>{
         const d=doc.data();
+        if(d.likedBy&&d.likedBy[profileUid]===true) liked.push({id:doc.id,...d});
+      });
+      if(liked.length===0){empty.style.display="block";return;}
+      empty.style.display="none";
+      liked.sort((a,b)=>{
+        const ta=a.createdAt?.toDate?a.createdAt.toDate():new Date(a.createdAt||0);
+        const tb=b.createdAt?.toDate?b.createdAt.toDate():new Date(b.createdAt||0);
+        return tb-ta;
+      });
+      liked.forEach(d=>{
         const card=document.createElement("div");
         card.className="post-card";
-        card.onclick=()=>goto(`post.html?id=${doc.id}`);
+        card.onclick=()=>goto(`post.html?id=${d.id}`);
         card.innerHTML=`
           <div class="pc-header">
             <div class="pc-avatar">${(d.name||"?").charAt(0)}</div>
